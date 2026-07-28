@@ -38,7 +38,7 @@ class TrackPageView
             return false;
         }
 
-        if ($request->is('admin*') || $request->is('livewire*')) {
+        if ($request->is('admin*') || $request->is('partner*') || $request->is('livewire*')) {
             return false;
         }
 

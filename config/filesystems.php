@@ -68,6 +68,19 @@ return [
             'report' => false,
         ],
 
+        // Private KYC documents for the Partner Portal (KTP, NPWP, profile
+        // photo). Deliberately NOT modeled after the public 'media' disk:
+        // these files must never be reachable by a direct public URL, only
+        // through PartnerDocumentController which checks document ownership
+        // before streaming the file.
+        'partner_documents' => [
+            'driver' => 'local',
+            'root' => storage_path('app/partner-documents'),
+            'visibility' => 'private',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

@@ -38,6 +38,7 @@ class ComingSoonMode
     protected function isExempt(Request $request): bool
     {
         return $request->is('admin*')
+            || $request->is('partner*')
             || $request->is('livewire*')
             || $request->is('contact*')
             || $request->is('coming-soon*')

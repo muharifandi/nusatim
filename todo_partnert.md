@@ -21,35 +21,40 @@ Ini bukan fitur, tapi keputusan desain yang akan menentukan struktur seluruh mod
 - [x] **Cek pola singleton settings** — `SiteSetting::current()` + `ManageSiteSettings` (satu Filament Page custom dengan form + `save()`, bukan Resource CRUD) adalah pola yang sudah dipakai untuk pengaturan situs profile. **Fase 23 "Partner Settings" harus ikut pola ini persis** (satu halaman pengaturan global, bukan resource list/create/edit biasa), karena sifatnya sama-sama singleton (satu set pengaturan berlaku untuk semua partner, bukan banyak baris data).
 - [x] **Cek pola resource sederhana (`ManageRecords`, satu halaman list + modal CRUD, dipakai `NewsletterSubscriberResource`)** — cocok dipakai untuk resource dengan sedikit field dan tidak butuh halaman detail sendiri (kandidat: `marketing_materials`). Resource dengan banyak field/relasi (Partner, Lead, Project) tetap pakai pola List/Create/Edit penuh seperti resource lain yang sudah ada.
 
+### Sudah diputuskan & diimplementasikan (bersama Fase 1)
+
+- [x] **Model akses**: guard `partner` + provider `partners` + model `Partner` terpisah total dari `User`/`web` (satu database yang sama). Sudah diverifikasi test: akun partner tidak bisa masuk `/admin`, akun `User` staff tidak bisa masuk `/partner`.
+- [x] **Panel admin untuk modul baru**: tetap satu panel admin (`/admin`), grup navigasi baru **"Partner Program"** (bukan panel Filament terpisah). Portal partner sendiri jadi panel Filament KEDUA (`/partner`, guard `partner`) — beda dari panel admin.
+- [x] **Penyimpanan dokumen sensitif**: disk privat baru `partner_documents` (`storage_path('app/partner-documents')`, tanpa `url` publik), file di-serve lewat `PartnerDocumentController` (route `partner.documents.show`) yang mengecek: partner hanya boleh lihat dokumennya sendiri, admin (`web` guard) boleh lihat semua. Diverifikasi test.
+
 ### Masih genuinely open — butuh jawaban dari pemberi spec, bukan keputusan teknis
 
-- [ ] **Model akses**: Portal partner pakai guard/auth terpisah (`partner`) di project Laravel yang sama, atau aplikasi terpisah? (Rekomendasi: guard terpisah dalam satu project — reuse database, tapi partner tidak boleh bisa login ke `/admin` dan sebaliknya admin tidak login lewat portal partner)
-- [ ] **Panel admin untuk modul baru**: apakah 8 modul admin baru (Partner Management, Project Board Management, dst) masuk ke Filament panel admin yang sudah ada (`/admin`), atau bikin panel Filament kedua khusus? (Rekomendasi: tetap satu panel admin, tambah grup navigasi baru "Partner Program")
-- [ ] **Penyimpanan dokumen sensitif (KTP, NPWP, bukti transfer)**: **jangan** pakai disk `media` yang sudah ada (itu `public_path()`, semua orang bisa akses langsung by URL — sudah dikonfirmasi lewat isi `DeletesOldFiles` di atas). Perlu disk baru yang **tidak publicly accessible** — file di-serve lewat route terautentikasi yang mengecek pemilik dokumen sebelum stream file-nya.
-- [ ] **Audit trail untuk data uang**: komisi & withdrawal tidak boleh sekadar kolom `status` yang di-update in-place tanpa jejak. Rencanakan tabel histori/log perubahan status (siapa approve, kapan, alasan reject, dll) sejak awal — bukan ditambah belakangan.
-- [ ] **Precision angka uang**: pastikan semua kolom nominal pakai `decimal`, bukan `float`/`double` (mengulang standar yang sudah dipakai di `pricing_plans.price`).
-- [ ] **Definisi "Level Partner"**: spec menyebut "Level Partner" di modul admin tapi tidak dijelaskan levelnya apa saja atau pengaruhnya ke apa (komisi berbeda? akses fitur berbeda?) — perlu klarifikasi dari pemberi spec sebelum dikerjakan.
-- [ ] **Definisi role approval**: siapa yang approve apa? (registrasi partner, claim project, komisi, withdrawal — apakah semua admin bisa approve semua, atau ada pemisahan role/permission?)
-- [ ] **Definisi "Produk"**: konfirmasi apakah benar reuse tabel `services` existing (lihat poin verifikasi di atas) atau memang perlu katalog produk baru yang terpisah dari layanan situs profile.
+- [ ] **Audit trail untuk data uang**: komisi & withdrawal tidak boleh sekadar kolom `status` yang di-update in-place tanpa jejak. Rencanakan tabel histori/log perubahan status (siapa approve, kapan, alasan reject, dll) sejak awal — bukan ditambah belakangan. Belum relevan di Fase 1 (tidak ada data uang di sini), tapi wajib diputuskan sebelum Fase 9/10/19/20.
+- [ ] **Precision angka uang**: pastikan semua kolom nominal pakai `decimal`, bukan `float`/`double` (mengulang standar yang sudah dipakai di `pricing_plans.price`). Belum relevan di Fase 1.
+- [ ] **Definisi "Level Partner"**: spec menyebut "Level Partner" di modul admin tapi tidak dijelaskan levelnya apa saja atau pengaruhnya ke apa (komisi berbeda? akses fitur berbeda?) — perlu klarifikasi dari pemberi spec sebelum dikerjakan. Kolom `level` sudah ada di tabel `partners` (nullable, diedit bebas dari admin) sebagai placeholder sampai definisinya jelas.
+- [ ] **Definisi role approval**: siapa yang approve apa? (registrasi partner, claim project, komisi, withdrawal — apakah semua admin bisa approve semua, atau ada pemisahan role/permission?) Fase 1 sementara pakai "siapa saja yang login ke `/admin` boleh approve/reject partner" — belum ada pemisahan role karena `spatie/laravel-permission` belum terpasang.
+- [ ] **Definisi "Produk"**: konfirmasi apakah benar reuse tabel `services` existing (lihat poin verifikasi di atas) atau memang perlu katalog produk baru yang terpisah dari layanan situs profile. Belum relevan di Fase 1, wajib diputuskan sebelum Fase 3.
 
 ---
 
-## Fase 1 — Registrasi & Autentikasi Partner
+## Fase 1 — Registrasi & Autentikasi Partner ✅ (selesai)
 
-- [ ] Migrasi tabel `partners` (data akun: nama, email, password, status registrasi, level, dst)
-- [ ] Migrasi tabel dokumen partner (foto profil, KTP, NPWP — path ke disk privat, bukan disk publik)
-- [ ] Migrasi tabel rekening bank partner (nama bank, no rekening, atas nama)
-- [ ] Halaman Registrasi akun (form publik, tanpa login)
-- [ ] Halaman Login partner
-- [ ] Fitur Lupa Password (reset via email)
-- [ ] Upload Foto Profil
-- [ ] Upload KTP
-- [ ] Upload NPWP (opsional, boleh dikosongkan)
-- [ ] Input Data Rekening
-- [ ] Halaman/modal Persetujuan Perjanjian Kemitraan (checkbox wajib centang sebelum submit registrasi)
-- [ ] State machine status registrasi: `Draft` → `Pending Review` → `Approved` / `Rejected`
-- [ ] Notifikasi email ke calon partner saat status berubah (approved/rejected)
-- [ ] Halaman "menunggu approval" yang ditampilkan ke partner selama status masih `Pending Review`
+- [x] Migrasi tabel `partners` (data akun: nama, email, password, status registrasi, level, dst)
+- [x] ~~Migrasi tabel dokumen partner~~ — digabung jadi kolom langsung di `partners` (`profile_photo_path`, `ktp_path`, `npwp_path`, disk privat `partner_documents`), bukan tabel terpisah. Lihat keputusan di Fase 0.
+- [x] ~~Migrasi tabel rekening bank partner~~ — digabung jadi kolom langsung di `partners` (`bank_name`, `bank_account_number`, `bank_account_holder`). Lihat keputusan di Fase 0.
+- [x] Halaman Registrasi akun (form publik, tanpa login) — panel Filament kedua (`/partner/register`), wizard 4 langkah: Akun → Dokumen → Rekening Bank → Perjanjian
+- [x] Halaman Login partner (`/partner/login`, guard `partner` terpisah total dari `/admin`)
+- [x] Fitur Lupa Password (reset via email) — bawaan Filament `passwordReset()`, broker `partners` sendiri
+- [x] Upload Foto Profil
+- [x] Upload KTP
+- [x] Upload NPWP (opsional, boleh dikosongkan)
+- [x] Input Data Rekening
+- [x] Halaman/modal Persetujuan Perjanjian Kemitraan (checkbox wajib centang, teksnya diambil dari `PartnerSetting::current()` — editable admin di `/admin/manage-partner-settings`)
+- [x] State machine status registrasi: `Pending Review` → `Approved` / `Rejected` (`Draft` diperlakukan sebagai progres wizard di client, bukan row DB tersendiri — lihat keputusan Fase 0)
+- [x] Notifikasi email ke calon partner saat status berubah (approved/rejected) — 3 Mailable (`PartnerRegistrationReceived/Approved/Rejected`)
+- [x] Halaman "menunggu approval" yang ditampilkan ke partner selama status masih `Pending Review` (`PartnerStatus` page, juga menampilkan alasan kalau `Rejected`)
+
+Dikerjakan bersama fondasi teknis Fase 0 (guard `partner`, panel Filament kedua, disk privat `partner_documents`, trait `DeletesOldFiles` digeneralisasi, `PartnerSetting` singleton, `PartnerResource` admin minimal untuk approve/reject). Diverifikasi lewat `tests/Feature/PartnerRegistrationTest.php` (7 test: wizard registrasi, isolasi guard dua arah, gating status, kepemilikan dokumen privat) — sempat menemukan bug nyata (infinite redirect loop karena panel partner belum punya halaman navigable sebelum `Filament\Pages\Dashboard` didaftarkan), sudah diperbaiki.
 
 ---
 

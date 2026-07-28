@@ -6,6 +6,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PartnerDocumentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\ProjectController;
@@ -39,3 +40,7 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap')
 
 Route::get('/coming-soon', [ComingSoonController::class, 'index'])->name('coming-soon');
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])->name('newsletter.subscribe');
+
+Route::get('/partner-documents/{partner}/{type}', [PartnerDocumentController::class, 'show'])
+    ->middleware(['auth:web,partner'])
+    ->name('partner.documents.show');

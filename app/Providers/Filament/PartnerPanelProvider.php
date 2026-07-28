@@ -1,0 +1,60 @@
+<?php
+
+namespace App\Providers\Filament;
+
+use App\Http\Middleware\EnsurePartnerApproved;
+use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\AuthenticateSession;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Panel;
+use Filament\PanelProvider;
+use Filament\Support\Colors\Color;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+
+class PartnerPanelProvider extends PanelProvider
+{
+    public function panel(Panel $panel): Panel
+    {
+        return $panel
+            ->id('partner')
+            ->path('partner')
+            ->authGuard('partner')
+            ->login()
+            ->registration(\App\Filament\Partner\Pages\Auth\Register::class)
+            ->passwordReset()
+            ->colors([
+                'primary' => Color::Indigo,
+            ])
+            // Placeholder landing page until the real dashboard is built in
+            // Fase 2 - without at least one navigable page, Filament's own
+            // getUrl() falls back to the panel's bare path, which would
+            // redirect an approved partner back to /partner in a loop.
+            ->pages([
+                \Filament\Pages\Dashboard::class,
+            ])
+            ->discoverResources(in: app_path('Filament/Partner/Resources'), for: 'App\\Filament\\Partner\\Resources')
+            ->discoverPages(in: app_path('Filament/Partner/Pages'), for: 'App\\Filament\\Partner\\Pages')
+            ->discoverWidgets(in: app_path('Filament/Partner/Widgets'), for: 'App\\Filament\\Partner\\Widgets')
+            ->middleware([
+                EncryptCookies::class,
+                AddQueuedCookiesToResponse::class,
+                StartSession::class,
+                AuthenticateSession::class,
+                ShareErrorsFromSession::class,
+                VerifyCsrfToken::class,
+                SubstituteBindings::class,
+                DisableBladeIconComponents::class,
+                DispatchServingFilamentEvent::class,
+            ])
+            ->authMiddleware([
+                Authenticate::class,
+                EnsurePartnerApproved::class,
+            ]);
+    }
+}

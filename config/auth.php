@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Partner;
 use App\Models\User;
 
 return [
@@ -42,6 +43,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Fully separate from 'web': the Partner Portal panel authenticates
+        // against the `partners` table, never the staff `users` table, so a
+        // partner account can never reach /admin and vice versa.
+        'partner' => [
+            'driver' => 'session',
+            'provider' => 'partners',
+        ],
     ],
 
     /*
@@ -71,6 +80,11 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        'partners' => [
+            'driver' => 'eloquent',
+            'model' => Partner::class,
+        ],
     ],
 
     /*
@@ -96,6 +110,13 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'partners' => [
+            'provider' => 'partners',
+            'table' => 'partner_password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
         ],
