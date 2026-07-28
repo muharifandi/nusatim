@@ -4,6 +4,21 @@ Breakdown kerja untuk pengembangan **Portal Partner/Affiliator** + modul tambaha
 
 Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Urutan fase disusun berdasarkan dependency teknis (fondasi dulu, baru fitur yang bergantung padanya) — bukan urutan penomoran di spec asli.
 
+## Progress
+
+| Fase | Status | Tanggal |
+|---|---|---|
+| Fase 0 — Keputusan Arsitektur | ✅ Selesai (bagian teknis) | 2026-07-29 |
+| Fase 1 — Registrasi & Autentikasi Partner | ✅ Selesai | 2026-07-29 |
+| Fase 2 — Dashboard Partner | ⏸️ Ditunda (perlu data Fase 3/4/8/9) | — |
+| Fase 3 — Lead & Opportunity Management | ✅ Selesai | 2026-07-29 |
+| Fase 4 — Customer Management | ✅ Selesai | 2026-07-29 |
+| Fase 17 (Admin) — Lead Monitoring | ⚠️ Preview minimal (dikerjakan bareng Fase 3/4) | 2026-07-29 |
+| Fase 15 (Admin) — Partner Management | ⚠️ Preview minimal (dikerjakan bareng Fase 1) | 2026-07-29 |
+| Fase 5–23 lainnya | belum dikerjakan | — |
+
+**Berikutnya**: Fase 6 (Sales Pipeline/Kanban) — Fase 5 (Sales Workspace) sengaja dilewati dulu karena isinya murni tampilan agregat dari data Fase 3/4/8/9 (lihat catatan di Fase 5 di bawah), jadi lebih efisien dikerjakan setelah Fase 8/9 juga selesai.
+
 ---
 
 ## Fase 0 — Keputusan Arsitektur (wajib selesai sebelum mulai coding)
@@ -37,7 +52,7 @@ Ini bukan fitur, tapi keputusan desain yang akan menentukan struktur seluruh mod
 
 ---
 
-## Fase 1 — Registrasi & Autentikasi Partner ✅ (selesai)
+## Fase 1 — Registrasi & Autentikasi Partner ✅ (selesai 2026-07-29)
 
 - [x] Migrasi tabel `partners` (data akun: nama, email, password, status registrasi, level, dst)
 - [x] ~~Migrasi tabel dokumen partner~~ — digabung jadi kolom langsung di `partners` (`profile_photo_path`, `ktp_path`, `npwp_path`, disk privat `partner_documents`), bukan tabel terpisah. Lihat keputusan di Fase 0.
@@ -76,7 +91,7 @@ Dikerjakan bersama fondasi teknis Fase 0 (guard `partner`, panel Filament kedua,
 
 ---
 
-## Fase 3 — Lead & Opportunity Management ✅ (selesai)
+## Fase 3 — Lead & Opportunity Management ✅ (selesai 2026-07-29)
 
 - [x] Migrasi tabel `leads` (relasi ke partner pemilik)
 - [x] Tambah Lead (form) — `/partner/leads/create`
@@ -94,7 +109,7 @@ Belum ada di scope ini: reminder belum benar-benar "muncul di dashboard & notifi
 
 ---
 
-## Fase 4 — Customer Management ✅ (selesai)
+## Fase 4 — Customer Management ✅ (selesai 2026-07-29)
 
 - [x] Migrasi tabel `customers` (partner pemilik, sumber dari lead yang closing)
 - [x] Halaman Profil Customer (`ViewCustomer`)
@@ -227,13 +242,13 @@ Diverifikasi lewat `tests/Feature/LeadManagementTest.php` (7 test: create lead +
 
 ---
 
-## Fase 15 (Admin) — Partner Management
+## Fase 15 (Admin) — Partner Management ⚠️ (preview minimal, 2026-07-29)
 
-- [ ] Approval Registrasi partner baru (lihat dokumen KTP/NPWP yang diupload, approve/reject)
+- [x] Approval Registrasi partner baru (lihat dokumen KTP/NPWP yang diupload, approve/reject) — `/admin/partners`, dikerjakan bareng Fase 1
 - [ ] Suspend Partner
 - [ ] Aktifkan kembali Partner
 - [ ] Reset Password partner (dari sisi admin)
-- [ ] Kelola Level Partner (menunggu klarifikasi dari Fase 0)
+- [ ] Kelola Level Partner (menunggu klarifikasi dari Fase 0) — kolom `level` sudah ada, cuma text bebas belum ada UI "kelola" sungguhan
 
 ---
 
@@ -247,7 +262,7 @@ Diverifikasi lewat `tests/Feature/LeadManagementTest.php` (7 test: create lead +
 
 ---
 
-## Fase 17 (Admin) — Lead Monitoring ⚠️ (versi minimal sudah ada, dikerjakan bareng Fase 3/4)
+## Fase 17 (Admin) — Lead Monitoring ⚠️ (preview minimal, 2026-07-29)
 
 - [x] Halaman monitoring seluruh lead semua partner (read access lintas partner, admin only) — `/admin/leads`
 - [x] Transfer Ownership lead (pindah kepemilikan dari satu partner ke partner lain)
