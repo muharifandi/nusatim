@@ -1,0 +1,94 @@
+/* Logo shown above the countdown - not part of the original template. */
+.coming-soon-wrap .coming-soon-box .coming-soon-logo {
+	margin-bottom: 40px;
+}
+
+.coming-soon-wrap .coming-soon-box .coming-soon-logo img {
+	max-height: 72px;
+	width: auto;
+	margin: 0 auto;
+}
+
+/*
+ * The template's own countdown CSS only shrinks the circles once (at
+ * 1199px), never again below that - so on real phone widths the 4 circles
+ * (130px + margins each) don't fit on one line and flex-wrap pushes them
+ * into a 2x2 grid, changing the layout instead of just scaling it down.
+ * These extra breakpoints keep it a single row of 4 all the way down,
+ * matching the desktop shape at a smaller size.
+ *
+ * The template also switches .coming-soon-wrap from flex to `display:
+ * block` below 767px with a fixed top/bottom padding, which only visually
+ * centers the content when the viewport height happens to match - on
+ * taller phones the content sits near the top with empty space below.
+ * Keeping it flex (just like desktop) centers it regardless of viewport
+ * height.
+ */
+@media only screen and (max-width: 767px) {
+	.coming-soon-wrap {
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.coming-soon-wrap .coming-soon-box .coming-soon-logo {
+		margin-bottom: 24px;
+	}
+
+	.coming-soon-wrap .coming-soon-box .coming-soon-logo img {
+		max-height: 52px;
+	}
+
+	.coming-soon-wrap .coming-soon-box .countdown .countdown-section {
+		height: 90px;
+		width: 90px;
+		margin: 0 8px 15px;
+		padding-top: 0;
+	}
+
+	.coming-soon-wrap .coming-soon-box .countdown .countdown-section h2 {
+		font-size: 24px;
+		line-height: 1.1;
+	}
+
+	.coming-soon-wrap .coming-soon-box .countdown .countdown-section h3 {
+		font-size: 12px;
+	}
+}
+
+@media only screen and (max-width: 575px) {
+	.coming-soon-wrap .coming-soon-box .coming-soon-logo img {
+		max-height: 44px;
+	}
+
+	.coming-soon-wrap .coming-soon-box .countdown .countdown-section {
+		height: 74px;
+		width: 74px;
+		margin: 0 5px 12px;
+	}
+
+	.coming-soon-wrap .coming-soon-box .countdown .countdown-section h2 {
+		font-size: 19px;
+	}
+
+	.coming-soon-wrap .coming-soon-box .countdown .countdown-section h3 {
+		font-size: 10px;
+	}
+}
+
+@media only screen and (max-width: 400px) {
+	.coming-soon-wrap .coming-soon-box .countdown .countdown-section {
+		height: 60px;
+		width: 60px;
+		margin: 0 3px 12px;
+	}
+
+	.coming-soon-wrap .coming-soon-box .countdown .countdown-section h2 {
+		font-size: 15px;
+		line-height: 1;
+	}
+
+	.coming-soon-wrap .coming-soon-box .countdown .countdown-section h3 {
+		font-size: 8px;
+	}
+}

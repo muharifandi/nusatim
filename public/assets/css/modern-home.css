@@ -1,0 +1,877 @@
+/* =========================================================
+   Modern Home Redesign — Nusatim
+   Scoped under .modern-home so it never leaks into the rest
+   of the (still theme-styled) site.
+   ========================================================= */
+
+/* ---------- Header override (unscoped: header lives outside .modern-home) ----------
+   The theme's header is transparent-with-white-text by default and only turns
+   solid/dark-text once `.sticky` is added on scroll — it assumes a dark/colored
+   hero image sits behind it. This modern hero is a light gradient, so that
+   default state is invisible until the user scrolls. This file is only loaded
+   on the home page, so it's safe to force the "solid" look unconditionally here. */
+header .navbar-layout1 {
+  background-color: #ffffff;
+  box-shadow: 0 0 35px 0 rgba(20, 20, 43, 0.08);
+}
+
+header .navbar-layout1 .temp-logo .default-logo {
+  opacity: 0;
+  visibility: hidden;
+}
+
+header .navbar-layout1 .temp-logo .sticky-logo {
+  opacity: 1;
+  visibility: visible;
+}
+
+header .navbar-layout1 nav.template-main-menu > ul > li > a {
+  color: #14142b;
+}
+
+header .navbar-layout1 .item-btn.btn-ghost.btn-light {
+  border-color: #5a49f8;
+  color: #5a49f8;
+  background-color: transparent;
+}
+
+header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
+  background-color: #5a49f8;
+  color: #ffffff;
+}
+
+.modern-home {
+  --brand: #5a49f8;
+  --brand-dark: #4433d8;
+  --brand-light: #eeebff;
+  --ink: #14142b;
+  --muted: #6e7191;
+  --border: #ecebfa;
+  --bg-soft: #f8f8fc;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+.modern-home * {
+  box-sizing: border-box;
+}
+
+.modern-home .m-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.modern-home .m-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--brand-light);
+  color: var(--brand-dark);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 8px 16px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+
+.modern-home .m-heading {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+
+.modern-home .m-section-head {
+  max-width: 640px;
+  margin: 0 auto 56px;
+  text-align: center;
+}
+
+.modern-home .m-section-head .m-heading {
+  font-size: 32px;
+}
+
+.modern-home .m-text {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0 0 28px;
+}
+
+.modern-home .m-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 30px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.modern-home .m-btn:hover {
+  text-decoration: none;
+}
+
+.modern-home .m-btn-primary {
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 10px 25px -8px rgba(90, 73, 248, 0.55);
+}
+
+.modern-home .m-btn-primary:hover {
+  background: var(--brand-dark);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.modern-home .m-btn-ghost {
+  background: #fff;
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+.modern-home .m-btn-ghost:hover {
+  border-color: var(--brand);
+  color: var(--brand-dark);
+}
+
+/* ---------- Hero ---------- */
+.modern-home .m-hero {
+  position: relative;
+  padding: 190px 0 110px;
+  background: linear-gradient(180deg, #fbfbff 0%, #ffffff 100%);
+}
+
+.modern-home .m-hero::before,
+.modern-home .m-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  z-index: 0;
+}
+
+.modern-home .m-hero::before {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(90, 73, 248, 0.16), transparent 70%);
+  top: -160px;
+  right: -120px;
+}
+
+.modern-home .m-hero::after {
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(255, 179, 71, 0.18), transparent 70%);
+  bottom: -120px;
+  left: -100px;
+}
+
+.modern-home .m-hero-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.modern-home .m-hero-heading {
+  font-size: 52px;
+}
+
+.modern-home .m-hero-heading .m-accent {
+  color: var(--brand);
+}
+
+.modern-home .m-hero-ctas {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.modern-home .m-trust {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.modern-home .m-trust-avatars {
+  display: flex;
+}
+
+.modern-home .m-trust-avatars img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  margin-left: -12px;
+  box-shadow: 0 2px 8px rgba(20, 20, 43, 0.12);
+}
+
+.modern-home .m-trust-avatars img:first-child {
+  margin-left: 0;
+}
+
+.modern-home .m-trust-text {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.modern-home .m-trust-text strong {
+  color: var(--ink);
+}
+
+.modern-home .m-risk-reversal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted);
+  margin: -8px 0 28px;
+}
+
+.modern-home .m-risk-reversal i {
+  color: #22c55e;
+}
+
+/* ---------- Quick-pick cards ---------- */
+.modern-home .m-quick-picks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+  margin-top: -64px;
+  padding-bottom: 40px;
+}
+
+.modern-home .m-quick-pick {
+  border-radius: 20px;
+  padding: 30px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modern-home .m-quick-pick:hover {
+  transform: translateY(-4px);
+  text-decoration: none;
+}
+
+.modern-home .m-quick-pick-primary {
+  background: linear-gradient(135deg, var(--brand) 0%, #8a3ffc 100%);
+  color: #fff;
+  box-shadow: 0 20px 40px -18px rgba(90, 73, 248, 0.55);
+}
+
+.modern-home .m-quick-pick-light {
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  box-shadow: 0 20px 40px -24px rgba(20, 20, 43, 0.15);
+}
+
+.modern-home .m-quick-pick-light:hover {
+  border-color: var(--brand);
+  color: var(--ink);
+}
+
+.modern-home .m-quick-pick .m-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.modern-home .m-quick-pick-primary .m-title { color: #fff; }
+
+.modern-home .m-quick-pick .m-sub {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.modern-home .m-quick-pick .m-arrow {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.modern-home .m-quick-pick-primary .m-arrow {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.modern-home .m-quick-pick-light .m-arrow {
+  background: var(--brand-light);
+  color: var(--brand);
+}
+
+/* ---------- Why us (dark section) ---------- */
+.modern-home .m-why-us {
+  background: linear-gradient(180deg, #14142b 0%, #1c1a3d 100%);
+  border-radius: 32px;
+  padding: 72px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.modern-home .m-why-us::before {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(90, 73, 248, 0.35), transparent 70%);
+  top: -180px;
+  right: -100px;
+}
+
+.modern-home .m-why-us .m-section-head {
+  position: relative;
+  z-index: 1;
+}
+
+.modern-home .m-why-us .m-eyebrow {
+  background: rgba(90, 73, 248, 0.2);
+  color: #b8adff;
+}
+
+.modern-home .m-why-us .m-heading,
+.modern-home .m-why-us .m-text {
+  color: #fff;
+}
+
+.modern-home .m-why-us .m-text {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.modern-home .m-why-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.modern-home .m-why-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 28px;
+}
+
+.modern-home .m-why-card .m-icon-circle {
+  background: rgba(90, 73, 248, 0.25);
+  color: #b8adff;
+}
+
+.modern-home .m-why-card h3 {
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.modern-home .m-why-card p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Hero visual: pure CSS "product card" mockup, no image dependency */
+.modern-home .m-hero-visual {
+  position: relative;
+  min-height: 420px;
+}
+
+.modern-home .m-hero-card {
+  position: relative;
+  background: linear-gradient(160deg, var(--brand) 0%, #8a3ffc 100%);
+  border-radius: 28px;
+  padding: 36px;
+  height: 420px;
+  box-shadow: 0 40px 70px -30px rgba(90, 73, 248, 0.45);
+  overflow: hidden;
+}
+
+.modern-home .m-hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.15) 2px, transparent 2px);
+  background-size: 22px 22px;
+  opacity: 0.5;
+}
+
+.modern-home .m-hero-card-row {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.modern-home .m-hero-card-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.modern-home .m-hero-card-bars {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  height: 150px;
+  margin: 30px 0;
+}
+
+.modern-home .m-hero-card-bars span {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px 8px 0 0;
+}
+
+.modern-home .m-hero-card-label {
+  position: relative;
+  color: #fff;
+}
+
+.modern-home .m-hero-card-label .m-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.modern-home .m-hero-card-label .m-sub {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+.modern-home .m-float-badge {
+  position: absolute;
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: 0 20px 40px -15px rgba(20, 20, 43, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modern-home .m-float-badge-1 {
+  top: -20px;
+  right: 20px;
+}
+
+.modern-home .m-float-badge-2 {
+  bottom: -24px;
+  left: -20px;
+}
+
+.modern-home .m-float-badge .m-icon-circle {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.modern-home .m-float-badge .m-num {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.modern-home .m-float-badge .m-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---------- Icon circle ---------- */
+.modern-home .m-icon-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brand-light);
+  color: var(--brand);
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* ---------- Logo cloud ---------- */
+.modern-home .m-logos {
+  padding: 60px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.modern-home .m-logos-label {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 32px;
+}
+
+.modern-home .m-logos-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+}
+
+.modern-home .m-logos-row img {
+  max-height: 34px;
+  width: auto;
+  filter: grayscale(1);
+  opacity: 0.55;
+  transition: all 0.2s ease;
+}
+
+.modern-home .m-logos-row a:hover img {
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+/* ---------- Generic section ---------- */
+.modern-home .m-section {
+  padding: 100px 0;
+}
+
+.modern-home .m-section-soft {
+  background: var(--bg-soft);
+}
+
+/* ---------- Services grid ---------- */
+.modern-home .m-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.modern-home .m-service-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  transition: all 0.25s ease;
+}
+
+.modern-home .m-service-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 40px -20px rgba(20, 20, 43, 0.15);
+  border-color: transparent;
+}
+
+.modern-home .m-service-card h3 {
+  font-size: 19px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.modern-home .m-service-card p {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0 0 16px;
+}
+
+.modern-home .m-service-link {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brand);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modern-home .m-service-link:hover {
+  color: var(--brand-dark);
+  text-decoration: none;
+}
+
+/* ---------- Stats band ---------- */
+.modern-home .m-stats {
+  background: linear-gradient(135deg, var(--brand) 0%, #4433d8 100%);
+  border-radius: 32px;
+  padding: 56px 40px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.modern-home .m-stat {
+  text-align: center;
+  color: #fff;
+}
+
+.modern-home .m-stat .m-num {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.modern-home .m-stat .m-label {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+/* ---------- About split ---------- */
+.modern-home .m-about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.modern-home .m-check-list {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 20px;
+}
+
+.modern-home .m-check-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.modern-home .m-check-list li i {
+  color: var(--brand);
+  margin-top: 3px;
+}
+
+.modern-home .m-about-visual {
+  position: relative;
+}
+
+.modern-home .m-about-photo {
+  border-radius: 24px;
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  box-shadow: 0 30px 60px -25px rgba(20, 20, 43, 0.3);
+}
+
+/* ---------- Testimonials ---------- */
+.modern-home .m-testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.modern-home .m-testimonial-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 30px;
+}
+
+.modern-home .m-stars {
+  color: #ffb347;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.modern-home .m-testimonial-card p {
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.7;
+  margin-bottom: 22px;
+}
+
+.modern-home .m-testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modern-home .m-testimonial-author img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.modern-home .m-testimonial-author .m-name {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.modern-home .m-testimonial-author .m-role {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---------- Portfolio / Blog cards ---------- */
+.modern-home .m-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.modern-home .m-media-card {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #fff;
+  transition: all 0.25s ease;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.modern-home .m-media-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 40px -20px rgba(20, 20, 43, 0.18);
+  text-decoration: none;
+  color: inherit;
+}
+
+.modern-home .m-media-card .m-media-figure {
+  height: 200px;
+  overflow: hidden;
+}
+
+.modern-home .m-media-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.modern-home .m-media-card:hover img {
+  transform: scale(1.06);
+}
+
+.modern-home .m-media-card .m-media-body {
+  padding: 22px;
+}
+
+.modern-home .m-media-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brand);
+  background: var(--brand-light);
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.modern-home .m-media-body h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.modern-home .m-media-body p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ---------- CTA band ---------- */
+.modern-home .m-cta {
+  position: relative;
+  background: linear-gradient(135deg, #14142b 0%, #241f4d 100%);
+  border-radius: 32px;
+  padding: 72px 40px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.modern-home .m-cta::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(90, 73, 248, 0.35), transparent 70%);
+  top: -160px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.modern-home .m-cta-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.modern-home .m-cta h2 {
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.modern-home .m-cta p {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 16px;
+  margin: 0 0 32px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 991px) {
+  .modern-home .m-hero { padding: 150px 0 80px; }
+  .modern-home .m-hero-grid { grid-template-columns: 1fr; gap: 60px; }
+  .modern-home .m-hero-heading { font-size: 40px; }
+  .modern-home .m-services-grid,
+  .modern-home .m-testimonial-grid,
+  .modern-home .m-card-grid { grid-template-columns: repeat(2, 1fr); }
+  .modern-home .m-stats { grid-template-columns: repeat(2, 1fr); }
+  .modern-home .m-about-grid { grid-template-columns: 1fr; }
+  .modern-home .m-hero-visual { min-height: 340px; }
+  .modern-home .m-why-grid { grid-template-columns: 1fr; }
+  .modern-home .m-quick-picks { margin-top: -40px; }
+}
+
+@media (max-width: 575px) {
+  .modern-home .m-hero { padding: 130px 0 60px; }
+  .modern-home .m-heading { font-size: 28px; }
+  .modern-home .m-hero-heading { font-size: 30px; }
+  .modern-home .m-section { padding: 64px 0; }
+  .modern-home .m-services-grid,
+  .modern-home .m-testimonial-grid,
+  .modern-home .m-card-grid,
+  .modern-home .m-stats,
+  .modern-home .m-check-list { grid-template-columns: 1fr; }
+  .modern-home .m-btn { width: 100%; justify-content: center; }
+  .modern-home .m-hero-ctas { flex-direction: column; align-items: stretch; }
+  .modern-home .m-quick-picks { grid-template-columns: 1fr; margin-top: 24px; }
+  .modern-home .m-quick-pick { flex-direction: column; align-items: flex-start; text-align: left; }
+  .modern-home .m-why-us { padding: 48px 24px; border-radius: 20px; }
+}

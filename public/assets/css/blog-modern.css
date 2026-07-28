@@ -1,0 +1,901 @@
+/* =========================================================
+   Blog Modern Redesign — Nusatim
+   Editorial, typography-led layout (Stripe/Vercel/Linear-blog
+   inspired) instead of the boxed, gradient-heavy template default.
+   Scoped under .blog-modern so it never leaks elsewhere.
+   ========================================================= */
+
+.blog-modern {
+  --brand: #5a49f8;
+  --brand-dark: #4433d8;
+  --ink: #14142b;
+  --muted: #6e7191;
+  --border: #ecebf5;
+  --bg-soft: #f8f8fc;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: var(--ink);
+}
+
+.blog-modern * {
+  box-sizing: border-box;
+}
+
+/* Header override (unscoped: header lives outside .blog-modern) - the theme
+   header is transparent/white-text by default, meant to sit over a dark
+   hero image. These pages no longer have the dark gradient banner, so force
+   the solid/dark-text "sticky" look from first paint. This file only loads
+   on blog pages, so it's safe to target header unconditionally here. */
+header .navbar-layout1 {
+  background-color: #ffffff;
+  box-shadow: 0 0 35px 0 rgba(20, 20, 43, 0.08);
+}
+
+header .navbar-layout1 .temp-logo .default-logo {
+  opacity: 0;
+  visibility: hidden;
+}
+
+header .navbar-layout1 .temp-logo .sticky-logo {
+  opacity: 1;
+  visibility: visible;
+}
+
+header .navbar-layout1 nav.template-main-menu > ul > li > a {
+  color: #14142b;
+}
+
+header .navbar-layout1 .item-btn.btn-ghost.btn-light {
+  border-color: #5a49f8;
+  color: #5a49f8;
+  background-color: transparent;
+}
+
+header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
+  background-color: #5a49f8;
+  color: #ffffff;
+}
+
+.bm-container {
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.bm-container-narrow {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Header ---------- */
+.bm-header {
+  /* The theme header is position:absolute and overlays the top of the page
+     (it normally relies on a big hero/banner below it for clearance) - this
+     page has no banner, so pad enough to clear the ~116px header height. */
+  padding: 160px 0 40px;
+  border-bottom: 1px solid var(--border);
+}
+
+.bm-eyebrow {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-bottom: 14px;
+}
+
+.bm-header h1 {
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+
+.bm-header p {
+  font-size: 18px;
+  color: var(--muted);
+  max-width: 560px;
+  margin: 0;
+}
+
+@media only screen and (max-width: 575px) {
+  .bm-header {
+    /* Mobile header (logo bar + lang/CTA bar) runs ~120px tall here, so
+       160px was padding far past what's needed - just clear it plus a
+       small buffer instead of leaving a big dead zone before any text. */
+    padding: 96px 0 24px;
+  }
+  .bm-header h1 {
+    font-size: 30px;
+  }
+  .bm-header p {
+    font-size: 16px;
+  }
+}
+
+/* ---------- Content section spacing ---------- */
+.bm-content {
+  padding: 56px 0 100px;
+}
+
+@media only screen and (max-width: 575px) {
+  .bm-content {
+    padding: 28px 0 56px;
+  }
+}
+
+/* ---------- Featured post ---------- */
+.bm-featured {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 64px;
+  padding-bottom: 56px;
+  border-bottom: 1px solid var(--border);
+}
+
+.bm-featured:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.bm-featured-image {
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 16 / 11;
+}
+
+.bm-featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.bm-featured:hover .bm-featured-image img {
+  transform: scale(1.03);
+}
+
+.bm-featured-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-bottom: 14px;
+}
+
+.bm-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.bm-meta .bm-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex: none;
+}
+
+.bm-featured-body h2 {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+
+.bm-featured-body p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0 0 18px;
+}
+
+.bm-readmore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.bm-featured:hover .bm-readmore {
+  color: var(--brand);
+}
+
+@media only screen and (max-width: 850px) {
+  .bm-featured {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .bm-featured-body h2 {
+    font-size: 24px;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .bm-featured {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+  }
+}
+
+/* ---------- Filter bar ---------- */
+.bm-filter-bar {
+  margin-bottom: 48px;
+}
+
+.bm-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.bm-filter-row input,
+.bm-filter-row select {
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ink);
+  background-color: #ffffff;
+  transition: border-color 0.2s ease;
+}
+
+.bm-filter-row input:focus,
+.bm-filter-row select:focus {
+  outline: none;
+  border-color: var(--brand);
+}
+
+.bm-search {
+  flex: 1 1 220px;
+  min-width: 180px;
+}
+
+.bm-search input {
+  width: 100%;
+}
+
+.bm-filter-select {
+  width: 160px;
+}
+
+.bm-filter-date {
+  width: 150px;
+}
+
+.bm-filter-submit {
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--ink);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.bm-filter-submit:hover {
+  background-color: var(--brand);
+}
+
+.bm-filter-reset {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: underline;
+}
+
+.bm-filter-reset:hover {
+  color: var(--brand);
+}
+
+@media only screen and (max-width: 575px) {
+  .bm-filter-bar {
+    margin-bottom: 24px;
+  }
+  .bm-filter-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding-bottom: 4px;
+  }
+  .bm-filter-row input,
+  .bm-filter-row select,
+  .bm-filter-submit {
+    width: 100%;
+  }
+  /* .bm-search is a <div> wrapper, not an input/select, so the rule above
+     doesn't reach it - and its flex-basis:220px (a width hint in the normal
+     row layout) gets reinterpreted as a *height* once the row switches to
+     flex-direction:column here, leaving a tall empty gap. Reset it plainly. */
+  .bm-search {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+  }
+  .bm-filter-select,
+  .bm-filter-date {
+    width: 100%;
+  }
+}
+
+/* ---------- Post grid ---------- */
+.bm-list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.bm-list-toolbar-label {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.bm-view-toggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background-color: var(--bg-soft);
+  border-radius: 10px;
+}
+
+.bm-view-btn {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+@media only screen and (max-width: 650px) {
+  .bm-view-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 15px;
+  }
+}
+
+.bm-view-btn:hover {
+  color: var(--ink);
+}
+
+.bm-view-btn.active {
+  background-color: #ffffff;
+  color: var(--brand);
+  box-shadow: 0 2px 6px rgba(20, 20, 43, 0.1);
+}
+
+.bm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px 32px;
+}
+
+@media only screen and (max-width: 991px) {
+  .bm-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  .bm-grid {
+    /* Stay at 2 columns down to phone widths instead of collapsing to a
+       single column, so the grid view still reads as a grid on mobile. */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 14px;
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .bm-grid {
+    gap: 20px 10px;
+  }
+}
+
+.bm-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.bm-card:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.bm-card-image {
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 530 / 401;
+  margin-bottom: 18px;
+}
+
+.bm-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.bm-card:hover .bm-card-image img {
+  transform: scale(1.05);
+}
+
+.bm-card-category {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-bottom: 8px;
+}
+
+.bm-card h3 {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+.bm-card:hover h3 {
+  color: var(--brand);
+}
+
+.bm-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+
+.bm-card-date {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+@media only screen and (max-width: 650px) {
+  .bm-card-image {
+    margin-bottom: 12px;
+  }
+  .bm-card-category {
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+  .bm-card h3 {
+    font-size: 15px;
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .bm-card p {
+    /* Excerpt text wraps to 3-4 lines in a ~160px-wide mobile column and
+       looks cluttered - clamp it so every card stays a consistent height. */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .bm-card-date {
+    font-size: 12px;
+  }
+}
+
+/* ---------- List view (grid/list toggle) ---------- */
+.bm-grid.list-view {
+  display: block;
+}
+
+.bm-grid.list-view .bm-card {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.bm-grid.list-view .bm-card:first-child {
+  padding-top: 0;
+}
+
+.bm-grid.list-view .bm-card-image {
+  flex: 0 0 220px;
+  width: 220px;
+  margin-bottom: 0;
+}
+
+.bm-grid.list-view .bm-card-body {
+  /* flex:1 alone stretches this to fill the entire remaining row width
+     (800px+ on wide screens) even though a title + one-line excerpt only
+     need a fraction of that - it reads as a chunk of text floating in a
+     lot of empty space. Cap it to a comfortable reading-column width and
+     let the row's own background/border still carry the eye across. */
+  flex: 1 1 auto;
+  max-width: 640px;
+  min-width: 0;
+}
+
+.bm-grid.list-view .bm-card p {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Keep the image-left / text-right layout at every width instead of
+   stacking on mobile - just scale the image column down so the text still
+   gets enough room to stay readable on narrow screens. */
+@media only screen and (max-width: 650px) {
+  .bm-grid.list-view .bm-card {
+    gap: 16px;
+  }
+  .bm-grid.list-view .bm-card-image {
+    flex-basis: 140px;
+    width: 140px;
+  }
+  .bm-grid.list-view .bm-card h3 {
+    font-size: 16px;
+  }
+  .bm-grid.list-view .bm-card p {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .bm-grid.list-view .bm-card-image {
+    flex-basis: 100px;
+    width: 100px;
+  }
+}
+
+.bm-empty {
+  padding: 60px 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.bm-pagination {
+  margin-top: 56px;
+  display: flex;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 575px) {
+  .bm-pagination {
+    margin-top: 32px;
+  }
+}
+
+.bm-pager {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bm-pager-link,
+.bm-pager-arrow {
+  min-width: 38px;
+  height: 38px;
+  padding: 0 6px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  transition: all 0.2s ease;
+}
+
+.bm-pager-link:hover,
+.bm-pager-arrow:hover {
+  background-color: var(--bg-soft);
+  color: var(--brand);
+}
+
+.bm-pager-link.active {
+  background-color: var(--ink);
+  color: #ffffff;
+}
+
+.bm-pager-arrow.disabled {
+  color: var(--border);
+  cursor: default;
+}
+
+.bm-pager-arrow.disabled:hover {
+  background-color: transparent;
+  color: var(--border);
+}
+
+.bm-pager-dots {
+  color: var(--muted);
+  padding: 0 4px;
+}
+
+/* ---------- Article (single post) ---------- */
+.bm-article-header {
+  /* Same header-overlay clearance issue as .bm-header - see its comment. */
+  padding: 152px 0 32px;
+}
+
+.bm-back {
+  display: flex;
+  width: -webkit-fit-content;
+  width: fit-content;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.bm-back:hover {
+  color: var(--brand);
+}
+
+.bm-article-header h1 {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 16px;
+  color: var(--ink);
+}
+
+.bm-excerpt {
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0 0 28px;
+}
+
+.bm-byline {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.bm-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand), #7b64f2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  flex: none;
+}
+
+.bm-byline-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.bm-byline-meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.bm-share-inline {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.bm-share-inline a {
+  color: var(--muted);
+  font-size: 15px;
+  transition: color 0.2s ease;
+}
+
+.bm-share-inline a:hover {
+  color: var(--brand);
+}
+
+@media only screen and (max-width: 575px) {
+  .bm-article-header {
+    padding: 160px 0 24px;
+  }
+  .bm-article-header h1 {
+    font-size: 28px;
+  }
+  .bm-excerpt {
+    font-size: 16px;
+  }
+  .bm-share-inline {
+    display: none;
+  }
+}
+
+.bm-hero-image {
+  max-width: 1000px;
+  margin: 0 auto 56px;
+  padding: 0 24px;
+}
+
+.bm-hero-image img {
+  width: 100%;
+  height: auto;
+  max-height: 520px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.bm-prose {
+  font-size: 18px;
+  line-height: 1.85;
+  color: #2b2b40;
+}
+
+.bm-prose p {
+  margin: 0 0 24px;
+}
+
+.bm-prose img {
+  display: block;
+  margin: 32px auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.bm-prose h2,
+.bm-prose h3 {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 40px 0 16px;
+}
+
+.bm-prose a {
+  color: var(--brand);
+}
+
+.bm-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 48px 0 0;
+}
+
+.bm-tags a {
+  display: inline-block;
+  padding: 7px 16px;
+  border-radius: 20px;
+  background-color: var(--bg-soft);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.bm-tags a:hover {
+  background-color: var(--brand);
+  color: #ffffff;
+}
+
+.bm-share-block {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.bm-share-block .bm-share-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.bm-share-block a {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: var(--bg-soft);
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.bm-share-block a:hover {
+  background-color: var(--brand);
+  color: #ffffff;
+}
+
+.bm-author-card {
+  margin-top: 48px;
+  padding: 28px;
+  border-radius: 16px;
+  background-color: var(--bg-soft);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.bm-author-card .bm-avatar {
+  width: 56px;
+  height: 56px;
+  font-size: 20px;
+}
+
+.bm-author-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.bm-author-card-bio {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ---------- Related section ---------- */
+.bm-related {
+  padding: 72px 0 100px;
+  border-top: 1px solid var(--border);
+  margin-top: 64px;
+}
+
+.bm-related h2 {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 32px;
+  color: var(--ink);
+}
