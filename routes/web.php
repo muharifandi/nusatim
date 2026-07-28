@@ -4,6 +4,7 @@ use App\Http\Controllers\ComingSoonController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LeadDocumentController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PartnerDocumentController;
@@ -44,3 +45,7 @@ Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])->na
 Route::get('/partner-documents/{partner}/{type}', [PartnerDocumentController::class, 'show'])
     ->middleware(['auth:web,partner'])
     ->name('partner.documents.show');
+
+Route::get('/lead-documents/{leadDocument}', [LeadDocumentController::class, 'show'])
+    ->middleware(['auth:web,partner'])
+    ->name('lead.documents.show');

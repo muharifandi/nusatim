@@ -81,6 +81,20 @@ return [
             'report' => false,
         ],
 
+        // Documents attached to a Lead (contracts, ID scans, quotes, etc).
+        // Kept separate from 'partner_documents' even though both are
+        // private - the two disks cover unrelated ownership domains
+        // (a partner's own KYC docs vs. documents attached to a lead they
+        // own), and LeadDocumentController's access rules differ from
+        // PartnerDocumentController's accordingly.
+        'lead_documents' => [
+            'driver' => 'local',
+            'root' => storage_path('app/lead-documents'),
+            'visibility' => 'private',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

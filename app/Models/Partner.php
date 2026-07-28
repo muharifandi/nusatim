@@ -7,6 +7,7 @@ use Database\Factories\PartnerFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -73,5 +74,15 @@ class Partner extends Authenticatable implements FilamentUser
     protected function fileFields(): array
     {
         return ['profile_photo_path', 'ktp_path', 'npwp_path'];
+    }
+
+    public function leads(): HasMany
+    {
+        return $this->hasMany(Lead::class);
+    }
+
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class);
     }
 }

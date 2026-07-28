@@ -58,7 +58,9 @@ Dikerjakan bersama fondasi teknis Fase 0 (guard `partner`, panel Filament kedua,
 
 ---
 
-## Fase 2 — Dashboard Partner
+## Fase 2 — Dashboard Partner ⏸️ (sengaja ditunda)
+
+**Belum dikerjakan, bukan lupa.** Semua isi fase ini adalah angka ringkasan/grafik dari tabel yang saat Fase 1 selesai belum ada sama sekali (`leads`, `customers`, `partner_projects`, `commissions`). Membangunnya lebih dulu cuma menghasilkan halaman kosong yang harus dibongkar ulang begitu data aslinya ada. Placeholder `Filament\Pages\Dashboard` bawaan (dipasang di Fase 1 supaya panel partner tidak infinite-redirect) dipakai sementara. Item "Total Lead"/"Total Customer" di bawah ini sudah bisa dikerjakan sekarang setelah Fase 3+4 selesai (datanya sudah ada) — sisanya (Project/Komisi/Withdrawal) menunggu fase terkait.
 
 - [ ] Query/summary: Total Lead, Total Opportunity, Total Customer, Total Project
 - [ ] Query/summary: Project Available (jumlah project yang bisa diklaim)
@@ -74,32 +76,38 @@ Dikerjakan bersama fondasi teknis Fase 0 (guard `partner`, panel Filament kedua,
 
 ---
 
-## Fase 3 — Lead & Opportunity Management
+## Fase 3 — Lead & Opportunity Management ✅ (selesai)
 
-- [ ] Migrasi tabel `leads` (relasi ke partner pemilik)
-- [ ] Tambah Lead (form)
-- [ ] Edit Lead
-- [ ] Halaman Detail Lead
-- [ ] Upload Dokumen di Lead (relasi dokumen ke lead, disk terpisah dari dokumen KYC partner)
-- [ ] Timeline aktivitas per Lead (log otomatis setiap ada perubahan/aktivitas)
-- [ ] Catatan Internal (notes bebas, tidak terlihat customer)
-- [ ] Reminder Follow Up (dengan tanggal/waktu, muncul di dashboard & notifikasi)
-- [ ] Reminder Meeting (dengan tanggal/waktu, muncul di dashboard & notifikasi)
-- [ ] State machine status lead: `New` → `Contacted` → `Qualified` → `Opportunity` → `Proposal` → `Negotiation` → `Won` / `Lost`
-- [ ] Saat status jadi `Won`: trigger otomatis pembuatan record Customer (Fase 4)
+- [x] Migrasi tabel `leads` (relasi ke partner pemilik)
+- [x] Tambah Lead (form) — `/partner/leads/create`
+- [x] Edit Lead
+- [x] Halaman Detail Lead (`ViewLead` — pola 4-halaman List/Create/Edit/View, pertama di project ini)
+- [x] Upload Dokumen di Lead (tabel `lead_documents`, disk privat `lead_documents` — terpisah dari `partner_documents`, di-serve `LeadDocumentController` dengan cek kepemilikan)
+- [x] Timeline aktivitas per Lead (tabel `lead_activities`, auto-log lewat model event `created`/`status_change`)
+- [x] Catatan Internal (`lead_activities` type=`note`, ditambah lewat action "Tambah Catatan" di relation manager Timeline)
+- [x] Reminder Follow Up (tabel `lead_reminders` type=`follow_up`)
+- [x] Reminder Meeting (`lead_reminders` type=`meeting`)
+- [x] State machine status lead: `new → contacted → qualified → opportunity → proposal → negotiation → won / lost`
+- [x] Saat status jadi `Won`: trigger otomatis pembuatan record Customer (Fase 4) — ada di model event, jadi tidak bisa dilewati lewat jalur manapun (bukan cuma lewat tombol "Tandai Won")
+
+Belum ada di scope ini: reminder belum benar-benar "muncul di dashboard & notifikasi" (menunggu Fase 2 Dashboard + Fase 13 Notification Center — datanya sudah siap dipakai begitu fase itu dikerjakan).
 
 ---
 
-## Fase 4 — Customer Management
+## Fase 4 — Customer Management ✅ (selesai)
 
-- [ ] Migrasi tabel `customers` (partner pemilik, sumber dari lead yang closing)
-- [ ] Halaman Profil Customer
-- [ ] Data PIC customer
-- [ ] Data Kontak
-- [ ] Data Produk yang dibeli
-- [ ] Nilai Project per customer
-- [ ] Status Pembayaran
-- [ ] Riwayat Aktivitas customer (gabungan timeline dari lead asal + aktivitas setelah jadi customer)
+- [x] Migrasi tabel `customers` (partner pemilik, sumber dari lead yang closing)
+- [x] Halaman Profil Customer (`ViewCustomer`)
+- [x] Data PIC customer
+- [x] Data Kontak — **diinterpretasikan sebagai orang yang sama dengan PIC** (`pic_name`/`pic_phone`/`pic_email`), bukan dua entitas kontak terpisah. Perlu dikonfirmasi kalau ternyata dimaksudkan beda.
+- [x] Data Produk yang dibeli (`service_id`, reuse tabel `services` — sama seperti di Lead)
+- [x] Nilai Project per customer
+- [x] Status Pembayaran (`unpaid`/`partial`/`paid`)
+- [x] Riwayat Aktivitas customer (gabungan timeline dari lead asal + aktivitas setelah jadi customer) — `Customer::activityTimeline()`, ditampilkan lewat Infolist `RepeatableEntry` (bukan RelationManager karena sumbernya gabungan 2 relasi, bukan 1 relasi tunggal)
+
+Dikerjakan bersama Fase 17 (Admin) versi minimal (Lead Monitoring: validasi + transfer ownership + peringatan duplikat sederhana berdasarkan phone/email yang sama) supaya kedua fase ini bisa diuji end-to-end dari sisi admin juga — sama seperti pola preview Fase 15 saat Fase 1. Anti-duplicate masih versi sederhana (tampilkan daftar lead lain dengan kontak sama), belum fuzzy-matching penuh.
+
+Diverifikasi lewat `tests/Feature/LeadManagementTest.php` (7 test: create lead + auto-log timeline, Won→Customer idempotent, Lost tidak membuat Customer, partner tidak bisa lihat/edit lead partner lain, kepemilikan dokumen privat, render halaman View Lead & Customer end-to-end, admin validate+transfer ownership).
 
 ---
 
@@ -239,12 +247,12 @@ Dikerjakan bersama fondasi teknis Fase 0 (guard `partner`, panel Filament kedua,
 
 ---
 
-## Fase 17 (Admin) — Lead Monitoring
+## Fase 17 (Admin) — Lead Monitoring ⚠️ (versi minimal sudah ada, dikerjakan bareng Fase 3/4)
 
-- [ ] Halaman monitoring seluruh lead semua partner (read access lintas partner, admin only)
-- [ ] Transfer Ownership lead (pindah kepemilikan dari satu partner ke partner lain)
-- [ ] Validasi Lead (admin verifikasi lead valid/tidak)
-- [ ] Anti Duplicate — deteksi lead dengan kontak/data yang sama sudah pernah diinput (oleh partner lain atau partner yang sama)
+- [x] Halaman monitoring seluruh lead semua partner (read access lintas partner, admin only) — `/admin/leads`
+- [x] Transfer Ownership lead (pindah kepemilikan dari satu partner ke partner lain)
+- [x] Validasi Lead (admin verifikasi lead valid/tidak)
+- [ ] Anti Duplicate — **versi sederhana sudah ada** (banner daftar lead lain dengan phone/email sama, di modal View), **belum** fuzzy-matching penuh (typo, format nomor beda, dst). Perbaiki di sini kalau versi sekarang kurang sensitif.
 
 ---
 
