@@ -17,14 +17,17 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 7 — Project Board (Available Project) | ✅ Selesai | 2026-07-29 |
 | Fase 8 — Project Management | ⏸️ Ditunda (2 sumber data sudah nyambung sejak Fase 9, tinggal tunggu data lebih banyak) | — |
 | Fase 9 — Commission Management (sisi Partner) | ✅ Selesai | 2026-07-29 |
+| Fase 10 — Withdrawal (Partner) | ✅ Selesai | 2026-07-29 |
+| Fase 11 — Withdrawal History | ✅ Selesai (dikerjakan bareng Fase 10) | 2026-07-29 |
 | Fase 16 (Admin) — Project Board Management | ✅ Selesai (dikerjakan bareng Fase 7, bukan cuma preview) | 2026-07-29 |
 | Fase 17 (Admin) — Lead Monitoring | ⚠️ Preview minimal (dikerjakan bareng Fase 3/4) | 2026-07-29 |
 | Fase 18 (Admin) — Commission Scheme Management | ✅ Selesai (dikerjakan bareng Fase 9) | 2026-07-29 |
 | Fase 19 (Admin) — Commission Management (sisi Admin) | ✅ Selesai (dikerjakan bareng Fase 9) | 2026-07-29 |
+| Fase 20 (Admin) — Withdrawal Management | ✅ Selesai (dikerjakan bareng Fase 10) | 2026-07-29 |
 | Fase 15 (Admin) — Partner Management | ⚠️ Preview minimal (dikerjakan bareng Fase 1) | 2026-07-29 |
-| Fase 5, 10–14, 20–23 lainnya | belum dikerjakan | — |
+| Fase 5, 12–14, 21–23 lainnya | belum dikerjakan | — |
 
-**Berikutnya**: Fase 10 (Withdrawal, sisi Partner) — komisi `Approved` sudah bisa dihitung jadi saldo (Fase 9 selesai), tapi field "Minimum Withdrawal" butuh Partner Settings (Fase 23) yang belum ada — kemungkinan dibangun sekalian sebagai bagian minimal dari Fase 10, sama seperti pola Fase 15/17 preview. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8/9).
+**Berikutnya**: Fase 12 (Marketing Center) — modul mandiri (upload/download materi marketing per kategori), tidak bergantung ke fase lain, jadi murni pekerjaan build biasa tanpa keputusan bisnis tambahan. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8/9/10).
 
 ---
 
@@ -221,21 +224,27 @@ Diverifikasi lewat `tests/Feature/CommissionManagementTest.php` (8 test): auto-c
 
 ---
 
-## Fase 10 — Withdrawal (Partner)
+## Fase 10 — Withdrawal (Partner) ✅ (selesai 2026-07-29)
 
-- [ ] Hitung & tampilkan saldo tersedia (komisi berstatus `Approved`/ready withdrawal)
-- [ ] Ambil aturan Minimum Withdrawal dari pengaturan admin (Fase Partner Settings)
-- [ ] Form Ajukan Withdrawal
-- [ ] Pilih rekening (dari data rekening yang sudah diinput saat registrasi/profile)
-- [ ] Upload Foto KTP — **wajib di setiap pengajuan penarikan** (bukan cukup sekali saat registrasi — ini beda dari KTP registrasi, tegaskan validasinya di kode)
-- [ ] Catatan Penarikan (opsional, alasan/keterangan dari partner)
-- [ ] State machine status: `Pending` → `Approved` → `Paid` / `Rejected`
+- [x] Hitung & tampilkan saldo tersedia (komisi berstatus `Approved`/ready withdrawal) — `Partner::availableBalance()`, divalidasi ulang server-side saat submit (bukan cuma ditampilkan)
+- [x] Ambil aturan Minimum Withdrawal dari pengaturan admin (Fase Partner Settings) — field `minimum_withdrawal` ditambahkan ke `partner_settings` (potongan minimal dari Fase 23, bukan seluruh modul)
+- [x] Form Ajukan Withdrawal — `/partner/withdrawals/create`
+- [x] Pilih rekening (dari data rekening yang sudah diinput saat registrasi/profile) — partner cuma punya 1 rekening (kolom langsung di `partners`), jadi otomatis di-snapshot saat submit, bukan pilihan aktif
+- [x] Upload Foto KTP — **wajib di setiap pengajuan penarikan**, kolom `withdrawals.ktp_path` terpisah dari `partners.ktp_path` registrasi
+- [x] Catatan Penarikan (opsional, alasan/keterangan dari partner)
+- [x] State machine status: `Pending` → `Approved` → `Paid` / `Rejected`
+
+**Audit trail** (di-flag sejak Fase 0): tabel `withdrawal_status_histories` terpisah, sama pola dengan `commission_status_histories` di Fase 9.
+
+**Kapan komisi ditandai `paid`**: bukan saat withdrawal `approved`, tapi saat benar-benar `paid` (admin upload bukti transfer) — komisi `approved` milik partner dikonsumsi FIFO (dari yang paling lama) sampai menutupi nominal withdrawal. Komisi tidak dibagi sebagian (kalau baris terakhir kelebihan, tetap ditandai paid utuh) — penyederhanaan yang didokumentasikan, bukan sistem alokasi presisi.
 
 ---
 
-## Fase 11 — Withdrawal History
+## Fase 11 — Withdrawal History ✅ (selesai 2026-07-29, dikerjakan bareng Fase 10)
 
-- [ ] Listing riwayat withdrawal: Nominal, Rekening, Foto KTP (link lihat, bukan publik), Bukti Transfer (dari admin), Tanggal, Status
+- [x] Listing riwayat withdrawal: Nominal, Rekening, Foto KTP (link lihat, bukan publik), Bukti Transfer (dari admin), Tanggal, Status — sudah ada di `/partner/withdrawals` (List) + halaman detail, tidak perlu halaman terpisah karena datanya sama dengan Fase 10
+
+Diverifikasi lewat `tests/Feature/WithdrawalTest.php` (7 test): submit melebihi saldo ditolak, submit di bawah minimum ditolak, snapshot rekening tidak berubah walau partner ganti rekening setelahnya, approve tercatat di audit trail, markPaid konsumsi FIFO komisi dengan benar, partner tidak bisa akses dokumen withdrawal partner lain, render halaman partner & admin.
 
 ---
 
@@ -329,14 +338,14 @@ Catatan: tiap skema dianggap pakai maksimal SATU dimensi cakupan (bukan gabungan
 
 ---
 
-## Fase 20 (Admin) — Withdrawal Management
+## Fase 20 (Admin) — Withdrawal Management ✅ (selesai 2026-07-29, dikerjakan bareng Fase 10)
 
-- [ ] Pengaturan Minimum Withdrawal (dipakai Fase 10 di sisi partner)
-- [ ] Approval Withdrawal
-- [ ] Verifikasi Foto KTP yang diupload partner saat pengajuan (tampilkan preview, bukan sekadar centang)
-- [ ] Upload Bukti Transfer (setelah withdrawal benar-benar ditransfer ke partner)
-- [ ] Reject Withdrawal (dengan alasan)
-- [ ] Riwayat Withdrawal (semua partner, admin view)
+- [x] Pengaturan Minimum Withdrawal (dipakai Fase 10 di sisi partner) — `/admin/manage-partner-settings`
+- [x] Approval Withdrawal
+- [x] Verifikasi Foto KTP yang diupload partner saat pengajuan (tampilkan preview, bukan sekadar centang) — link "Lihat" langsung buka file lewat `WithdrawalDocumentController`
+- [x] Upload Bukti Transfer (setelah withdrawal benar-benar ditransfer ke partner) — action "Mark Paid"
+- [x] Reject Withdrawal (dengan alasan)
+- [x] Riwayat Withdrawal (semua partner, admin view) — `/admin/withdrawals`
 
 ---
 

@@ -90,4 +90,19 @@ class Partner extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(Commission::class);
     }
+
+    public function withdrawals(): HasMany
+    {
+        return $this->hasMany(Withdrawal::class);
+    }
+
+    /**
+     * Approved-but-not-yet-paid commissions - the pool a withdrawal request
+     * draws from. Re-validated server-side in Withdrawal::submit(), not
+     * just used to render the balance shown in the form.
+     */
+    public function availableBalance(): float
+    {
+        return (float) $this->commissions()->where('status', 'approved')->sum('amount');
+    }
 }

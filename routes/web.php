@@ -14,6 +14,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\WithdrawalDocumentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -49,3 +50,7 @@ Route::get('/partner-documents/{partner}/{type}', [PartnerDocumentController::cl
 Route::get('/lead-documents/{leadDocument}', [LeadDocumentController::class, 'show'])
     ->middleware(['auth:web,partner'])
     ->name('lead.documents.show');
+
+Route::get('/withdrawal-documents/{withdrawal}/{type}', [WithdrawalDocumentController::class, 'show'])
+    ->middleware(['auth:web,partner'])
+    ->name('withdrawal.documents.show');

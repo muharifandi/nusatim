@@ -8,6 +8,11 @@ class PartnerSetting extends Model
 {
     protected $fillable = [
         'partnership_agreement',
+        'minimum_withdrawal',
+    ];
+
+    protected $casts = [
+        'minimum_withdrawal' => 'decimal:2',
     ];
 
     /**
