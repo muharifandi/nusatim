@@ -12,6 +12,7 @@ class Customer extends Model
     protected $fillable = [
         'partner_id',
         'lead_id',
+        'partner_project_id',
         'name',
         'pic_name',
         'pic_phone',
@@ -33,6 +34,16 @@ class Customer extends Model
     public function lead(): BelongsTo
     {
         return $this->belongsTo(Lead::class);
+    }
+
+    public function partnerProject(): BelongsTo
+    {
+        return $this->belongsTo(PartnerProject::class);
+    }
+
+    public function commission(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Commission::class);
     }
 
     public function service(): BelongsTo

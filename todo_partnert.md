@@ -15,13 +15,16 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 4 — Customer Management | ✅ Selesai | 2026-07-29 |
 | Fase 6 — Sales Pipeline (Kanban) | ✅ Selesai | 2026-07-29 |
 | Fase 7 — Project Board (Available Project) | ✅ Selesai | 2026-07-29 |
-| Fase 8 — Project Management | ⏸️ Ditunda (perlu data Fase 7 + Fase 3/4 sama-sama jalan dulu) | — |
+| Fase 8 — Project Management | ⏸️ Ditunda (2 sumber data sudah nyambung sejak Fase 9, tinggal tunggu data lebih banyak) | — |
+| Fase 9 — Commission Management (sisi Partner) | ✅ Selesai | 2026-07-29 |
 | Fase 16 (Admin) — Project Board Management | ✅ Selesai (dikerjakan bareng Fase 7, bukan cuma preview) | 2026-07-29 |
 | Fase 17 (Admin) — Lead Monitoring | ⚠️ Preview minimal (dikerjakan bareng Fase 3/4) | 2026-07-29 |
+| Fase 18 (Admin) — Commission Scheme Management | ✅ Selesai (dikerjakan bareng Fase 9) | 2026-07-29 |
+| Fase 19 (Admin) — Commission Management (sisi Admin) | ✅ Selesai (dikerjakan bareng Fase 9) | 2026-07-29 |
 | Fase 15 (Admin) — Partner Management | ⚠️ Preview minimal (dikerjakan bareng Fase 1) | 2026-07-29 |
-| Fase 5, 9–14, 18–23 lainnya | belum dikerjakan | — |
+| Fase 5, 10–14, 20–23 lainnya | belum dikerjakan | — |
 
-**Berikutnya**: Fase 9 (Commission Management sisi Partner) — ini mulai masuk area yang butuh keputusan bisnis dulu (skema komisi, siapa approve apa untuk uang) sebelum coding, lihat "genuinely open" di Fase 0. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8).
+**Berikutnya**: Fase 10 (Withdrawal, sisi Partner) — komisi `Approved` sudah bisa dihitung jadi saldo (Fase 9 selesai), tapi field "Minimum Withdrawal" butuh Partner Settings (Fase 23) yang belum ada — kemungkinan dibangun sekalian sebagai bagian minimal dari Fase 10, sama seperti pola Fase 15/17 preview. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8/9).
 
 ---
 
@@ -179,11 +182,13 @@ Diverifikasi lewat `tests/Feature/PartnerProjectTest.php` (8 test): board partne
 
 **Bug produksi ditemukan & diperbaiki saat mengerjakan fase ini**: model `User` (staff/admin) ternyata tidak pernah implement `FilamentUser`. Efeknya, Filament fallback ke aturan "boleh akses `/admin` HANYA kalau `APP_ENV=local`" — di server manapun selain lokal (staging, production, `testing`) admin **tidak akan pernah bisa login ke `/admin` sama sekali**, tanpa pesan error yang jelas (403 kosong). Ketahuan justru karena test Fase 7 ini yang pertama kali benar-benar hit route admin lewat HTTP asli dengan user login (test fase-fase sebelumnya semua lewat `Livewire::test()` yang tidak kena middleware ini). Sudah diperbaiki: `User` implement `FilamentUser::canAccessPanel()` return `true` (menyamai perilaku yang memang sudah berjalan di lokal — belum ada pemisahan role/permission).
 
+**Update dari Fase 9**: `partner_projects` yang `Assigned` sekarang otomatis bikin/hubungkan `Customer` (kolom baru `customers.partner_project_id`) — lihat catatan lengkap di Fase 9. Ini relevan untuk Fase 8 di bawah karena dua sumber datanya sekarang sudah tersambung.
+
 ---
 
 ## Fase 8 — Project Management ⏸️ (sengaja ditunda)
 
-**Belum dikerjakan, bukan lupa** — sama seperti Fase 2, ini roll-up view dari 2 sumber data berbeda: project hasil klaim Fase 7 yang `Assigned`/`In Progress`, DAN customer hasil closing Lead di Fase 3/4 yang sama sekali tidak lewat Project Board. Baru masuk akal dikerjakan setelah kedua sumbernya benar-benar terpakai di lapangan. Kolom `progress` sudah disiapkan di tabel `partner_projects` (default 0) supaya tidak perlu migration tambahan nanti.
+**Belum dikerjakan, bukan lupa** — roll-up view dari data project/customer. **Update dari Fase 9**: alasan awal fase ini ditunda (2 sumber data terpisah tanpa hubungan) **sudah tidak berlaku lagi** — sejak Fase 9, `PartnerProject` yang `Assigned` otomatis bikin/hubungkan `Customer` (`customers.partner_project_id`), jadi sekarang tinggal query `Customer` (opsional join ke `partnerProject` untuk data status/progress project-nya) sebagai satu sumber. Tetap ditunda bukan karena masalah arsitektur lagi, tapi supaya ada data asli lebih banyak dulu (dari Fase 3/4/7) sebelum bangun UI ringkasannya. Kolom `progress` sudah disiapkan di tabel `partner_projects` (default 0) supaya tidak perlu migration tambahan nanti.
 
 - [ ] Listing project yang sudah terjual (hasil dari Fase 7 yang `Assigned`/`In Progress`, atau dari closing Lead di Fase 3)
 - [ ] Tampilkan: Nama Project, Customer, Produk, Nilai Project, Status Pembayaran, Status Project, Progress
@@ -191,20 +196,28 @@ Diverifikasi lewat `tests/Feature/PartnerProjectTest.php` (8 test): board partne
 
 ---
 
-## Fase 9 — Commission Management (sisi Partner)
+## Fase 9 — Commission Management (sisi Partner) ✅ (selesai 2026-07-29)
 
-- [ ] Migrasi tabel `commission_schemes` (lihat 3 jenis skema di bawah)
-- [ ] Migrasi tabel `commissions` (per project/invoice, relasi ke scheme yang dipakai + histori status)
-- [ ] Listing komisi: Project, Produk, Skema Komisi, Nilai Project, Nilai Invoice, Persentase, Nominal Komisi, Status
-- [ ] State machine status komisi: `Pending` → `Waiting Client Payment` → `Approved` → `Paid` / `Rejected`
+- [x] Migrasi tabel `commission_schemes` (lihat 3 jenis skema di bawah)
+- [x] Migrasi tabel `commissions` (per project/invoice, relasi ke scheme yang dipakai + histori status)
+- [x] Listing komisi: Project, Produk, Skema Komisi, Nilai Project, Nilai Invoice, Persentase, Nominal Komisi, Status — `/partner/commissions`
+- [x] State machine status komisi: `Pending` → `Waiting Client Payment` → `Approved` → `Paid` / `Rejected`
 
 ### Implementasi 3 jenis skema komisi
 
-- [ ] **Percentage** — komisi = persentase × nilai project (sekali hitung, saat closing). Contoh: 10% × Rp100.000.000.
-- [ ] **Recurring Percentage** — komisi dihitung ulang **setiap** client melakukan pembayaran/tagihan berikutnya (bukan sekali di awal). Butuh trigger/job yang jalan tiap ada pembayaran baru tercatat. Contoh: client bayar Rp5.000.000/bulan, komisi 10% → partner dapat Rp500.000 setiap pembayaran.
-- [ ] **Flat Commission** — nominal tetap per unit penjualan, tidak bergantung nilai project. Contoh: setiap penjualan Produk A → komisi Rp2.000.000 (tetap, walau harga produk A berbeda-beda).
+- [x] **Percentage** — komisi = persentase × nilai project (sekali hitung, saat closing). Contoh: 10% × Rp100.000.000.
+- [x] **Recurring Percentage** — ⚠️ **tipe skema-nya sudah bisa dipilih & disimpan**, tapi mesin hitung ulang otomatis tiap ada pembayaran baru **belum dibangun** — sistem ini belum punya tabel invoice/payment sama sekali. Generate untuk skema ini sekarang cuma menghasilkan satu baris komisi awal (diperlakukan seperti Percentage biasa). Butuh fase baru "Invoice/Payment Tracking" + keputusan produk sebelum benar-benar berfungsi sesuai deskripsi asli.
+- [x] **Flat Commission** — nominal tetap per unit penjualan, tidak bergantung nilai project. Contoh: setiap penjualan Produk A → komisi Rp2.000.000 (tetap, walau harga produk A berbeda-beda).
 
 > Ketiga skema ini harus bisa hidup berdampingan — satu produk/partner/project bisa punya skema berbeda dari produk/partner/project lain (lihat Fase "Commission Scheme Management" di sisi Admin).
+
+**Perbaikan arsitektur yang dilakukan sekalian di fase ini**: sebelum ini, sistem punya 2 sumber "deal tertutup" yang terpisah dan tidak terhubung — `Customer` (dari Lead Won, Fase 3/4) dan `PartnerProject` yang `Assigned` (dari klaim Project Board, Fase 7). Komisi butuh satu sumber pasti untuk dihitung, jadi sekarang `PartnerProject::approveClaim()` dan `assignDirectly()` (assign langsung admin) otomatis membuat/menghubungkan `Customer` juga — persis pola `Lead::markWon()`. `customers` dapat kolom baru `partner_project_id` (nullable, unik). Setelah ini, **`Customer` adalah satu-satunya sumber "deal tertutup"** di seluruh sistem, apapun asalnya — ini juga menyelesaikan sebagian gap yang bikin Fase 8 ditunda.
+
+**Audit trail untuk data uang** (di-flag sejak Fase 0, baru relevan sekarang): tabel `commission_status_histories` terpisah, terisi otomatis lewat model event tiap kali status komisi berubah — bukan sekadar kolom `status` yang di-update begitu saja.
+
+Diverifikasi lewat `tests/Feature/CommissionManagementTest.php` (8 test): auto-create Customer dari PartnerProject (idempotent), prioritas resolusi skema (Project > Partner > Produk > Global), hitung nominal Percentage & Flat benar + idempotent, audit trail status berjalan, reject tercatat alasannya, scoping partner, admin bonus komisi tanpa scheme, render halaman partner & admin.
+
+**Bug test-writing ditemukan & diperbaiki saat menulis test fase ini** (bukan bug aplikasi): `actingAs($user)` tanpa guard eksplisit setelah `actingAs($partner, 'partner')` di test method yang sama ikut ke-set ke guard `partner` juga — ternyata `Illuminate\Auth\AuthManager::shouldUse(null)` fallback ke `config('auth.defaults.guard')` yang sudah "tertular" ke `partner` dari pemanggilan sebelumnya. Perbaikan: selalu isi guard eksplisit (`actingAs($admin, 'web')`) di test manapun yang mencampur kedua guard.
 
 ---
 
@@ -292,25 +305,27 @@ Dikerjakan bareng Fase 7 (bukan sekadar preview minimal seperti Fase 15/17) kare
 
 ---
 
-## Fase 18 (Admin) — Commission Scheme Management
+## Fase 18 (Admin) — Commission Scheme Management ✅ (selesai 2026-07-29, dikerjakan bareng Fase 9)
 
-- [ ] Form buat skema komisi baru, pilih salah satu dari 3 jenis (Percentage / Recurring Percentage / Flat Commission)
-- [ ] Pengaturan cakupan skema: Per Produk
-- [ ] Pengaturan cakupan skema: Per Partner
-- [ ] Pengaturan cakupan skema: Per Project
-- [ ] Masa Berlaku skema (tanggal mulai/berakhir)
-- [ ] Input Persentase (untuk skema Percentage/Recurring Percentage)
-- [ ] Input Nominal Flat (untuk skema Flat Commission)
+- [x] Form buat skema komisi baru, pilih salah satu dari 3 jenis (Percentage / Recurring Percentage / Flat Commission) — `/admin/commission-schemes`
+- [x] Pengaturan cakupan skema: Per Produk
+- [x] Pengaturan cakupan skema: Per Partner
+- [x] Pengaturan cakupan skema: Per Project
+- [x] Masa Berlaku skema (tanggal mulai/berakhir)
+- [x] Input Persentase (untuk skema Percentage/Recurring Percentage)
+- [x] Input Nominal Flat (untuk skema Flat Commission)
+
+Catatan: tiap skema dianggap pakai maksimal SATU dimensi cakupan (bukan gabungan) — form kasih helper text "isi salah satu saja". Urutan prioritas kalau lebih dari satu skema bisa cocok untuk satu Customer: **Project spesifik → Partner spesifik → Produk spesifik → skema global** (semua cakupan kosong). Ini asumsi, tidak dijelaskan eksplisit di spec asli.
 
 ---
 
-## Fase 19 (Admin) — Commission Management (sisi Admin)
+## Fase 19 (Admin) — Commission Management (sisi Admin) ✅ (selesai 2026-07-29, dikerjakan bareng Fase 9)
 
-- [ ] Generate Komisi (proses hitung komisi dari project/invoice yang closing, sesuai skema aktif)
-- [ ] Approval Komisi
-- [ ] Reject Komisi (dengan alasan, tercatat di histori)
-- [ ] Bonus Komisi (komisi tambahan di luar skema normal, manual oleh admin)
-- [ ] Riwayat Komisi (log lengkap perubahan status per komisi)
+- [x] Generate Komisi (proses hitung komisi dari project/invoice yang closing, sesuai skema aktif) — `/admin/commissions`, action "Generate Komisi" pilih Customer yang belum punya komisi
+- [x] Approval Komisi
+- [x] Reject Komisi (dengan alasan, tercatat di histori)
+- [x] Bonus Komisi (komisi tambahan di luar skema normal, manual oleh admin) — pilih partner + customer (opsional) + nominal + catatan, tanpa lewat scheme matching
+- [x] Riwayat Komisi (log lengkap perubahan status per komisi) — tabel `commission_status_histories`, terisi otomatis lewat model event
 
 ---
 

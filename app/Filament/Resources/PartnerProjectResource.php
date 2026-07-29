@@ -85,11 +85,7 @@ class PartnerProjectResource extends Resource
                             ->options(fn () => Partner::where('status', 'approved')->pluck('name', 'id'))
                             ->required(),
                     ])
-                    ->action(fn (PartnerProject $record, array $data) => $record->update([
-                        'partner_id' => $data['partner_id'],
-                        'status' => 'assigned',
-                        'claimed_at' => now(),
-                    ])),
+                    ->action(fn (PartnerProject $record, array $data) => $record->assignDirectly(Partner::findOrFail($data['partner_id']))),
                 Tables\Actions\Action::make('approveClaim')
                     ->label('Approve Claim')
                     ->icon('heroicon-o-check')

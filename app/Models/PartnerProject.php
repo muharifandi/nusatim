@@ -81,12 +81,52 @@ class PartnerProject extends Model
     public function approveClaim(): void
     {
         $this->update(['status' => 'assigned']);
+        $this->ensureCustomerExists();
 
         if ($this->partner) {
             Mail::to($this->partner->email)->send(
                 new PartnerProjectClaimApproved($this, $this->partner, SiteSetting::current())
             );
         }
+    }
+
+    /**
+     * Admin assigning a partner directly, skipping the claim flow entirely.
+     */
+    public function assignDirectly(Partner $partner): void
+    {
+        $this->update([
+            'partner_id' => $partner->id,
+            'status' => 'assigned',
+            'claimed_at' => now(),
+        ]);
+        $this->ensureCustomerExists();
+    }
+
+    /**
+     * Whether a project reaches 'assigned' via an approved claim or a
+     * direct admin assignment, it needs a Customer record behind it -
+     * Customer is the single "closed deal" record Commission (Fase 9)
+     * calculates from, regardless of whether the deal originated here or
+     * from a Won Lead (see Lead::markWon()). Idempotent: customers.
+     * partner_project_id is unique, so calling this more than once for the
+     * same project is safe.
+     */
+    protected function ensureCustomerExists(): void
+    {
+        if (! $this->partner_id) {
+            return;
+        }
+
+        Customer::firstOrCreate(
+            ['partner_project_id' => $this->id],
+            [
+                'partner_id' => $this->partner_id,
+                'name' => $this->name,
+                'service_id' => $this->service_id,
+                'project_value' => $this->budget,
+            ]
+        );
     }
 
     public function rejectClaim(): void
