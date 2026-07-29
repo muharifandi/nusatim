@@ -24,10 +24,12 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 18 (Admin) — Commission Scheme Management | ✅ Selesai (dikerjakan bareng Fase 9) | 2026-07-29 |
 | Fase 19 (Admin) — Commission Management (sisi Admin) | ✅ Selesai (dikerjakan bareng Fase 9) | 2026-07-29 |
 | Fase 20 (Admin) — Withdrawal Management | ✅ Selesai (dikerjakan bareng Fase 10) | 2026-07-29 |
+| Fase 12 — Marketing Center | ✅ Selesai | 2026-07-29 |
+| Fase 21 (Admin) — Marketing Material | ✅ Selesai (dikerjakan bareng Fase 12) | 2026-07-29 |
 | Fase 15 (Admin) — Partner Management | ⚠️ Preview minimal (dikerjakan bareng Fase 1) | 2026-07-29 |
-| Fase 5, 12–14, 21–23 lainnya | belum dikerjakan | — |
+| Fase 5, 13–14, 22–23 lainnya | belum dikerjakan | — |
 
-**Berikutnya**: Fase 12 (Marketing Center) — modul mandiri (upload/download materi marketing per kategori), tidak bergantung ke fase lain, jadi murni pekerjaan build biasa tanpa keputusan bisnis tambahan. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8/9/10).
+**Berikutnya**: Fase 13 (Notification Center) — infrastrukturnya bisa pakai fitur notification bawaan Laravel (`Partner` sudah pakai trait `Notifiable` sejak Fase 1), dan semua titik trigger yang diminta (perubahan status Lead, Project baru tersedia, klaim disetujui, reminder, komisi masuk, withdrawal approved) sudah jadi event nyata di kode sejak fase-fase sebelumnya — tinggal disambungkan. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8/9/10).
 
 ---
 
@@ -248,11 +250,15 @@ Diverifikasi lewat `tests/Feature/WithdrawalTest.php` (7 test): submit melebihi 
 
 ---
 
-## Fase 12 — Marketing Center
+## Fase 12 — Marketing Center ✅ (selesai 2026-07-29)
 
-- [ ] Migrasi tabel `marketing_materials` (kategori: brosur, company profile, price list, proposal, logo, banner, video, template WA, template email, FAQ, selling point)
-- [ ] Halaman listing materi per kategori, bisa didownload partner
-- [ ] (Sisi admin ada di Fase "Marketing Material" di bawah — upload-nya dari sana)
+- [x] Migrasi tabel `marketing_materials` (kategori: brosur, company profile, price list, proposal, logo, banner, video, template WA, template email, FAQ, selling point)
+- [x] Halaman listing materi per kategori, bisa didownload partner — `/partner/marketing-materials`, dikelompokkan per kategori (`defaultGroup`), hanya materi `is_active`
+- [x] (Sisi admin ada di Fase "Marketing Material" di bawah — upload-nya dari sana)
+
+Kategori file (brosur/company profile/price list/proposal/logo/banner/video) disimpan di disk publik `media` (sama seperti upload admin lainnya — bukan dokumen rahasia, memang untuk dibagikan partner ke calon customer). Kategori teks (template WhatsApp/email, FAQ, selling point) disimpan sebagai rich text (`content`) yang partner bisa langsung copy, bukan file.
+
+Diverifikasi lewat `tests/Feature/MarketingCenterTest.php` (5 test): partner cuma lihat materi aktif, materi file punya link download yang benar, materi teks menampilkan isi lengkap, admin bisa create, render halaman partner & admin.
 
 ---
 
@@ -349,15 +355,17 @@ Catatan: tiap skema dianggap pakai maksimal SATU dimensi cakupan (bukan gabungan
 
 ---
 
-## Fase 21 (Admin) — Marketing Material
+## Fase 21 (Admin) — Marketing Material ✅ (selesai 2026-07-29, dikerjakan bareng Fase 12)
 
-- [ ] Upload Brosur
-- [ ] Upload Proposal
-- [ ] Upload Video
-- [ ] Upload Banner
-- [ ] Upload Template (WhatsApp & Email)
+- [x] Upload Brosur
+- [x] Upload Proposal
+- [x] Upload Video
+- [x] Upload Banner
+- [x] Upload Template (WhatsApp & Email)
 
 > Satu form/resource admin untuk kelola seluruh isi Marketing Center (Fase 12), dikelompokkan per kategori materi.
+
+Sesuai catatan di atas, `/admin/marketing-materials` menangani **semua 11 kategori** dari Fase 12 (bukan cuma 5 yang disebut eksplisit di daftar checklist ini) — company profile, price list, logo, FAQ, dan selling point ikut ditangani lewat resource yang sama, form-nya menyesuaikan (Upload untuk kategori file, Rich Text untuk kategori teks).
 
 ---
 
