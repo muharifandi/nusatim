@@ -13,11 +13,12 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 2 — Dashboard Partner | ⏸️ Ditunda (perlu data Fase 3/4/8/9) | — |
 | Fase 3 — Lead & Opportunity Management | ✅ Selesai | 2026-07-29 |
 | Fase 4 — Customer Management | ✅ Selesai | 2026-07-29 |
+| Fase 6 — Sales Pipeline (Kanban) | ✅ Selesai | 2026-07-29 |
 | Fase 17 (Admin) — Lead Monitoring | ⚠️ Preview minimal (dikerjakan bareng Fase 3/4) | 2026-07-29 |
 | Fase 15 (Admin) — Partner Management | ⚠️ Preview minimal (dikerjakan bareng Fase 1) | 2026-07-29 |
-| Fase 5–23 lainnya | belum dikerjakan | — |
+| Fase 5, 7–23 lainnya | belum dikerjakan | — |
 
-**Berikutnya**: Fase 6 (Sales Pipeline/Kanban) — Fase 5 (Sales Workspace) sengaja dilewati dulu karena isinya murni tampilan agregat dari data Fase 3/4/8/9 (lihat catatan di Fase 5 di bawah), jadi lebih efisien dikerjakan setelah Fase 8/9 juga selesai.
+**Berikutnya**: Fase 7 (Project Board) — Fase 5 (Sales Workspace) masih sengaja dilewati dulu karena isinya murni tampilan agregat dari data Fase 3/4/8/9 (lihat catatan di Fase 5 di bawah), jadi lebih efisien dikerjakan setelah Fase 8/9 juga selesai.
 
 ---
 
@@ -145,11 +146,17 @@ Diverifikasi lewat `tests/Feature/LeadManagementTest.php` (7 test: create lead +
 
 ---
 
-## Fase 6 — Sales Pipeline (Kanban)
+## Fase 6 — Sales Pipeline (Kanban) ✅ (selesai 2026-07-29)
 
-- [ ] Tampilan Kanban board dengan kolom sesuai status lead (`New` s.d. `Lost`, sama seperti Fase 3)
-- [ ] Drag & drop card lead antar kolom → update status
-- [ ] Filter pipeline (per periode, per produk, dst — sesuaikan kebutuhan)
+- [x] Tampilan Kanban board dengan kolom sesuai status lead (`New` s.d. `Lost`, sama seperti Fase 3) — halaman baru `/partner/pipeline`
+- [x] Drag & drop card lead antar kolom → update status — native HTML5 Drag and Drop API (tidak nambah dependency baru), status di-update lewat `Lead::update()` biasa jadi otomatis kena hook logging timeline + auto-Customer kalau di-drop ke kolom Won (reuse persis logic dari Fase 3, bukan logic baru)
+- [x] Filter pipeline (per periode, per produk, dst) — filter Produk (dropdown `services`) dan rentang tanggal (dari/sampai), berdasar `created_at`
+
+Server-side re-cek kepemilikan lead di `moveLead()` (bukan cuma UI yang disembunyikan) — partner tidak bisa pindahkan lead milik partner lain walau tahu ID-nya, diverifikasi test.
+
+**Bug ditemukan & diperbaiki saat mengerjakan fase ini**: form/tabel Produk di `LeadResource`, `CustomerResource` (Fase 3/4, sudah live sebelumnya) salah pakai `service.name`/`pluck('name','id')` — kolom asli di tabel `services` adalah `title`, bukan `name`. Akibatnya dropdown & kolom "Produk" tampil kosong walau `service_id` tersimpan benar di database. Sudah diperbaiki di 3 file itu.
+
+Diverifikasi lewat `tests/Feature/SalesPipelineTest.php` (5 test: drag ke Won → status+timeline+Customer, status tidak valid ditolak, partner tidak bisa pindahkan lead partner lain, filter produk mengurangi hasil, halaman render semua 8 kolom).
 
 ---
 

@@ -44,7 +44,7 @@ class CustomerResource extends Resource
                 Forms\Components\TextInput::make('pic_email')->label('Email PIC')->email()->maxLength(255),
                 Forms\Components\Select::make('service_id')
                     ->label('Produk')
-                    ->options(fn () => Service::active()->pluck('name', 'id'))
+                    ->options(fn () => Service::active()->pluck('title', 'id'))
                     ->searchable(),
                 Forms\Components\TextInput::make('project_value')
                     ->label('Nilai Project')
@@ -71,7 +71,7 @@ class CustomerResource extends Resource
                         Infolists\Components\TextEntry::make('pic_name')->label('PIC')->placeholder('-'),
                         Infolists\Components\TextEntry::make('pic_phone')->label('Telepon PIC')->placeholder('-'),
                         Infolists\Components\TextEntry::make('pic_email')->label('Email PIC')->placeholder('-'),
-                        Infolists\Components\TextEntry::make('service.name')->label('Produk')->placeholder('-'),
+                        Infolists\Components\TextEntry::make('service.title')->label('Produk')->placeholder('-'),
                         Infolists\Components\TextEntry::make('project_value')->label('Nilai Project')->money('IDR'),
                         Infolists\Components\TextEntry::make('payment_status')->label('Status Pembayaran')->badge(),
                     ])
@@ -97,7 +97,7 @@ class CustomerResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('pic_name')->label('PIC')->placeholder('-'),
-                Tables\Columns\TextColumn::make('service.name')->label('Produk')->placeholder('-'),
+                Tables\Columns\TextColumn::make('service.title')->label('Produk')->placeholder('-'),
                 Tables\Columns\TextColumn::make('project_value')->label('Nilai Project')->money('IDR'),
                 Tables\Columns\TextColumn::make('payment_status')
                     ->label('Pembayaran')

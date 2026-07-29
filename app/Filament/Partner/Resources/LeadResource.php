@@ -48,7 +48,7 @@ class LeadResource extends Resource
                     ->maxLength(255),
                 Forms\Components\Select::make('service_id')
                     ->label('Produk')
-                    ->options(fn () => Service::active()->pluck('name', 'id'))
+                    ->options(fn () => Service::active()->pluck('title', 'id'))
                     ->searchable(),
                 Forms\Components\TextInput::make('estimated_value')
                     ->label('Estimasi Nilai')
@@ -77,7 +77,7 @@ class LeadResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('phone')->searchable(),
-                Tables\Columns\TextColumn::make('service.name')->label('Produk')->placeholder('-'),
+                Tables\Columns\TextColumn::make('service.title')->label('Produk')->placeholder('-'),
                 Tables\Columns\TextColumn::make('estimated_value')->label('Estimasi Nilai')->money('IDR'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
