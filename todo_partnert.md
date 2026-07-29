@@ -14,11 +14,14 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 3 — Lead & Opportunity Management | ✅ Selesai | 2026-07-29 |
 | Fase 4 — Customer Management | ✅ Selesai | 2026-07-29 |
 | Fase 6 — Sales Pipeline (Kanban) | ✅ Selesai | 2026-07-29 |
+| Fase 7 — Project Board (Available Project) | ✅ Selesai | 2026-07-29 |
+| Fase 8 — Project Management | ⏸️ Ditunda (perlu data Fase 7 + Fase 3/4 sama-sama jalan dulu) | — |
+| Fase 16 (Admin) — Project Board Management | ✅ Selesai (dikerjakan bareng Fase 7, bukan cuma preview) | 2026-07-29 |
 | Fase 17 (Admin) — Lead Monitoring | ⚠️ Preview minimal (dikerjakan bareng Fase 3/4) | 2026-07-29 |
 | Fase 15 (Admin) — Partner Management | ⚠️ Preview minimal (dikerjakan bareng Fase 1) | 2026-07-29 |
-| Fase 5, 7–23 lainnya | belum dikerjakan | — |
+| Fase 5, 9–14, 18–23 lainnya | belum dikerjakan | — |
 
-**Berikutnya**: Fase 7 (Project Board) — Fase 5 (Sales Workspace) masih sengaja dilewati dulu karena isinya murni tampilan agregat dari data Fase 3/4/8/9 (lihat catatan di Fase 5 di bawah), jadi lebih efisien dikerjakan setelah Fase 8/9 juga selesai.
+**Berikutnya**: Fase 9 (Commission Management sisi Partner) — ini mulai masuk area yang butuh keputusan bisnis dulu (skema komisi, siapa approve apa untuk uang) sebelum coding, lihat "genuinely open" di Fase 0. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8).
 
 ---
 
@@ -160,23 +163,31 @@ Diverifikasi lewat `tests/Feature/SalesPipelineTest.php` (5 test: drag ke Won �
 
 ---
 
-## Fase 7 — Project Board (Available Project)
+## Fase 7 — Project Board (Available Project) ✅ (selesai 2026-07-29)
 
-- [ ] Migrasi tabel `partner_projects` (project yang dibuka admin, bisa diklaim partner)
-- [ ] Listing project: Nama, Produk, Budget, Lokasi, Deadline, Tingkat Kesulitan, Nilai Komisi, Status
-- [ ] Halaman Detail Project
-- [ ] Fitur Claim Project (partner mengajukan klaim)
-- [ ] Fitur Batalkan Claim (hanya selama status masih `Pending Approval`, belum diproses admin)
-- [ ] State machine status: `Available` → `Pending Approval` → `Assigned` → `In Progress` → `Closed` / `Cancelled`
-- [ ] Notifikasi ke partner saat klaim disetujui/ditolak admin
+- [x] Migrasi tabel `partner_projects` (project yang dibuka admin, bisa diklaim partner)
+- [x] Listing project: Nama, Produk, Budget, Lokasi, Deadline, Tingkat Kesulitan, Nilai Komisi, Status — `/partner/partner-projects`
+- [x] Halaman Detail Project
+- [x] Fitur Claim Project (partner mengajukan klaim) — pakai conditional update (bukan cek-lalu-simpan) supaya dua partner yang klaim bersamaan tidak bisa dua-duanya berhasil
+- [x] Fitur Batalkan Claim (hanya selama status masih `Pending Approval`, belum diproses admin)
+- [x] State machine status: `draft → available → pending_approval → assigned → in_progress → closed / cancelled` (tambah `draft` di depan `available`, lihat Fase 16 di bawah)
+- [x] Notifikasi ke partner saat klaim disetujui/ditolak admin — `PartnerProjectClaimApproved`/`Rejected` (pola sama seperti mail Fase 1)
+
+Catatan: "Nilai Komisi" (`commission_value`) di sini murni angka referensi/preview untuk partner yang browsing board — bukan hasil hitungan skema komisi sungguhan (Commission Scheme belum dibangun, itu Fase 9/18/19).
+
+Diverifikasi lewat `tests/Feature/PartnerProjectTest.php` (8 test): board partner cuma nampilin project available + milik sendiri, race condition klaim, cancel claim, approve/reject claim + email, admin assign langsung, render halaman partner & admin.
+
+**Bug produksi ditemukan & diperbaiki saat mengerjakan fase ini**: model `User` (staff/admin) ternyata tidak pernah implement `FilamentUser`. Efeknya, Filament fallback ke aturan "boleh akses `/admin` HANYA kalau `APP_ENV=local`" — di server manapun selain lokal (staging, production, `testing`) admin **tidak akan pernah bisa login ke `/admin` sama sekali**, tanpa pesan error yang jelas (403 kosong). Ketahuan justru karena test Fase 7 ini yang pertama kali benar-benar hit route admin lewat HTTP asli dengan user login (test fase-fase sebelumnya semua lewat `Livewire::test()` yang tidak kena middleware ini). Sudah diperbaiki: `User` implement `FilamentUser::canAccessPanel()` return `true` (menyamai perilaku yang memang sudah berjalan di lokal — belum ada pemisahan role/permission).
 
 ---
 
-## Fase 8 — Project Management
+## Fase 8 — Project Management ⏸️ (sengaja ditunda)
+
+**Belum dikerjakan, bukan lupa** — sama seperti Fase 2, ini roll-up view dari 2 sumber data berbeda: project hasil klaim Fase 7 yang `Assigned`/`In Progress`, DAN customer hasil closing Lead di Fase 3/4 yang sama sekali tidak lewat Project Board. Baru masuk akal dikerjakan setelah kedua sumbernya benar-benar terpakai di lapangan. Kolom `progress` sudah disiapkan di tabel `partner_projects` (default 0) supaya tidak perlu migration tambahan nanti.
 
 - [ ] Listing project yang sudah terjual (hasil dari Fase 7 yang `Assigned`/`In Progress`, atau dari closing Lead di Fase 3)
 - [ ] Tampilkan: Nama Project, Customer, Produk, Nilai Project, Status Pembayaran, Status Project, Progress
-- [ ] Update progress project (oleh partner atau admin — putuskan di Fase 0)
+- [ ] Update progress project (oleh partner atau admin — masih belum diputuskan, lihat Fase 0)
 
 ---
 
@@ -259,13 +270,16 @@ Diverifikasi lewat `tests/Feature/SalesPipelineTest.php` (5 test: drag ke Won �
 
 ---
 
-## Fase 16 (Admin) — Project Board Management
+## Fase 16 (Admin) — Project Board Management ✅ (selesai 2026-07-29, dikerjakan bareng Fase 7)
 
-- [ ] CRUD Project (buat/edit/hapus project yang akan dibuka ke partner)
-- [ ] Publish Project (ubah status jadi `Available`, baru muncul di Project Board partner)
-- [ ] Assign Partner langsung (tanpa lewat mekanisme klaim, untuk kasus tertentu)
-- [ ] Approve Claim (menyetujui klaim yang diajukan partner di Fase 7)
-- [ ] Close Project
+- [x] CRUD Project (buat/edit/hapus project yang akan dibuka ke partner) — `/admin/partner-projects`, project baru mulai berstatus `draft` (belum tampil ke partner)
+- [x] Publish Project (ubah status jadi `Available`, baru muncul di Project Board partner)
+- [x] Assign Partner langsung (tanpa lewat mekanisme klaim, untuk kasus tertentu)
+- [x] Approve Claim (menyetujui klaim yang diajukan partner di Fase 7)
+- [x] Reject Claim (bonus, tidak eksplisit di daftar tapi perlu — tanpa ini klaim yang ditolak macet permanen di `pending_approval`)
+- [x] Close Project
+
+Dikerjakan bareng Fase 7 (bukan sekadar preview minimal seperti Fase 15/17) karena tanpa sisi admin ini, Fase 7 sama sekali tidak bisa diuji — partner tidak akan pernah melihat project apapun kalau tidak ada yang di-publish.
 
 ---
 
