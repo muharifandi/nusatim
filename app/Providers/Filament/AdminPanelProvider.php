@@ -48,6 +48,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make('Reports & Settings'),
                 NavigationGroup::make('Website'),
                 NavigationGroup::make('RBAC & Sistem'),
+                NavigationGroup::make('Bantuan'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

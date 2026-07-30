@@ -22,6 +22,8 @@ class CommissionResource extends Resource
 
     protected static ?string $navigationLabel = 'Komisi';
 
+    protected static ?int $navigationSort = 6;
+
     public static function canCreate(): bool
     {
         return false;

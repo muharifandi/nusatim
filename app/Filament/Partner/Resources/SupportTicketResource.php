@@ -30,6 +30,8 @@ class SupportTicketResource extends Resource
 
     protected static ?string $navigationLabel = 'Support Ticket';
 
+    protected static ?int $navigationSort = 9;
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('partner_id', Auth::guard('partner')->id());

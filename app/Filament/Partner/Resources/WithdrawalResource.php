@@ -22,6 +22,8 @@ class WithdrawalResource extends Resource
 
     protected static ?string $navigationLabel = 'Withdrawal';
 
+    protected static ?int $navigationSort = 7;
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('partner_id', Auth::guard('partner')->id());
