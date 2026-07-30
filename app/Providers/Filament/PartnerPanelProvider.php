@@ -34,6 +34,7 @@ class PartnerPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Indigo,
             ])
+            ->font('Instrument Sans')
             // Fase 2's real Dashboard (app/Filament/Partner/Pages/Dashboard.php)
             // is picked up by discoverPages() below, same as the admin
             // panel's own custom Dashboard - no explicit ->pages() needed
@@ -60,6 +61,10 @@ class PartnerPanelProvider extends PanelProvider
                 PanelsRenderHook::HEAD_END,
                 fn () => view('filament.hooks.pipeline-loader'),
                 scopes: [\App\Filament\Partner\Pages\Pipeline::class],
+            )
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn () => view('filament.hooks.panel-polish'),
             );
     }
 }

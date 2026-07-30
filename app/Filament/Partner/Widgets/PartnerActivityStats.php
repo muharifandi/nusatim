@@ -31,14 +31,28 @@ class PartnerActivityStats extends StatsOverviewWidget
             ->whereNull('completed_at');
 
         return [
-            Stat::make('Total Lead', $partner->leads()->count()),
-            Stat::make('Total Opportunity', $opportunityCount),
-            Stat::make('Total Customer', $partner->customers()->count()),
-            Stat::make('Total Project', PartnerProject::where('partner_id', $partner->id)->count()),
+            Stat::make('Total Lead', $partner->leads()->count())
+                ->icon('heroicon-o-funnel')
+                ->color('gray'),
+            Stat::make('Total Opportunity', $opportunityCount)
+                ->icon('heroicon-o-arrow-trending-up')
+                ->color('warning'),
+            Stat::make('Total Customer', $partner->customers()->count())
+                ->icon('heroicon-o-user-group')
+                ->color('success'),
+            Stat::make('Total Project', PartnerProject::where('partner_id', $partner->id)->count())
+                ->icon('heroicon-o-briefcase')
+                ->color('info'),
             Stat::make('Project Available', PartnerProject::where('status', 'available')->count())
-                ->description('Bisa diklaim siapa saja'),
-            Stat::make('Follow Up Hari Ini', (clone $todayReminders)->where('type', 'follow_up')->count()),
-            Stat::make('Meeting Hari Ini', (clone $todayReminders)->where('type', 'meeting')->count()),
+                ->description('Bisa diklaim siapa saja')
+                ->icon('heroicon-o-globe-alt')
+                ->color('info'),
+            Stat::make('Follow Up Hari Ini', (clone $todayReminders)->where('type', 'follow_up')->count())
+                ->icon('heroicon-o-phone')
+                ->color('warning'),
+            Stat::make('Meeting Hari Ini', (clone $todayReminders)->where('type', 'meeting')->count())
+                ->icon('heroicon-o-calendar-days')
+                ->color('warning'),
         ];
     }
 }

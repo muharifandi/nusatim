@@ -31,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->font('Instrument Sans')
             ->sidebarWidth('15rem')
             ->sidebarFullyCollapsibleOnDesktop()
             ->maxContentWidth(MaxWidth::Full)
@@ -73,6 +74,10 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 fn () => view('filament.hooks.pagination-layout'),
+            )
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn () => view('filament.hooks.panel-polish'),
             )
             ->renderHook(
                 \Filament\Widgets\View\WidgetsRenderHook::TABLE_WIDGET_START,
