@@ -50,7 +50,7 @@ class CommissionSchemeResource extends Resource
                     ->required(fn (Forms\Get $get) => $get('type') === 'flat'),
 
                 Forms\Components\Section::make('Cakupan Skema')
-                    ->description('Isi salah satu saja (Produk / Partner / Level / Project). Kosongkan semua untuk jadikan skema global (fallback kalau tidak ada yang lebih spesifik cocok). Urutan prioritas: Project > Partner > Level > Produk > Default.')
+                    ->description('Isi salah satu saja (Produk / Partner / Project). Kosongkan semua untuk jadikan skema global (fallback kalau tidak ada yang lebih spesifik cocok). Urutan prioritas: Project > Partner > Produk > Default.')
                     ->schema([
                         Forms\Components\Select::make('service_id')
                             ->label('Per Produk')
@@ -60,14 +60,11 @@ class CommissionSchemeResource extends Resource
                             ->label('Per Partner')
                             ->options(fn () => Partner::where('status', 'approved')->pluck('name', 'id'))
                             ->searchable(),
-                        Forms\Components\Select::make('level')
-                            ->label('Per Level Partner')
-                            ->options(Partner::LEVELS),
                         Forms\Components\Select::make('partner_project_id')
                             ->label('Per Project')
                             ->options(fn () => PartnerProject::pluck('name', 'id'))
                             ->searchable(),
-                    ])->columns(4),
+                    ])->columns(3),
 
                 Forms\Components\DatePicker::make('starts_at')->label('Berlaku Mulai'),
                 Forms\Components\DatePicker::make('ends_at')->label('Berlaku Sampai'),
@@ -90,10 +87,6 @@ class CommissionSchemeResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('service.title')->label('Produk')->placeholder('-'),
                 Tables\Columns\TextColumn::make('partner.name')->label('Partner')->placeholder('-'),
-                Tables\Columns\TextColumn::make('level')
-                    ->label('Level')
-                    ->formatStateUsing(fn (?string $state) => $state ? (Partner::LEVELS[$state] ?? $state) : null)
-                    ->placeholder('-'),
                 Tables\Columns\TextColumn::make('partnerProject.name')->label('Project')->placeholder('-'),
                 Tables\Columns\IconColumn::make('is_active')->boolean(),
             ])
