@@ -34,7 +34,7 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 5 — Sales Workspace | ✅ Selesai (dikerjakan bareng Fase 8) | 2026-07-30 |
 | Fase 24 (Admin) — RBAC (Role & Permission) | ✅ Selesai | 2026-07-30 |
 | Fase 25 (Admin) — Workflow Assignment | ✅ Selesai | 2026-07-30 |
-| Fase 26 (Admin+Partner) — Support Ticket | 🔧 Sedang dikerjakan | 2026-07-30 |
+| Fase 26 (Admin+Partner) — Support Ticket | ✅ Selesai | 2026-07-30 |
 | Fase 27 (Admin) — Audit Log | 🔧 Sedang dikerjakan | 2026-07-30 |
 
 **Final Review klien (2026-07-30 sore)** menetapkan beberapa keputusan bisnis final yang merevisi/menyelesaikan item-item yang sebelumnya masih asumsi/placeholder — lihat bagian **"Final Business Decisions (Client Sign-off)"** di bawah untuk detail lengkap. Ringkasnya: Workflow Approval (Fase 23) direvisi total jadi RBAC sungguhan (Fase 24+25, sedang dikerjakan), Partner Level (yang sempat ditambahkan sebagai bagian Commission Scheme di hari yang sama) di-revert jadi murni atribut informational, Produk/Export/dll dikonfirmasi final tanpa perubahan kode, dan 2 modul baru ditambahkan ke scope (Support Ticket, Audit Log).
@@ -499,15 +499,19 @@ Diverifikasi lewat `tests/Feature/WorkflowAssignmentTest.php` (5 test): migratio
 
 ---
 
-## Fase 26 (Admin+Partner) — Support Ticket
+## Fase 26 (Admin+Partner) — Support Ticket ✅ (selesai 2026-07-30)
 
 **Modul baru yang tidak pernah ada di spec/todo manapun sebelumnya** — ditambahkan karena "Final Review" klien menyebutnya sebagai salah satu dari 6 workflow yang butuh Assignment. Dibangun sebagai modul minimal (tanpa kategori/prioritas/SLA) supaya Assignment-nya benar-benar teruji end-to-end, bukan cuma kerangka kosong.
 
-- [ ] Partner bisa buat tiket (subjek + deskripsi)
-- [ ] Partner bisa lihat status tiket miliknya sendiri (tidak bisa lihat tiket partner lain)
-- [ ] Admin bisa lihat semua tiket lintas partner
-- [ ] Admin bisa assign tiket ke staff user (pakai Workflow Assignment dari Fase 25)
-- [ ] Admin bisa resolve (dengan catatan penyelesaian) / close tiket
+- [x] Partner bisa buat tiket (subjek + deskripsi) — `/partner/support-tickets/create`
+- [x] Partner bisa lihat status tiket miliknya sendiri (tidak bisa lihat tiket partner lain) — scoped lewat `getEloquentQuery()`, pola sama seperti `LeadResource`/`CustomerResource`. Tidak bisa edit/hapus setelah dibuat.
+- [x] Admin bisa lihat semua tiket lintas partner — `/admin/support-tickets`
+- [x] Admin bisa assign tiket ke staff user (pakai Workflow Assignment dari Fase 25) — status otomatis jadi `in_progress`
+- [x] Admin bisa resolve (dengan catatan penyelesaian) / close tiket — state machine `open → in_progress → resolved → closed`
+
+Kedua action `resolve`/`close` (dan `assign`) digating permission modul `support_ticket` (Fase 24) + `WorkflowAssignment::userIsAuthorizedFor()` (Fase 25), persis pola yang sama dengan 5 workflow existing.
+
+Diverifikasi lewat `tests/Feature/SupportTicketTest.php` (5 test): partner bisa buat tiket, partner cuma lihat tiket sendiri (tidak bisa lihat tiket partner lain), admin lihat tiket lintas partner, admin bisa assign+resolve+close berurutan, action resolve digating benar oleh permission + Workflow Assignment (user dengan permission tapi bukan Role yang di-assign diblokir).
 
 ---
 

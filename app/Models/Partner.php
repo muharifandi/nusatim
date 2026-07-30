@@ -17,12 +17,14 @@ class Partner extends Authenticatable implements FilamentUser
     use DeletesOldFiles, HasFactory, Notifiable;
 
     /**
-     * Fixed tier list, following the standard tiered partner/affiliate
-     * program pattern used by similar systems (e.g. HubSpot Solutions
-     * Partner, most SaaS reseller programs) - higher tier gets a better
-     * default commission rate via CommissionScheme's 'level' scope. Kept
-     * as a fixed list rather than an admin-managed table since the spec
-     * never asked for custom/renamable tiers, just "Kelola Level Partner".
+     * Fixed tier list. Purely an informational business attribute (badge,
+     * loyalty program, reward, prioritas project, klasifikasi, dashboard/
+     * reporting) - a final business decision (2026-07-30) explicitly ruled
+     * this OUT of Commission Scheme resolution (see CommissionScheme::
+     * resolveFor()), after briefly being wired in as a scope earlier the
+     * same day. Kept as a fixed list rather than an admin-managed table
+     * since the spec never asked for custom/renamable tiers, just "Kelola
+     * Level Partner".
      */
     public const LEVELS = [
         'bronze' => 'Bronze',
@@ -138,5 +140,10 @@ class Partner extends Authenticatable implements FilamentUser
         return $this->salesTargets()
             ->whereDate('period', now()->startOfMonth()->toDateString())
             ->first();
+    }
+
+    public function supportTickets(): HasMany
+    {
+        return $this->hasMany(SupportTicket::class);
     }
 }
