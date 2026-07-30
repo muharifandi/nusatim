@@ -18,11 +18,12 @@ return new class extends Migration
             $table->decimal('percentage', 5, 2)->nullable(); // percentage|recurring_percentage
             $table->decimal('flat_amount', 15, 2)->nullable(); // flat
 
-            // Each scheme is expected to use at most ONE of these three scope
-            // columns (an assumption - the spec never states what happens if
-            // more than one is set). Match priority when generating a
-            // commission is: project > partner > service > global (all
-            // three null) - see CommissionScheme::resolveFor().
+            // Each scheme is expected to use at most ONE scope column (an
+            // assumption - the spec never states what happens if more than
+            // one is set). A 4th scope column, `level`, was added later in
+            // a separate migration (add_level_to_commission_schemes_table)
+            // for Fase 15's Level Partner. See CommissionScheme::resolveFor()
+            // for the full current priority order.
             $table->foreignId('service_id')->nullable()->constrained('services')->nullOnDelete();
             $table->foreignId('partner_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('partner_project_id')->nullable()->constrained()->nullOnDelete();
