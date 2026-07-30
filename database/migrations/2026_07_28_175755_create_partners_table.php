@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
 
-            $table->string('status')->default('pending_review'); // pending_review|approved|rejected
+            $table->string('status')->default('pending_review'); // pending_review|approved|rejected|suspended
             // Placeholder until "Level Partner" is actually defined by the
             // spec owner (see todo_partnert.md Fase 0) - free text set only
             // from the admin side for now, not chosen by the partner.

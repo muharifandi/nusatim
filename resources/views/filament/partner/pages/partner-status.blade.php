@@ -15,6 +15,20 @@
                 </div>
             @endif
         </x-filament::section>
+    @elseif($partner->status === 'suspended')
+        <x-filament::section>
+            <x-slot name="heading">Akun Disuspend</x-slot>
+
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                Akun partner Anda untuk sementara disuspend oleh admin dan tidak bisa mengakses portal. Hubungi tim kami kalau ini di luar dugaan Anda.
+            </p>
+
+            @if($partner->rejection_reason)
+                <div class="mt-4 rounded-lg border p-4 text-sm">
+                    {{ $partner->rejection_reason }}
+                </div>
+            @endif
+        </x-filament::section>
     @else
         <x-filament::section>
             <x-slot name="heading">Menunggu Persetujuan Admin</x-slot>

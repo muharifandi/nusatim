@@ -12,7 +12,9 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\HtmlString;
 
 class PartnerResource extends Resource
@@ -72,6 +74,7 @@ class PartnerResource extends Resource
                     ->color(fn (string $state) => match ($state) {
                         'approved' => 'success',
                         'rejected' => 'danger',
+                        'suspended' => 'gray',
                         default => 'warning',
                     }),
                 Tables\Columns\TextColumn::make('level')->placeholder('-'),
@@ -118,6 +121,58 @@ class PartnerResource extends Resource
                         Mail::to($record->email)->send(
                             new PartnerRegistrationRejected($record, SiteSetting::current())
                         );
+                    }),
+                Tables\Actions\Action::make('suspend')
+                    ->label('Suspend')
+                    ->icon('heroicon-o-no-symbol')
+                    ->color('gray')
+                    ->visible(fn (Partner $record) => $record->status === 'approved')
+                    ->form([
+                        // Reuses the same free-text `rejection_reason` column
+                        // as the reject action - it's a generic "reason the
+                        // account isn't in good standing" field, and a
+                        // partner is never both rejected and suspended at
+                        // once, so there's no ambiguity in storing either
+                        // reason there.
+                        Forms\Components\Textarea::make('rejection_reason')
+                            ->label('Alasan Suspend')
+                            ->helperText('Opsional - ditampilkan ke partner di halaman status akun.'),
+                    ])
+                    ->action(fn (Partner $record, array $data) => $record->update([
+                        'status' => 'suspended',
+                        'rejection_reason' => $data['rejection_reason'] ?? null,
+                    ])),
+                Tables\Actions\Action::make('reactivate')
+                    ->label('Aktifkan Kembali')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->visible(fn (Partner $record) => $record->status === 'suspended')
+                    ->action(fn (Partner $record) => $record->update([
+                        'status' => 'approved',
+                        'rejection_reason' => null,
+                    ])),
+                Tables\Actions\Action::make('resetPassword')
+                    ->label('Reset Password')
+                    ->icon('heroicon-o-key')
+                    ->requiresConfirmation()
+                    ->modalDescription('Partner akan menerima email berisi link untuk membuat password baru.')
+                    ->visible(fn (Partner $record) => $record->status !== 'pending_review')
+                    ->action(function (Partner $record) {
+                        // Reuses the exact same reset-link mechanism already
+                        // wired up for the partner-facing "Lupa Password"
+                        // flow (Fase 1, Filament's passwordReset() +
+                        // the 'partners' broker) - admin just triggers it on
+                        // the partner's behalf instead of building a
+                        // separate "set new password directly" flow.
+                        $status = Password::broker('partners')->sendResetLink(['email' => $record->email]);
+
+                        Notification::make()
+                            ->title($status === Password::RESET_LINK_SENT
+                                ? 'Link reset password terkirim ke '.$record->email
+                                : 'Gagal mengirim link reset password')
+                            ->color($status === Password::RESET_LINK_SENT ? 'success' : 'danger')
+                            ->send();
                     }),
             ]);
     }

@@ -68,6 +68,11 @@ class Partner extends Authenticatable implements FilamentUser
         return $this->status === 'rejected';
     }
 
+    public function isSuspended(): bool
+    {
+        return $this->status === 'suspended';
+    }
+
     protected static function fileDisk(): string
     {
         return 'partner_documents';
