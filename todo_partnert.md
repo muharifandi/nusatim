@@ -20,7 +20,7 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 10 — Withdrawal (Partner) | ✅ Selesai | 2026-07-29 |
 | Fase 11 — Withdrawal History | ✅ Selesai (dikerjakan bareng Fase 10) | 2026-07-29 |
 | Fase 16 (Admin) — Project Board Management | ✅ Selesai (dikerjakan bareng Fase 7, bukan cuma preview) | 2026-07-29 |
-| Fase 17 (Admin) — Lead Monitoring | ⚠️ Preview minimal (dikerjakan bareng Fase 3/4) | 2026-07-29 |
+| Fase 17 (Admin) — Lead Monitoring | ✅ Selesai | 2026-07-30 |
 | Fase 18 (Admin) — Commission Scheme Management | ✅ Selesai (dikerjakan bareng Fase 9) | 2026-07-29 |
 | Fase 19 (Admin) — Commission Management (sisi Admin) | ✅ Selesai (dikerjakan bareng Fase 9) | 2026-07-29 |
 | Fase 20 (Admin) — Withdrawal Management | ✅ Selesai (dikerjakan bareng Fase 10) | 2026-07-29 |
@@ -33,7 +33,7 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 23 (Admin) — Partner Settings | ✅ Selesai | 2026-07-30 |
 | Fase 5 — Sales Workspace | ✅ Selesai (dikerjakan bareng Fase 8) | 2026-07-30 |
 
-**Sedang menyelesaikan sisa pekerjaan** (2026-07-30): Fase 2, Fase 8, dan Fase 5 sudah selesai semua (penundaan sebelumnya sudah tidak berlaku, semua data sumbernya sudah ada). Fase 15 juga sudah dilengkapi (Suspend/Aktifkan/Reset Password) — tersisa "Kelola Level Partner" yang masih menunggu Fase 0. Sisa item terakhir: Fase 17, plus 2 item besar yang masih butuh keputusan produk terpisah (lihat di bawah).
+**Sedang menyelesaikan sisa pekerjaan** (2026-07-30): Fase 2, Fase 8, Fase 5, Fase 15 (kecuali "Kelola Level Partner"), dan Fase 17 semuanya sudah selesai. Yang tersisa cuma 1 item kecil yang menunggu keputusan bisnis (Fase 0), plus 2 item besar yang butuh scoping/keputusan produk terpisah (lihat di bawah) — bukan pekerjaan teknis yang bisa langsung dikerjakan tanpa arahan lebih lanjut.
 
 ### Sisa pekerjaan (ringkasan cepat)
 
@@ -41,7 +41,6 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 
 **Sudah "selesai" tapi sengaja belum 100% lengkap:**
 - Fase 15 (admin Partner Management): Suspend/Aktifkan/Reset Password sudah selesai; UI "Kelola Level Partner" masih menunggu klarifikasi Fase 0
-- Fase 17 (admin Lead Monitoring): Anti Duplicate baru versi sederhana, belum fuzzy-matching
 - Fase 9 (Commission — Recurring Percentage): tipe skema bisa dipilih, tapi mesin hitung-ulang otomatis per pembayaran belum ada (belum ada sistem invoice/payment)
 - Fase 23 (Notifikasi): kanal default sudah ada, "template pesan" (isi teks tiap notifikasi diedit admin) belum dibangun
 
@@ -356,12 +355,14 @@ Dikerjakan bareng Fase 7 (bukan sekadar preview minimal seperti Fase 15/17) kare
 
 ---
 
-## Fase 17 (Admin) — Lead Monitoring ⚠️ (preview minimal, 2026-07-29)
+## Fase 17 (Admin) — Lead Monitoring ✅ (selesai 2026-07-30)
 
 - [x] Halaman monitoring seluruh lead semua partner (read access lintas partner, admin only) — `/admin/leads`
 - [x] Transfer Ownership lead (pindah kepemilikan dari satu partner ke partner lain)
 - [x] Validasi Lead (admin verifikasi lead valid/tidak)
-- [ ] Anti Duplicate — **versi sederhana sudah ada** (banner daftar lead lain dengan phone/email sama, di modal View), **belum** fuzzy-matching penuh (typo, format nomor beda, dst). Perbaiki di sini kalau versi sekarang kurang sensitif.
+- [x] Anti Duplicate — upgrade dari exact-match jadi fuzzy-matching (`Lead::findPotentialDuplicates()`): nomor telepon dinormalisasi dulu (buang semua karakter selain digit, prefix `+62`/`62` disamakan jadi `0`) supaya `+62 812-3456-7890` dan `081234567890` dikenali sebagai nomor yang sama; email dibandingkan case-insensitive; nama dibandingkan pakai `similar_text()` (ambang 85%) untuk menangkap typo kecil di nama lead/perusahaan. Tetap perbandingan in-memory (bukan query fuzzy di level DB) karena skala data di sini kecil (small business, bukan call center).
+
+Diverifikasi lewat `tests/Feature/LeadDuplicateDetectionTest.php` (5 test): nomor telepon format beda terdeteksi sama, email beda kapital terdeteksi sama, nama dengan typo kecil terdeteksi mirip (nama yang benar-benar beda tidak ikut ke-flag), lead tanpa kemiripan sama sekali tidak menghasilkan duplikat, halaman View Lead admin menampilkan daftar duplikat yang benar.
 
 ---
 

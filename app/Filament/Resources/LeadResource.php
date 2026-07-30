@@ -13,10 +13,10 @@ use Filament\Tables\Table;
 use Illuminate\Support\HtmlString;
 
 /**
- * Minimal "Lead Monitoring" preview (Fase 17) - full version (anti-duplicate
- * detection, deeper validation workflow) comes later. This gives admin
- * read-only cross-partner visibility, ownership transfer, and validation
- * now so Fase 3/4 can be tested end-to-end from the admin side too.
+ * "Lead Monitoring" (Fase 17) - read-only cross-partner visibility,
+ * ownership transfer, validation, and fuzzy anti-duplicate detection
+ * (Lead::findPotentialDuplicates() - normalized phone, normalized email,
+ * similar name).
  */
 class LeadResource extends Resource
 {
@@ -53,14 +53,10 @@ class LeadResource extends Resource
                             return '-';
                         }
 
-                        $matches = Lead::query()
-                            ->where('id', '!=', $record->id)
-                            ->where(fn ($q) => $q->where('phone', $record->phone)->orWhere('email', $record->email))
-                            ->with('partner')
-                            ->get();
+                        $matches = $record->findPotentialDuplicates();
 
                         if ($matches->isEmpty()) {
-                            return new HtmlString('<span class="text-sm text-gray-500">Tidak ada lead lain dengan telepon/email yang sama.</span>');
+                            return new HtmlString('<span class="text-sm text-gray-500">Tidak ada lead lain yang mirip (telepon, email, atau nama).</span>');
                         }
 
                         return new HtmlString(
