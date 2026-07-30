@@ -7,6 +7,7 @@ use App\Filament\Resources\CommissionResource\Pages;
 use App\Models\Commission;
 use App\Models\Customer;
 use App\Models\Partner;
+use App\Models\WorkflowAssignment;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -106,13 +107,17 @@ class CommissionResource extends Resource
                     ->label('Approve')
                     ->icon('heroicon-o-check')
                     ->color('success')
-                    ->visible(fn (Commission $record) => in_array($record->status, ['pending', 'waiting_client_payment']))
+                    ->visible(fn (Commission $record) => in_array($record->status, ['pending', 'waiting_client_payment'])
+                        && auth()->user()?->can('commission.approve')
+                        && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::COMMISSION_APPROVAL, auth()->user()))
                     ->action(fn (Commission $record) => $record->approve()),
                 Tables\Actions\Action::make('reject')
                     ->label('Reject')
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
-                    ->visible(fn (Commission $record) => in_array($record->status, ['pending', 'waiting_client_payment']))
+                    ->visible(fn (Commission $record) => in_array($record->status, ['pending', 'waiting_client_payment'])
+                        && auth()->user()?->can('commission.reject')
+                        && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::COMMISSION_APPROVAL, auth()->user()))
                     ->form([
                         Forms\Components\Textarea::make('reason')->label('Alasan Reject')->required(),
                     ])

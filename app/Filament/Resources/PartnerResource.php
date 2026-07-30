@@ -8,6 +8,7 @@ use App\Mail\PartnerRegistrationApproved;
 use App\Mail\PartnerRegistrationRejected;
 use App\Models\Partner;
 use App\Models\SiteSetting;
+use App\Models\WorkflowAssignment;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -110,7 +111,9 @@ class PartnerResource extends Resource
                     ->icon('heroicon-o-check')
                     ->color('success')
                     ->requiresConfirmation()
-                    ->visible(fn (Partner $record) => $record->status !== 'approved')
+                    ->visible(fn (Partner $record) => $record->status !== 'approved'
+                        && auth()->user()?->can('partner.approve')
+                        && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::PARTNER_REGISTRATION, auth()->user()))
                     ->action(function (Partner $record) {
                         $record->update([
                             'status' => 'approved',
@@ -125,7 +128,9 @@ class PartnerResource extends Resource
                     ->label('Reject')
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
-                    ->visible(fn (Partner $record) => $record->status !== 'rejected')
+                    ->visible(fn (Partner $record) => $record->status !== 'rejected'
+                        && auth()->user()?->can('partner.reject')
+                        && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::PARTNER_REGISTRATION, auth()->user()))
                     ->form([
                         Forms\Components\Textarea::make('rejection_reason')
                             ->label('Alasan Reject')

@@ -33,7 +33,7 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 23 (Admin) — Partner Settings | ✅ Selesai | 2026-07-30 |
 | Fase 5 — Sales Workspace | ✅ Selesai (dikerjakan bareng Fase 8) | 2026-07-30 |
 | Fase 24 (Admin) — RBAC (Role & Permission) | ✅ Selesai | 2026-07-30 |
-| Fase 25 (Admin) — Workflow Assignment | 🔧 Sedang dikerjakan | 2026-07-30 |
+| Fase 25 (Admin) — Workflow Assignment | ✅ Selesai | 2026-07-30 |
 | Fase 26 (Admin+Partner) — Support Ticket | 🔧 Sedang dikerjakan | 2026-07-30 |
 | Fase 27 (Admin) — Audit Log | 🔧 Sedang dikerjakan | 2026-07-30 |
 
@@ -479,17 +479,23 @@ Diverifikasi lewat `tests/Feature/RoleManagementTest.php` (6 test): migration se
 
 ---
 
-## Fase 25 (Admin) — Workflow Assignment
+## Fase 25 (Admin) — Workflow Assignment ✅ (selesai 2026-07-30)
 
 Melengkapi Fase 24: menentukan **siapa** (Role mana) yang jadi approver di tiap workflow, bukan cuma **bisa apa** (permission).
 
-- [ ] Tabel `workflow_assignments` — 1 row per workflow, admin pilih Role approver (boleh dikosongkan = siapa saja yang punya permission `approve` di modul itu boleh approve)
-- [ ] Workflow: Registrasi Partner → `PartnerResource::approve/reject`
-- [ ] Workflow: Project Claim → `PartnerProjectResource::approveClaim/rejectClaim`
-- [ ] Workflow: Project Approval → `PartnerProjectResource::publish` (draft → available)
-- [ ] Workflow: Commission Approval → `CommissionResource::approve/reject`
-- [ ] Workflow: Withdrawal Approval → `WithdrawalResource::approve/reject`
-- [ ] Workflow: Support Ticket → `SupportTicketResource::resolve/close` (Fase 26)
+- [x] Tabel `workflow_assignments` — 1 row per workflow (`WorkflowAssignmentResource`, `/admin/workflow-assignments`, cuma bisa edit `role_id`, tidak bisa create/delete karena 6 row-nya fixed & di-seed sekali lewat migration), admin pilih Role approver (boleh dikosongkan = siapa saja yang punya permission `approve` di modul itu boleh approve)
+- [x] Workflow: Registrasi Partner → `PartnerResource::approve/reject`
+- [x] Workflow: Project Claim → `PartnerProjectResource::approveClaim/rejectClaim`
+- [x] Workflow: Project Approval → `PartnerProjectResource::publish` (draft → available)
+- [x] Workflow: Commission Approval → `CommissionResource::approve/reject`
+- [x] Workflow: Withdrawal Approval → `WithdrawalResource::approve/reject`
+- [x] Workflow: Support Ticket → `SupportTicketResource::resolve/close` (dikaitkan di sini, diimplementasikan penuh di Fase 26)
+
+Kelima action approve/reject/publish existing ditambah 2 syarat sekaligus: permission modul terkait (`{modul}.approve`/`.reject`, dari Fase 24) DAN `WorkflowAssignment::userIsAuthorizedFor()` (kalau workflow itu di-assign ke Role tertentu, user juga harus punya Role itu — kalau tidak di-assign, permission saja cukup).
+
+Field `approval_workflow_notes` (placeholder lama di Partner Settings, Fase 23) dihapus total (kolom + form field) — sepenuhnya digantikan Fase 24+25 ini.
+
+Diverifikasi lewat `tests/Feature/WorkflowAssignmentTest.php` (5 test): migration seed menghasilkan 6 row workflow tanpa assignment, workflow tanpa assignment bisa diapprove siapa saja yang punya permission modul itu, workflow yang sudah di-assign ke Role tertentu memblokir user yang punya permission tapi bukan Role itu (dan mengizinkan yang punya Role-nya), admin bisa ubah Role approver lewat `WorkflowAssignmentResource`, kolom `approval_workflow_notes` sudah tidak ada lagi di `partner_settings`.
 
 ---
 

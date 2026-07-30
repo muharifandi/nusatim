@@ -13,7 +13,6 @@ class PartnerSetting extends Model
         'default_commission_scheme_id',
         'max_concurrent_claimed_projects',
         'claim_processing_hours',
-        'approval_workflow_notes',
         'default_email_notifications_enabled',
     ];
 

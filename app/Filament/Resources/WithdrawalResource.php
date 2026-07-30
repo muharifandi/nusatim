@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Concerns\AuthorizesModule;
 use App\Filament\Resources\WithdrawalResource\Pages;
 use App\Models\Withdrawal;
+use App\Models\WorkflowAssignment;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -88,13 +89,17 @@ class WithdrawalResource extends Resource
                     ->label('Approve')
                     ->icon('heroicon-o-check')
                     ->color('success')
-                    ->visible(fn (Withdrawal $record) => $record->status === 'pending')
+                    ->visible(fn (Withdrawal $record) => $record->status === 'pending'
+                        && auth()->user()?->can('withdrawal.approve')
+                        && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::WITHDRAWAL_APPROVAL, auth()->user()))
                     ->action(fn (Withdrawal $record) => $record->approve()),
                 Tables\Actions\Action::make('reject')
                     ->label('Reject')
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
-                    ->visible(fn (Withdrawal $record) => in_array($record->status, ['pending', 'approved']))
+                    ->visible(fn (Withdrawal $record) => in_array($record->status, ['pending', 'approved'])
+                        && auth()->user()?->can('withdrawal.reject')
+                        && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::WITHDRAWAL_APPROVAL, auth()->user()))
                     ->form([
                         Forms\Components\Textarea::make('reason')->label('Alasan Reject')->required(),
                     ])

@@ -9,7 +9,6 @@ use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -81,14 +80,6 @@ class ManagePartnerSettings extends Page implements HasActions, HasForms
                             ->numeric()
                             ->helperText('Klaim yang masih Pending Approval melebihi jam ini otomatis ditolak (dibuka lagi untuk partner lain). Kosongkan untuk tidak ada batas waktu.'),
                     ])->columns(2),
-                Section::make('Workflow Approval')
-                    ->description('Dokumentasi kebijakan (teks bebas) - belum ada sistem role/permission sungguhan untuk mengatur ini secara otomatis.')
-                    ->schema([
-                        Textarea::make('approval_workflow_notes')
-                            ->label('')
-                            ->hiddenLabel()
-                            ->rows(4),
-                    ]),
                 Section::make('Notifikasi')
                     ->description('Kanal default untuk partner yang baru mendaftar (partner tetap bisa ubah preferensinya sendiri di Fase 14). Isi/template teks tiap jenis notifikasi belum bisa diedit dari sini.')
                     ->schema([

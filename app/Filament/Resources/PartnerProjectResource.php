@@ -7,6 +7,7 @@ use App\Filament\Resources\PartnerProjectResource\Pages;
 use App\Models\Partner;
 use App\Models\PartnerProject;
 use App\Models\Service;
+use App\Models\WorkflowAssignment;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -85,7 +86,9 @@ class PartnerProjectResource extends Resource
                     ->label('Publish')
                     ->icon('heroicon-o-globe-alt')
                     ->color('success')
-                    ->visible(fn (PartnerProject $record) => $record->status === 'draft')
+                    ->visible(fn (PartnerProject $record) => $record->status === 'draft'
+                        && auth()->user()?->can('partner_project.approve')
+                        && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::PROJECT_APPROVAL, auth()->user()))
                     ->action(fn (PartnerProject $record) => $record->publish()),
                 Tables\Actions\Action::make('assignPartner')
                     ->label('Assign Partner')
@@ -102,13 +105,17 @@ class PartnerProjectResource extends Resource
                     ->label('Approve Claim')
                     ->icon('heroicon-o-check')
                     ->color('success')
-                    ->visible(fn (PartnerProject $record) => $record->status === 'pending_approval')
+                    ->visible(fn (PartnerProject $record) => $record->status === 'pending_approval'
+                        && auth()->user()?->can('partner_project.approve')
+                        && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::PROJECT_CLAIM, auth()->user()))
                     ->action(fn (PartnerProject $record) => $record->approveClaim()),
                 Tables\Actions\Action::make('rejectClaim')
                     ->label('Reject Claim')
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
-                    ->visible(fn (PartnerProject $record) => $record->status === 'pending_approval')
+                    ->visible(fn (PartnerProject $record) => $record->status === 'pending_approval'
+                        && auth()->user()?->can('partner_project.reject')
+                        && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::PROJECT_CLAIM, auth()->user()))
                     ->action(fn (PartnerProject $record) => $record->rejectClaim()),
                 Tables\Actions\Action::make('close')
                     ->label('Close')
