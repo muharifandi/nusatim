@@ -23,7 +23,9 @@ class MarketingMaterialResource extends Resource
 
     protected static ?string $navigationLabel = 'Marketing Material';
 
-    protected static ?string $navigationGroup = 'Partner Program';
+    protected static ?string $navigationGroup = 'Marketing & Support';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

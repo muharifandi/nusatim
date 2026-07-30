@@ -26,7 +26,9 @@ class CommissionSchemeResource extends Resource
 
     protected static ?string $navigationLabel = 'Commission Scheme';
 
-    protected static ?string $navigationGroup = 'Partner Program';
+    protected static ?string $navigationGroup = 'Commission & Withdrawal';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

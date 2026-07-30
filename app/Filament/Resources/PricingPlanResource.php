@@ -19,6 +19,10 @@ class PricingPlanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
+    protected static ?string $navigationGroup = 'Website';
+
+    protected static ?int $navigationSort = 8;
+
     public static function form(Form $form): Form
     {
         return $form

@@ -18,6 +18,10 @@ class NewsletterSubscriberResource extends Resource
 
     protected static ?string $navigationLabel = 'Newsletter';
 
+    protected static ?string $navigationGroup = 'Website';
+
+    protected static ?int $navigationSort = 13;
+
     protected static ?string $modelLabel = 'Subscriber';
 
     public static function form(Form $form): Form

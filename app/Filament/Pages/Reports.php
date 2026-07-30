@@ -11,7 +11,9 @@ class Reports extends Page
 
     protected static ?string $navigationLabel = 'Reports';
 
-    protected static ?string $navigationGroup = 'Partner Program';
+    protected static ?string $navigationGroup = 'Reports & Settings';
+
+    protected static ?int $navigationSort = 1;
 
     protected static string $view = 'filament.pages.reports';
 

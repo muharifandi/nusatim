@@ -26,7 +26,9 @@ class WithdrawalResource extends Resource
 
     protected static ?string $navigationLabel = 'Withdrawal';
 
-    protected static ?string $navigationGroup = 'Partner Program';
+    protected static ?string $navigationGroup = 'Commission & Withdrawal';
+
+    protected static ?int $navigationSort = 3;
 
     public static function canCreate(): bool
     {

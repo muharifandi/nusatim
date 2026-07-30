@@ -24,7 +24,9 @@ class PartnerSalesTargetResource extends Resource
 
     protected static ?string $navigationLabel = 'Sales Target';
 
-    protected static ?string $navigationGroup = 'Partner Program';
+    protected static ?string $navigationGroup = 'Partner Management';
+
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {

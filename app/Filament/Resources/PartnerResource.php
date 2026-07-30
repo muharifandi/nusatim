@@ -31,7 +31,9 @@ class PartnerResource extends Resource
 
     protected static ?string $navigationLabel = 'Partner';
 
-    protected static ?string $navigationGroup = 'Partner Program';
+    protected static ?string $navigationGroup = 'Partner Management';
+
+    protected static ?int $navigationSort = 1;
 
     public static function canCreate(): bool
     {
