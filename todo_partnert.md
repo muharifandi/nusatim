@@ -35,6 +35,25 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 
 **Seluruh `todo_partnert.md` sudah selesai dikerjakan**, kecuali Fase 2, 5, dan 8 yang sengaja ditunda (bukan lupa/terlewat — lihat catatan masing-masing fase di bawah untuk alasannya, semuanya soal "tunggu data lebih matang dulu", bukan blocker teknis). Kalau nanti mau lanjut ke tiga fase itu, tinggal kabari — datanya (Lead/Customer/Project/Commission/Withdrawal) sudah cukup untuk mulai kapan saja.
 
+### Sisa pekerjaan (ringkasan cepat)
+
+**Belum dikerjakan sama sekali:**
+- Fase 2 — Dashboard Partner (ditunda)
+- Fase 5 — Sales Workspace (ditunda)
+- Fase 8 — Project Management (ditunda)
+
+**Sudah "selesai" tapi sengaja belum 100% lengkap:**
+- Fase 15 (admin Partner Management): belum ada Suspend/Aktifkan Partner, Reset Password dari admin, UI "Kelola Level Partner"
+- Fase 17 (admin Lead Monitoring): Anti Duplicate baru versi sederhana, belum fuzzy-matching
+- Fase 9 (Commission — Recurring Percentage): tipe skema bisa dipilih, tapi mesin hitung-ulang otomatis per pembayaran belum ada (belum ada sistem invoice/payment)
+- Fase 23 (Notifikasi): kanal default sudah ada, "template pesan" (isi teks tiap notifikasi diedit admin) belum dibangun
+
+**Pertanyaan bisnis yang masih terbuka** (bukan teknis, cuma pemberi spec yang bisa jawab) — lihat detail di Fase 0 di bawah:
+- Definisi "Level Partner" dan pengaruhnya
+- Siapa approve apa (role/permission)
+- Konfirmasi "Produk" = tabel `services` yang sudah ada
+- Format export laporan: CSV (dipilih) vs PDF/Excel asli
+
 ---
 
 ## Fase 0 — Keputusan Arsitektur (wajib selesai sebelum mulai coding)
@@ -58,13 +77,17 @@ Ini bukan fitur, tapi keputusan desain yang akan menentukan struktur seluruh mod
 - [x] **Panel admin untuk modul baru**: tetap satu panel admin (`/admin`), grup navigasi baru **"Partner Program"** (bukan panel Filament terpisah). Portal partner sendiri jadi panel Filament KEDUA (`/partner`, guard `partner`) — beda dari panel admin.
 - [x] **Penyimpanan dokumen sensitif**: disk privat baru `partner_documents` (`storage_path('app/partner-documents')`, tanpa `url` publik), file di-serve lewat `PartnerDocumentController` (route `partner.documents.show`) yang mengecek: partner hanya boleh lihat dokumennya sendiri, admin (`web` guard) boleh lihat semua. Diverifikasi test.
 
+### Sudah diselesaikan sambil jalan (dulu tercatat "genuinely open", sekarang sudah dibangun)
+
+- [x] **Audit trail untuk data uang** — tabel `commission_status_histories` (Fase 9) dan `withdrawal_status_histories` (Fase 10), keduanya terisi otomatis lewat model event tiap kali status berubah, bukan sekadar kolom `status` yang di-update in-place.
+- [x] **Precision angka uang** — semua kolom nominal (`commissions.amount`, `withdrawals.amount`, `customers.project_value`, `partner_projects.budget`, dst) pakai `decimal`, tidak ada yang `float`/`double`.
+
 ### Masih genuinely open — butuh jawaban dari pemberi spec, bukan keputusan teknis
 
-- [ ] **Audit trail untuk data uang**: komisi & withdrawal tidak boleh sekadar kolom `status` yang di-update in-place tanpa jejak. Rencanakan tabel histori/log perubahan status (siapa approve, kapan, alasan reject, dll) sejak awal — bukan ditambah belakangan. Belum relevan di Fase 1 (tidak ada data uang di sini), tapi wajib diputuskan sebelum Fase 9/10/19/20.
-- [ ] **Precision angka uang**: pastikan semua kolom nominal pakai `decimal`, bukan `float`/`double` (mengulang standar yang sudah dipakai di `pricing_plans.price`). Belum relevan di Fase 1.
-- [ ] **Definisi "Level Partner"**: spec menyebut "Level Partner" di modul admin tapi tidak dijelaskan levelnya apa saja atau pengaruhnya ke apa (komisi berbeda? akses fitur berbeda?) — perlu klarifikasi dari pemberi spec sebelum dikerjakan. Kolom `level` sudah ada di tabel `partners` (nullable, diedit bebas dari admin) sebagai placeholder sampai definisinya jelas.
-- [ ] **Definisi role approval**: siapa yang approve apa? (registrasi partner, claim project, komisi, withdrawal — apakah semua admin bisa approve semua, atau ada pemisahan role/permission?) Fase 1 sementara pakai "siapa saja yang login ke `/admin` boleh approve/reject partner" — belum ada pemisahan role karena `spatie/laravel-permission` belum terpasang.
-- [ ] **Definisi "Produk"**: konfirmasi apakah benar reuse tabel `services` existing (lihat poin verifikasi di atas) atau memang perlu katalog produk baru yang terpisah dari layanan situs profile. Belum relevan di Fase 1, wajib diputuskan sebelum Fase 3.
+- [ ] **Definisi "Level Partner"**: spec menyebut "Level Partner" di modul admin tapi tidak dijelaskan levelnya apa saja atau pengaruhnya ke apa (komisi berbeda? akses fitur berbeda?) — perlu klarifikasi dari pemberi spec sebelum dikerjakan. Kolom `level` sudah ada di tabel `partners` (nullable, diedit bebas dari admin) sebagai placeholder sampai definisinya jelas. UI "Kelola Level Partner" di Fase 15 juga masih menunggu ini.
+- [ ] **Definisi role approval**: siapa yang approve apa? (registrasi partner, claim project, komisi, withdrawal — apakah semua admin bisa approve semua, atau ada pemisahan role/permission?) Sementara semua fase pakai "siapa saja yang login ke `/admin` boleh approve/reject" — belum ada pemisahan role karena `spatie/laravel-permission` belum terpasang. Fase 23 "Workflow Approval" cuma catatan teks bebas menunggu ini.
+- [ ] **Definisi "Produk"**: dipakai sebagai rekomendasi teknis (reuse tabel `services`) sejak Fase 3, dan sudah dipakai konsisten di semua fase (Lead/Customer/Project/Commission Scheme) — tapi **belum ada konfirmasi eksplisit** dari pemberi spec bahwa ini memang yang dimaksud, bukan katalog produk terpisah.
+- [ ] **Format export laporan** (Fase 22): diputuskan pakai CSV (universal, tidak nambah dependency baru) — **belum dikonfirmasi** apakah ini yang benar-benar dibutuhkan atau harus PDF/Excel asli.
 
 ---
 
