@@ -32,21 +32,22 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 22 (Admin) — Reports | ✅ Selesai | 2026-07-30 |
 | Fase 23 (Admin) — Partner Settings | ✅ Selesai | 2026-07-30 |
 | Fase 5 — Sales Workspace | ✅ Selesai (dikerjakan bareng Fase 8) | 2026-07-30 |
+| Fase 24 (Admin) — RBAC (Role & Permission) | 🔧 Sedang dikerjakan | 2026-07-30 |
+| Fase 25 (Admin) — Workflow Assignment | 🔧 Sedang dikerjakan | 2026-07-30 |
+| Fase 26 (Admin+Partner) — Support Ticket | 🔧 Sedang dikerjakan | 2026-07-30 |
+| Fase 27 (Admin) — Audit Log | 🔧 Sedang dikerjakan | 2026-07-30 |
 
-**Sedang menyelesaikan sisa pekerjaan** (2026-07-30): Fase 2, Fase 8, Fase 5, Fase 15, dan Fase 17 semuanya sudah selesai — termasuk "Kelola Level Partner" yang tadinya menunggu klarifikasi Fase 0 (diputuskan mengikuti pola standar sistem sejenis, lihat Fase 0). Yang tersisa sekarang cuma 2 item besar yang butuh scoping/keputusan produk terpisah (lihat di bawah) — bukan pekerjaan teknis yang bisa langsung dikerjakan tanpa arahan lebih lanjut.
+**Final Review klien (2026-07-30 sore)** menetapkan beberapa keputusan bisnis final yang merevisi/menyelesaikan item-item yang sebelumnya masih asumsi/placeholder — lihat bagian **"Final Business Decisions (Client Sign-off)"** di bawah untuk detail lengkap. Ringkasnya: Workflow Approval (Fase 23) direvisi total jadi RBAC sungguhan (Fase 24+25, sedang dikerjakan), Partner Level (yang sempat ditambahkan sebagai bagian Commission Scheme di hari yang sama) di-revert jadi murni atribut informational, Produk/Export/dll dikonfirmasi final tanpa perubahan kode, dan 2 modul baru ditambahkan ke scope (Support Ticket, Audit Log).
 
 ### Sisa pekerjaan (ringkasan cepat)
 
-**Belum dikerjakan sama sekali:** tidak ada lagi — semua fase di daftar sudah dikerjakan (lihat pengecualian "sengaja belum 100% lengkap" di bawah).
+**Sedang dikerjakan** (per Final Review 2026-07-30): Fase 24 (RBAC), Fase 25 (Workflow Assignment), Fase 26 (Support Ticket, modul baru), Fase 27 (Audit Log, modul baru). Plus revert kecil di Fase 15/Commission Scheme untuk Partner Level.
 
 **Sudah "selesai" tapi sengaja belum 100% lengkap:**
-- Fase 9 (Commission — Recurring Percentage): tipe skema bisa dipilih, tapi mesin hitung-ulang otomatis per pembayaran belum ada (belum ada sistem invoice/payment) — **ukurannya setara Fase 9+10 digabung**, butuh scoping terpisah sebelum dikerjakan
+- Fase 9 (Commission — Recurring Percentage): **dikonfirmasi final sebagai future enhancement**, bukan MVP (butuh Invoice Management + Payment Tracking + Scheduler/Recurring Engine terpisah)
 - Fase 23 (Notifikasi): kanal default sudah ada, "template pesan" (isi teks tiap notifikasi diedit admin) belum dibangun
 
-**Pertanyaan bisnis yang masih terbuka** (bukan teknis, cuma pemberi spec yang bisa jawab) — lihat detail di Fase 0 di bawah:
-- Siapa approve apa (role/permission)
-- Konfirmasi "Produk" = tabel `services` yang sudah ada
-- Format export laporan: CSV (dipilih) vs PDF/Excel asli
+**Pertanyaan bisnis yang masih terbuka:** tidak ada lagi — semua yang tersisa di versi sebelumnya (role approval, Produk, format export) sudah dijawab final lewat Final Review 2026-07-30.
 
 ---
 
@@ -75,13 +76,10 @@ Ini bukan fitur, tapi keputusan desain yang akan menentukan struktur seluruh mod
 
 - [x] **Audit trail untuk data uang** — tabel `commission_status_histories` (Fase 9) dan `withdrawal_status_histories` (Fase 10), keduanya terisi otomatis lewat model event tiap kali status berubah, bukan sekadar kolom `status` yang di-update in-place.
 - [x] **Precision angka uang** — semua kolom nominal (`commissions.amount`, `withdrawals.amount`, `customers.project_value`, `partner_projects.budget`, dst) pakai `decimal`, tidak ada yang `float`/`double`.
-- [x] **Definisi "Level Partner"** (2026-07-30) — pemberi spec tidak pernah menjawab detail levelnya apa saja, jadi diputuskan mengikuti pola standar yang dipakai sistem partner/affiliate sejenis (mis. HubSpot Solutions Partner, program reseller SaaS pada umumnya): 4 tier tetap **Bronze/Silver/Gold/Platinum** (`Partner::LEVELS`), pengaruhnya ke **rate komisi** — level jadi salah satu cakupan di Commission Scheme (di antara Per Partner dan Per Produk dalam prioritas resolusi), jadi partner level lebih tinggi bisa dapat skema komisi default yang lebih baik kalau tidak punya skema khusus sendiri. UI "Kelola Level Partner" sungguhan (bukan cuma field pasif) dibangun bareng ini di Fase 15.
-
-### Masih genuinely open — butuh jawaban dari pemberi spec, bukan keputusan teknis
-
-- [ ] **Definisi role approval**: siapa yang approve apa? (registrasi partner, claim project, komisi, withdrawal — apakah semua admin bisa approve semua, atau ada pemisahan role/permission?) Sementara semua fase pakai "siapa saja yang login ke `/admin` boleh approve/reject" — belum ada pemisahan role karena `spatie/laravel-permission` belum terpasang. Fase 23 "Workflow Approval" cuma catatan teks bebas menunggu ini.
-- [ ] **Definisi "Produk"**: dipakai sebagai rekomendasi teknis (reuse tabel `services`) sejak Fase 3, dan sudah dipakai konsisten di semua fase (Lead/Customer/Project/Commission Scheme) — tapi **belum ada konfirmasi eksplisit** dari pemberi spec bahwa ini memang yang dimaksud, bukan katalog produk terpisah.
-- [ ] **Format export laporan** (Fase 22): diputuskan pakai CSV (universal, tidak nambah dependency baru) — **belum dikonfirmasi** apakah ini yang benar-benar dibutuhkan atau harus PDF/Excel asli.
+- [x] ~~**Definisi "Level Partner"** (2026-07-30) — 4 tier tetap Bronze/Silver/Gold/Platinum, pengaruhnya ke rate komisi (Commission Scheme)~~ **DIREVISI ulang 2026-07-30 sore** (final review klien) — lihat "Final Business Decisions" di bawah: Level Partner **BUKAN** bagian dari Commission Scheme, murni atribut bisnis informational (badge/loyalty/reward/prioritas project/klasifikasi/dashboard). Tier tetap (`Partner::LEVELS`) dan UI "Ubah Level" (Fase 15) tetap ada, tapi cakupan "Per Level" di Commission Scheme (sempat ditambahkan sore harinya) di-revert.
+- [x] **Definisi role approval** (2026-07-30) — RESOLVED lewat "Final Business Decisions": RBAC (Role/Permission per modul + assign User ke Role + assign approver per workflow). Lihat Fase 24 & 25 di bawah.
+- [x] **Definisi "Produk"** (2026-07-30) — RESOLVED: dikonfirmasi final tetap pakai tabel `services`, tidak ada tabel `products` terpisah. Lihat "Final Business Decisions".
+- [x] **Format export laporan** (2026-07-30) — RESOLVED: dikonfirmasi final CSV untuk fase awal. Lihat "Final Business Decisions".
 
 ---
 
@@ -241,7 +239,7 @@ Full regression: 89/90 test lulus (1 kegagalan adalah `ExampleTest` yang sudah g
 ### Implementasi 3 jenis skema komisi
 
 - [x] **Percentage** — komisi = persentase × nilai project (sekali hitung, saat closing). Contoh: 10% × Rp100.000.000.
-- [x] **Recurring Percentage** — ⚠️ **tipe skema-nya sudah bisa dipilih & disimpan**, tapi mesin hitung ulang otomatis tiap ada pembayaran baru **belum dibangun** — sistem ini belum punya tabel invoice/payment sama sekali. Generate untuk skema ini sekarang cuma menghasilkan satu baris komisi awal (diperlakukan seperti Percentage biasa). Butuh fase baru "Invoice/Payment Tracking" + keputusan produk sebelum benar-benar berfungsi sesuai deskripsi asli.
+- [x] **Recurring Percentage** — ⚠️ **tipe skema-nya sudah bisa dipilih & disimpan**, tapi mesin hitung ulang otomatis tiap ada pembayaran baru **belum dibangun** — sistem ini belum punya tabel invoice/payment sama sekali. Generate untuk skema ini sekarang cuma menghasilkan satu baris komisi awal (diperlakukan seperti Percentage biasa). **Dikonfirmasi final oleh klien (2026-07-30, lihat "Final Business Decisions" di bawah): ini memang bukan bagian dari MVP**, melainkan future enhancement yang butuh 3 modul tambahan (Invoice Management, Payment Tracking, Scheduler/Recurring Engine) — bukan lagi item "belum sempat dikerjakan", tapi item yang sengaja di luar scope saat ini.
 - [x] **Flat Commission** — nominal tetap per unit penjualan, tidak bergantung nilai project. Contoh: setiap penjualan Produk A → komisi Rp2.000.000 (tetap, walau harga produk A berbeda-beda).
 
 > Ketiga skema ini harus bisa hidup berdampingan — satu produk/partner/project bisa punya skema berbeda dari produk/partner/project lain (lihat Fase "Commission Scheme Management" di sisi Admin).
@@ -438,12 +436,78 @@ Diverifikasi lewat `tests/Feature/ReportsTest.php` (7 test): agregasi Laporan Pa
 - [x] Pengaturan Commission Scheme Default (skema fallback kalau produk/partner/project tidak punya skema khusus) — `default_commission_scheme_id`, prioritas: Project → Partner → Produk → **Default di sini** → skema tanpa cakupan (fallback lama dari Fase 9, tetap jalan berdampingan, tidak diganti)
 - [x] Pengaturan Project Claim Rule (mis. berapa lama klaim harus diproses, berapa project maksimal diklaim bersamaan) — **keduanya benar-benar ditegakkan**, bukan cuma field tersimpan: `max_concurrent_claimed_projects` dicek di `PartnerProject::claim()` (`ValidationException` kalau sudah di batas), `claim_processing_hours` ditegakkan lewat command terjadwal baru `projects:expire-stale-claims` (`->hourly()`, otomatis reject klaim yang lewat batas waktu)
 - [x] Pengaturan Partner Agreement (teks perjanjian kemitraan yang ditampilkan di Fase 1 registrasi — editable tanpa ubah kode) — dibangun di Fase 1
-- [x] Pengaturan Workflow Approval (siapa approve apa, sesuai keputusan di Fase 0) — ⚠️ **placeholder teks bebas** (`approval_workflow_notes`), bukan sistem role sungguhan — sama pola dengan "Level Partner" di Fase 1, karena `spatie/laravel-permission` belum terpasang dan pertanyaan "siapa approve apa" belum dijawab sejak Fase 0
+- [x] ~~Pengaturan Workflow Approval (siapa approve apa, sesuai keputusan di Fase 0) — placeholder teks bebas~~ **DIREVISI 2026-07-30**: keputusan final klien adalah RBAC sungguhan, bukan catatan teks. Field `approval_workflow_notes` dihapus, digantikan sepenuhnya oleh **Fase 24 (RBAC) + Fase 25 (Workflow Assignment)** di bawah — lihat "Final Business Decisions".
 - [x] Pengaturan Notifikasi (kanal default, template pesan) — **"kanal default" dibangun** (`default_email_notifications_enabled`, dipakai `Register::handleRegistration()` untuk partner baru). ⚠️ **"Template pesan" (isi teks tiap jenis email/notifikasi editable admin) SENGAJA TIDAK dibangun** — perlu sistem templating dinamis menggantikan Blade view yang di-hardcode di `resources/views/emails/*.blade.php`, itu perubahan besar terpisah, bukan bagian dari fase ini.
 
 **Ini menandai semua fase di `todo_partnert.md` selesai dikerjakan pada saat ditulis (2026-07-29/30)** — Fase 2 (Dashboard), Fase 5 (Sales Workspace), dan Fase 8 (Project Management) waktu itu masih sengaja ditunda, tapi ketiganya sudah diselesaikan juga per 2026-07-30 (lihat catatan masing-masing fase di atas dan ringkasan "Sisa Pekerjaan" di bagian Progress).
 
 Diverifikasi lewat `tests/Feature/PartnerSettingsExtendedTest.php` (7 test): default skema eksplisit menang lawan fallback lama tapi kalah lawan skema lebih spesifik, klaim ditolak begitu di batas concurrent (dan tidak terpengaruh kalau setting kosong), command expire-stale-claims cuma memproses yang benar-benar lewat batas waktu, registrasi baru memakai kanal notifikasi default dari setting.
+
+---
+
+## Final Business Decisions (Client Sign-off, 2026-07-30)
+
+Dokumen "Final Review" dari klien menetapkan keputusan-keputusan berikut sebagai **final, tidak perlu klarifikasi lagi**:
+
+- **Role menggunakan RBAC** — bukan lagi placeholder teks. Lihat Fase 24 (Role & Permission) dan Fase 25 (Workflow Assignment) di bawah.
+- **Workflow Approval menggunakan Assignment** — approver per workflow ditentukan lewat Role, bukan hardcode "siapa saja yang login boleh approve". Lihat Fase 25.
+- **Produk menggunakan tabel `services`** — final, tidak akan ada tabel `products` terpisah. Sudah konsisten dipakai di semua modul (Lead, Customer, Project, Commission Scheme, Project Board) sejak awal, tidak ada perubahan kode.
+- **Export menggunakan CSV pada fase awal** — final, sudah diimplementasikan di Fase 22.
+- **Lead hanya dimiliki satu Partner** — sudah begini sejak Fase 3 (`leads.partner_id`, bukan many-to-many), tidak ada perubahan kode.
+- **Project Claim mengikuti alur**: Available → Pending Approval → Assigned → In Progress → Closed — sudah sesuai state machine `PartnerProject` sejak Fase 7 (ditambah `draft` sebelum `Available` dan `Cancelled` sebagai off-ramp, detail implementasi yang tidak bertentangan dengan alur inti ini).
+- **Commission dihitung berdasarkan pembayaran (invoice/payment) yang telah diterima** — ini **konfirmasi arah jangka panjang**, bukan MVP sekarang. MVP saat ini masih pakai `project_value` sebagai proksi nilai yang "diterima" (dihitung sekali saat closing). Perhitungan berbasis invoice/payment sungguhan adalah bagian dari Recurring Commission (Fase 9) yang dikonfirmasi sebagai future enhancement, lihat catatan di Fase 9.
+- **Partner menggunakan Role bawaan "Partner"**, tidak bisa mengelola Role maupun Permission — sudah benar secara arsitektur sejak awal (guard `partner` terpisah total dari RBAC yang dibangun di Fase 24, yang cuma berlaku untuk guard `web`/staff admin). Tidak dibangun tabel roles/permissions terpisah untuk guard `partner` karena semua partner memang selalu punya akses yang identik hari ini — tidak ada kebutuhan pembedaan hak akses antar partner yang diminta.
+- **Partner Level bukan bagian dari Commission Scheme** — direvisi dari keputusan sore harinya (Level sempat ditambahkan sebagai salah satu cakupan resolusi skema komisi), di-revert total. Level murni atribut informational: badge, loyalty program, reward, bonus, prioritas mendapat project, klasifikasi partner, dashboard & reporting. Yang benar-benar diimplementasikan hari ini: tier tetap (`Partner::LEVELS`) + badge di tabel `PartnerResource` (dashboard/reporting) + UI "Ubah Level". Loyalty/reward/bonus/prioritas project **belum ada logic aktifnya** (tidak diminta dibangun sekarang, cuma disebut sebagai contoh kegunaan level ke depannya) — dicatat di sini supaya tidak dianggap sudah selesai.
+- **Audit Log** ditambahkan sebagai modul baru (disarankan, bukan wajib) — beda dari Status History (`commission_status_histories`/`withdrawal_status_histories`) yang sudah ada: Audit Log generik lintas model, mencatat siapa/kapan/apa yang berubah. Lihat Fase 27.
+
+---
+
+## Fase 24 (Admin) — RBAC (Role & Permission)
+
+Menggantikan placeholder "Workflow Approval" di Fase 23 sepenuhnya. Pakai `spatie/laravel-permission`, guard `web` (staff/admin) saja — Partner tetap guard terpisah tanpa RBAC sendiri (lihat "Final Business Decisions").
+
+- [ ] Admin bisa membuat Role
+- [ ] Admin bisa mengatur Permission per Modul — 15 modul (Partner, Lead, Project Board, Commission Scheme, Commission, Withdrawal, Marketing Material, Sales Target, Reports, Partner Settings, Support Ticket, Role, User, Workflow Assignment, Audit Log), masing-masing dengan permission minimum: View/Create/Update/Delete/Approve/Reject/Assign/Export
+- [ ] Admin bisa assign User (staff) ke Role — `UserResource` baru (belum pernah ada UI kelola staff user sebelumnya)
+- [ ] Modul-modul existing (Partner, Lead, Project Board, Commission Scheme, Commission, Withdrawal, Marketing Material, Sales Target, Partner Settings) digating oleh permission ini di CRUD standarnya
+
+**Batasan lingkup**: RBAC ini cuma berlaku untuk resource-resource **Portal Partner/Sales Partner Management** (sesuai lingkup dokumen ini), tidak termasuk 12 resource CMS situs profile yang sudah ada duluan (Client/Faq/Menu/Page/Post/PricingPlan/Project/Promotion/Service/TeamMember/Testimonial/ContactMessage) — itu di luar lingkup modul Partner Program.
+
+---
+
+## Fase 25 (Admin) — Workflow Assignment
+
+Melengkapi Fase 24: menentukan **siapa** (Role mana) yang jadi approver di tiap workflow, bukan cuma **bisa apa** (permission).
+
+- [ ] Tabel `workflow_assignments` — 1 row per workflow, admin pilih Role approver (boleh dikosongkan = siapa saja yang punya permission `approve` di modul itu boleh approve)
+- [ ] Workflow: Registrasi Partner → `PartnerResource::approve/reject`
+- [ ] Workflow: Project Claim → `PartnerProjectResource::approveClaim/rejectClaim`
+- [ ] Workflow: Project Approval → `PartnerProjectResource::publish` (draft → available)
+- [ ] Workflow: Commission Approval → `CommissionResource::approve/reject`
+- [ ] Workflow: Withdrawal Approval → `WithdrawalResource::approve/reject`
+- [ ] Workflow: Support Ticket → `SupportTicketResource::resolve/close` (Fase 26)
+
+---
+
+## Fase 26 (Admin+Partner) — Support Ticket
+
+**Modul baru yang tidak pernah ada di spec/todo manapun sebelumnya** — ditambahkan karena "Final Review" klien menyebutnya sebagai salah satu dari 6 workflow yang butuh Assignment. Dibangun sebagai modul minimal (tanpa kategori/prioritas/SLA) supaya Assignment-nya benar-benar teruji end-to-end, bukan cuma kerangka kosong.
+
+- [ ] Partner bisa buat tiket (subjek + deskripsi)
+- [ ] Partner bisa lihat status tiket miliknya sendiri (tidak bisa lihat tiket partner lain)
+- [ ] Admin bisa lihat semua tiket lintas partner
+- [ ] Admin bisa assign tiket ke staff user (pakai Workflow Assignment dari Fase 25)
+- [ ] Admin bisa resolve (dengan catatan penyelesaian) / close tiket
+
+---
+
+## Fase 27 (Admin) — Audit Log
+
+Disarankan klien, beda dari Status History yang sudah ada (Fase 9/10) — Status History cuma mencatat histori status; Audit Log mencatat **siapa** melakukan **perubahan apa** pada **kapan**, lintas model.
+
+- [ ] Tabel `audit_logs` generik (model manapun, aktor manapun — staff `User` atau `Partner`)
+- [ ] Terpasang otomatis (lewat model event, bukan instrumentasi manual per-action) di: Partner, Lead, Customer, Project Board, Commission, Withdrawal, Support Ticket, Role & Permission, Workflow Assignment
+- [ ] Halaman admin read-only untuk melihat/filter Audit Log (per model, per user, per aksi, per tanggal)
 
 ---
 
@@ -471,13 +535,19 @@ Diverifikasi lewat `tests/Feature/PartnerSettingsExtendedTest.php` (7 test): def
 | 18 | Withdrawal Management | ❌ | ✅ |
 | 19 | Reports | ❌ | ✅ |
 | 20 | Partner Settings | ❌ | ✅ |
+| 21 | RBAC (Role & Permission) | ❌ | ✅ |
+| 22 | Workflow Assignment | ❌ | ✅ |
+| 23 | Support Ticket | ✅ | ✅ |
+| 24 | Audit Log | ❌ | ✅ |
+
+> Modul 21-24 ditambahkan 2026-07-30 dari "Final Review" klien — tidak ada di spec asli (lihat "Final Business Decisions" di atas).
 
 ---
 
 ## Catatan Penting
 
-> Spec asli yang diberikan berhenti tepat di judul "Catatan Penting" tanpa isi — poin-poin di bawah ini murni catatan teknis tambahan dari hasil review breakdown, **bukan** dari spec asli. Perlu dikonfirmasi ke pemberi spec, bukan dianggap final.
+> Spec asli yang diberikan berhenti tepat di judul "Catatan Penting" tanpa isi — poin-poin di bawah ini murni catatan teknis tambahan dari hasil review breakdown, **bukan** dari spec asli.
 
 - **Keamanan dokumen KYC (KTP/NPWP/bukti transfer)** adalah data pribadi sensitif — wajib disimpan di disk privat dengan akses terautentikasi per-pemilik, bukan folder publik seperti disk `media` yang dipakai situs profile saat ini.
-- **Ketelitian angka komisi**: skema Recurring Percentage butuh mekanisme yang jelas untuk tahu "pembayaran keberapa" sudah dihitung, supaya komisi tidak double-hitung atau ke-skip kalau job/cron sempat gagal jalan.
-- **Klarifikasi masih dibutuhkan** (jangan mulai kerja di area ini sebelum dijawab): definisi "Level Partner" dan pengaruhnya, siapa berwenang approve di tiap tahap (registrasi/klaim/komisi/withdrawal), dan format export laporan yang diharapkan.
+- **Ketelitian angka komisi**: skema Recurring Percentage butuh mekanisme yang jelas untuk tahu "pembayaran keberapa" sudah dihitung, supaya komisi tidak double-hitung atau ke-skip kalau job/cron sempat gagal jalan. Relevan lagi begitu Recurring Commission (future enhancement) mulai dikerjakan.
+- ~~**Klarifikasi masih dibutuhkan**~~ — **semua terjawab final** lewat "Final Business Decisions" (2026-07-30): definisi Level Partner, siapa berwenang approve (RBAC), format export laporan.
