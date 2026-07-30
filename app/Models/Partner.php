@@ -16,6 +16,21 @@ class Partner extends Authenticatable implements FilamentUser
     /** @use HasFactory<PartnerFactory> */
     use DeletesOldFiles, HasFactory, Notifiable;
 
+    /**
+     * Fixed tier list, following the standard tiered partner/affiliate
+     * program pattern used by similar systems (e.g. HubSpot Solutions
+     * Partner, most SaaS reseller programs) - higher tier gets a better
+     * default commission rate via CommissionScheme's 'level' scope. Kept
+     * as a fixed list rather than an admin-managed table since the spec
+     * never asked for custom/renamable tiers, just "Kelola Level Partner".
+     */
+    public const LEVELS = [
+        'bronze' => 'Bronze',
+        'silver' => 'Silver',
+        'gold' => 'Gold',
+        'platinum' => 'Platinum',
+    ];
+
     protected $fillable = [
         'name',
         'email',

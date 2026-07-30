@@ -40,12 +40,15 @@ class PartnerResource extends Resource
                 Forms\Components\TextInput::make('name')->disabled(),
                 Forms\Components\TextInput::make('email')->disabled(),
                 Forms\Components\TextInput::make('status')->disabled(),
-                // Free text for now - "Level Partner" belum didefinisikan
-                // secara final (lihat todo_partnert.md Fase 0), jadi
-                // sementara admin isi bebas sampai levelnya dikonfirmasi.
-                Forms\Components\TextInput::make('level')
+                // Read-only display here - the real edit surface is the
+                // "Ubah Level" table action below (this View modal disables
+                // the whole form anyway, matching the read-only pattern used
+                // for the other fields on this page).
+                Forms\Components\Select::make('level')
                     ->label('Level Partner')
-                    ->helperText('Belum ada daftar level baku - isi bebas untuk sementara.'),
+                    ->options(Partner::LEVELS)
+                    ->placeholder('Belum diset')
+                    ->disabled(),
                 Forms\Components\TextInput::make('bank_name')->label('Nama Bank')->disabled(),
                 Forms\Components\TextInput::make('bank_account_number')->label('Nomor Rekening')->disabled(),
                 Forms\Components\TextInput::make('bank_account_holder')->label('Atas Nama')->disabled(),
@@ -77,7 +80,18 @@ class PartnerResource extends Resource
                         'suspended' => 'gray',
                         default => 'warning',
                     }),
-                Tables\Columns\TextColumn::make('level')->placeholder('-'),
+                Tables\Columns\TextColumn::make('level')
+                    ->label('Level')
+                    ->badge()
+                    ->formatStateUsing(fn (?string $state) => $state ? (Partner::LEVELS[$state] ?? $state) : null)
+                    ->color(fn (?string $state) => match ($state) {
+                        'platinum' => 'success',
+                        'gold' => 'warning',
+                        'silver' => 'info',
+                        'bronze' => 'gray',
+                        default => 'gray',
+                    })
+                    ->placeholder('-'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Mendaftar Pada')
                     ->dateTime()
@@ -152,6 +166,18 @@ class PartnerResource extends Resource
                         'status' => 'approved',
                         'rejection_reason' => null,
                     ])),
+                Tables\Actions\Action::make('updateLevel')
+                    ->label('Ubah Level')
+                    ->icon('heroicon-o-star')
+                    ->fillForm(fn (Partner $record) => ['level' => $record->level])
+                    ->form([
+                        Forms\Components\Select::make('level')
+                            ->label('Level Partner')
+                            ->options(Partner::LEVELS)
+                            ->placeholder('Tidak ada level')
+                            ->helperText('Menentukan rate default di Commission Scheme (cakupan "Per Level") kalau partner ini tidak punya skema khusus sendiri.'),
+                    ])
+                    ->action(fn (Partner $record, array $data) => $record->update(['level' => $data['level']])),
                 Tables\Actions\Action::make('resetPassword')
                     ->label('Reset Password')
                     ->icon('heroicon-o-key')

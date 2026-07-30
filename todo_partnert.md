@@ -28,24 +28,22 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 21 (Admin) — Marketing Material | ✅ Selesai (dikerjakan bareng Fase 12) | 2026-07-29 |
 | Fase 13 — Notification Center | ✅ Selesai | 2026-07-30 |
 | Fase 14 — Profile Partner | ✅ Selesai | 2026-07-30 |
-| Fase 15 (Admin) — Partner Management | ⚠️ Sebagian besar selesai (1 item menunggu Fase 0) | 2026-07-30 |
+| Fase 15 (Admin) — Partner Management | ✅ Selesai | 2026-07-30 |
 | Fase 22 (Admin) — Reports | ✅ Selesai | 2026-07-30 |
 | Fase 23 (Admin) — Partner Settings | ✅ Selesai | 2026-07-30 |
 | Fase 5 — Sales Workspace | ✅ Selesai (dikerjakan bareng Fase 8) | 2026-07-30 |
 
-**Sedang menyelesaikan sisa pekerjaan** (2026-07-30): Fase 2, Fase 8, Fase 5, Fase 15 (kecuali "Kelola Level Partner"), dan Fase 17 semuanya sudah selesai. Yang tersisa cuma 1 item kecil yang menunggu keputusan bisnis (Fase 0), plus 2 item besar yang butuh scoping/keputusan produk terpisah (lihat di bawah) — bukan pekerjaan teknis yang bisa langsung dikerjakan tanpa arahan lebih lanjut.
+**Sedang menyelesaikan sisa pekerjaan** (2026-07-30): Fase 2, Fase 8, Fase 5, Fase 15, dan Fase 17 semuanya sudah selesai — termasuk "Kelola Level Partner" yang tadinya menunggu klarifikasi Fase 0 (diputuskan mengikuti pola standar sistem sejenis, lihat Fase 0). Yang tersisa sekarang cuma 2 item besar yang butuh scoping/keputusan produk terpisah (lihat di bawah) — bukan pekerjaan teknis yang bisa langsung dikerjakan tanpa arahan lebih lanjut.
 
 ### Sisa pekerjaan (ringkasan cepat)
 
 **Belum dikerjakan sama sekali:** tidak ada lagi — semua fase di daftar sudah dikerjakan (lihat pengecualian "sengaja belum 100% lengkap" di bawah).
 
 **Sudah "selesai" tapi sengaja belum 100% lengkap:**
-- Fase 15 (admin Partner Management): Suspend/Aktifkan/Reset Password sudah selesai; UI "Kelola Level Partner" masih menunggu klarifikasi Fase 0
-- Fase 9 (Commission — Recurring Percentage): tipe skema bisa dipilih, tapi mesin hitung-ulang otomatis per pembayaran belum ada (belum ada sistem invoice/payment)
+- Fase 9 (Commission — Recurring Percentage): tipe skema bisa dipilih, tapi mesin hitung-ulang otomatis per pembayaran belum ada (belum ada sistem invoice/payment) — **ukurannya setara Fase 9+10 digabung**, butuh scoping terpisah sebelum dikerjakan
 - Fase 23 (Notifikasi): kanal default sudah ada, "template pesan" (isi teks tiap notifikasi diedit admin) belum dibangun
 
 **Pertanyaan bisnis yang masih terbuka** (bukan teknis, cuma pemberi spec yang bisa jawab) — lihat detail di Fase 0 di bawah:
-- Definisi "Level Partner" dan pengaruhnya
 - Siapa approve apa (role/permission)
 - Konfirmasi "Produk" = tabel `services` yang sudah ada
 - Format export laporan: CSV (dipilih) vs PDF/Excel asli
@@ -77,10 +75,10 @@ Ini bukan fitur, tapi keputusan desain yang akan menentukan struktur seluruh mod
 
 - [x] **Audit trail untuk data uang** — tabel `commission_status_histories` (Fase 9) dan `withdrawal_status_histories` (Fase 10), keduanya terisi otomatis lewat model event tiap kali status berubah, bukan sekadar kolom `status` yang di-update in-place.
 - [x] **Precision angka uang** — semua kolom nominal (`commissions.amount`, `withdrawals.amount`, `customers.project_value`, `partner_projects.budget`, dst) pakai `decimal`, tidak ada yang `float`/`double`.
+- [x] **Definisi "Level Partner"** (2026-07-30) — pemberi spec tidak pernah menjawab detail levelnya apa saja, jadi diputuskan mengikuti pola standar yang dipakai sistem partner/affiliate sejenis (mis. HubSpot Solutions Partner, program reseller SaaS pada umumnya): 4 tier tetap **Bronze/Silver/Gold/Platinum** (`Partner::LEVELS`), pengaruhnya ke **rate komisi** — level jadi salah satu cakupan di Commission Scheme (di antara Per Partner dan Per Produk dalam prioritas resolusi), jadi partner level lebih tinggi bisa dapat skema komisi default yang lebih baik kalau tidak punya skema khusus sendiri. UI "Kelola Level Partner" sungguhan (bukan cuma field pasif) dibangun bareng ini di Fase 15.
 
 ### Masih genuinely open — butuh jawaban dari pemberi spec, bukan keputusan teknis
 
-- [ ] **Definisi "Level Partner"**: spec menyebut "Level Partner" di modul admin tapi tidak dijelaskan levelnya apa saja atau pengaruhnya ke apa (komisi berbeda? akses fitur berbeda?) — perlu klarifikasi dari pemberi spec sebelum dikerjakan. Kolom `level` sudah ada di tabel `partners` (nullable, diedit bebas dari admin) sebagai placeholder sampai definisinya jelas. UI "Kelola Level Partner" di Fase 15 juga masih menunggu ini.
 - [ ] **Definisi role approval**: siapa yang approve apa? (registrasi partner, claim project, komisi, withdrawal — apakah semua admin bisa approve semua, atau ada pemisahan role/permission?) Sementara semua fase pakai "siapa saja yang login ke `/admin` boleh approve/reject" — belum ada pemisahan role karena `spatie/laravel-permission` belum terpasang. Fase 23 "Workflow Approval" cuma catatan teks bebas menunggu ini.
 - [ ] **Definisi "Produk"**: dipakai sebagai rekomendasi teknis (reuse tabel `services`) sejak Fase 3, dan sudah dipakai konsisten di semua fase (Lead/Customer/Project/Commission Scheme) — tapi **belum ada konfirmasi eksplisit** dari pemberi spec bahwa ini memang yang dimaksud, bukan katalog produk terpisah.
 - [ ] **Format export laporan** (Fase 22): diputuskan pakai CSV (universal, tidak nambah dependency baru) — **belum dikonfirmasi** apakah ini yang benar-benar dibutuhkan atau harus PDF/Excel asli.
@@ -330,15 +328,15 @@ Diverifikasi lewat `tests/Feature/PartnerProfileTest.php` (5 test): update bioda
 
 ---
 
-## Fase 15 (Admin) — Partner Management ⚠️ (sebagian besar selesai 2026-07-30, 1 item masih menunggu Fase 0)
+## Fase 15 (Admin) — Partner Management ✅ (selesai 2026-07-30)
 
 - [x] Approval Registrasi partner baru (lihat dokumen KTP/NPWP yang diupload, approve/reject) — `/admin/partners`, dikerjakan bareng Fase 1
 - [x] Suspend Partner — action baru di tabel `PartnerResource` (cuma muncul untuk partner `approved`), alasan opsional disimpan ke kolom `rejection_reason` yang sudah ada (di-reuse sebagai "alasan status non-aktif" generik, bukan kolom baru — partner tidak pernah rejected dan suspended sekaligus jadi tidak ambigu). Partner yang disuspend otomatis terblokir dari portal lewat `EnsurePartnerApproved` yang sudah ada (sama seperti pending/rejected), diarahkan ke halaman status dengan pesan "Akun Disuspend" + alasan
 - [x] Aktifkan kembali Partner — action `reactivate` (cuma muncul untuk partner `suspended`), status kembali `approved`, `rejection_reason` dikosongkan lagi
 - [x] Reset Password partner (dari sisi admin) — admin memicu `Password::broker('partners')->sendResetLink()`, reuse persis mekanisme "Lupa Password" partner yang sudah ada dari Fase 1 (bukan admin melihat/set password baru secara langsung, lebih aman)
-- [ ] Kelola Level Partner (menunggu klarifikasi dari Fase 0) — kolom `level` sudah ada, cuma text bebas belum ada UI "kelola" sungguhan
+- [x] Kelola Level Partner (2026-07-30) — level pindah dari free-text jadi 4 tier tetap (`Partner::LEVELS`: Bronze/Silver/Gold/Platinum, lihat keputusan penuh di Fase 0), dikelola lewat action baru `updateLevel` (dropdown, bukan field pasif di form View yang sebelumnya tidak benar-benar bisa diedit). Level ini juga jadi cakupan baru di Commission Scheme (lihat Fase 18) — partner level lebih tinggi bisa dapat rate default lebih baik.
 
-Diverifikasi lewat `tests/Feature/PartnerManagementTest.php` (6 test): suspend partner `approved` menyimpan alasan, partner `suspended` diblokir dari portal dan melihat pesan+alasan di halaman status, reaktivasi mengembalikan status & mengosongkan alasan, action suspend/reaktivasi cuma tampil sesuai status yang relevan, reset password mengirim notifikasi `ResetPassword` + menyimpan token ke `partner_password_reset_tokens`, action reset password tidak tampil untuk partner yang masih `pending_review`.
+Diverifikasi lewat `tests/Feature/PartnerManagementTest.php` (6 test): suspend partner `approved` menyimpan alasan, partner `suspended` diblokir dari portal dan melihat pesan+alasan di halaman status, reaktivasi mengembalikan status & mengosongkan alasan, action suspend/reaktivasi cuma tampil sesuai status yang relevan, reset password mengirim notifikasi `ResetPassword` + menyimpan token ke `partner_password_reset_tokens`, action reset password tidak tampil untuk partner yang masih `pending_review`. Level Partner + pengaruhnya ke Commission Scheme diverifikasi terpisah lewat `tests/Feature/PartnerLevelTest.php` (5 test): admin bisa ubah level, resolusi skema komisi memprioritaskan Level di antara Partner dan Produk, skema per-level cuma cocok untuk partner dengan level persis sama, komisi yang di-generate memakai rate dari skema level, admin bisa buat skema baru dengan cakupan Level lewat form.
 
 ---
 
@@ -371,12 +369,13 @@ Diverifikasi lewat `tests/Feature/LeadDuplicateDetectionTest.php` (5 test): nomo
 - [x] Form buat skema komisi baru, pilih salah satu dari 3 jenis (Percentage / Recurring Percentage / Flat Commission) — `/admin/commission-schemes`
 - [x] Pengaturan cakupan skema: Per Produk
 - [x] Pengaturan cakupan skema: Per Partner
+- [x] Pengaturan cakupan skema: Per Level Partner (baru, 2026-07-30 — lihat Fase 15)
 - [x] Pengaturan cakupan skema: Per Project
 - [x] Masa Berlaku skema (tanggal mulai/berakhir)
 - [x] Input Persentase (untuk skema Percentage/Recurring Percentage)
 - [x] Input Nominal Flat (untuk skema Flat Commission)
 
-Catatan: tiap skema dianggap pakai maksimal SATU dimensi cakupan (bukan gabungan) — form kasih helper text "isi salah satu saja". Urutan prioritas kalau lebih dari satu skema bisa cocok untuk satu Customer: **Project spesifik → Partner spesifik → Produk spesifik → skema global** (semua cakupan kosong). Ini asumsi, tidak dijelaskan eksplisit di spec asli.
+Catatan: tiap skema dianggap pakai maksimal SATU dimensi cakupan (bukan gabungan) — form kasih helper text "isi salah satu saja". Urutan prioritas kalau lebih dari satu skema bisa cocok untuk satu Customer: **Project spesifik → Partner spesifik → Level Partner → Produk spesifik → Default (Fase 23) → skema global** (semua cakupan kosong). Ini asumsi, tidak dijelaskan eksplisit di spec asli. Kolom `level` ditambahkan 2026-07-30 lewat migration terpisah (`add_level_to_commission_schemes_table`) begitu "Level Partner" (Fase 15) akhirnya didefinisikan.
 
 ---
 
