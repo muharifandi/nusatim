@@ -19,6 +19,10 @@ class MenuResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-bars-3';
 
+    protected static ?string $navigationGroup = 'Website';
+
+    protected static ?int $navigationSort = 11;
+
     public static function form(Form $form): Form
     {
         return $form

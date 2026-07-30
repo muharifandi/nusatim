@@ -26,7 +26,9 @@ class ManagePartnerSettings extends Page implements HasActions, HasForms
 
     protected static ?string $navigationLabel = 'Partner Settings';
 
-    protected static ?string $navigationGroup = 'Partner Program';
+    protected static ?string $navigationGroup = 'Reports & Settings';
+
+    protected static ?int $navigationSort = 2;
 
     protected static string $view = 'filament.pages.manage-partner-settings';
 

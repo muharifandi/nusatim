@@ -26,7 +26,9 @@ class SupportTicketResource extends Resource
 
     protected static ?string $navigationLabel = 'Support Ticket';
 
-    protected static ?string $navigationGroup = 'Partner Program';
+    protected static ?string $navigationGroup = 'Marketing & Support';
+
+    protected static ?int $navigationSort = 2;
 
     public static function canCreate(): bool
     {

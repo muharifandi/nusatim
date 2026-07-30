@@ -32,6 +32,8 @@ class AuditLogResource extends Resource
 
     protected static ?string $navigationGroup = 'RBAC & Sistem';
 
+    protected static ?int $navigationSort = 4;
+
     public static function canCreate(): bool
     {
         return false;

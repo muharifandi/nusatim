@@ -26,6 +26,8 @@ class WorkflowAssignmentResource extends Resource
 
     protected static ?string $navigationGroup = 'RBAC & Sistem';
 
+    protected static ?int $navigationSort = 3;
+
     public static function canCreate(): bool
     {
         // The 6 rows are fixed and seeded once (seed_workflow_assignments) -

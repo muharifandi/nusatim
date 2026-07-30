@@ -22,7 +22,9 @@ class SendAnnouncement extends Page implements HasForms
 
     protected static ?string $navigationLabel = 'Pengumuman';
 
-    protected static ?string $navigationGroup = 'Partner Program';
+    protected static ?string $navigationGroup = 'Marketing & Support';
+
+    protected static ?int $navigationSort = 3;
 
     protected static string $view = 'filament.pages.send-announcement';
 

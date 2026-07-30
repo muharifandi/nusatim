@@ -26,6 +26,10 @@ class ManageSiteSettings extends Page implements HasActions, HasForms
 
     protected static ?string $navigationLabel = 'Site Settings';
 
+    protected static ?string $navigationGroup = 'Website';
+
+    protected static ?int $navigationSort = 14;
+
     protected static string $view = 'filament.pages.manage-site-settings';
 
     public ?array $data = [];

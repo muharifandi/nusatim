@@ -6,6 +6,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -33,6 +34,20 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarWidth('15rem')
             ->sidebarFullyCollapsibleOnDesktop()
             ->maxContentWidth(MaxWidth::Full)
+            // Explicit order (Filament defaults to alphabetical otherwise) -
+            // partner-program operations first since that's the actively
+            // used part of the admin day-to-day, system/RBAC last since
+            // it's touched rarely. Each resource/page sets a matching
+            // $navigationGroup string + $navigationSort for its position
+            // within the group.
+            ->navigationGroups([
+                NavigationGroup::make('Partner Management'),
+                NavigationGroup::make('Commission & Withdrawal'),
+                NavigationGroup::make('Marketing & Support'),
+                NavigationGroup::make('Reports & Settings'),
+                NavigationGroup::make('Website'),
+                NavigationGroup::make('RBAC & Sistem'),
+            ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
