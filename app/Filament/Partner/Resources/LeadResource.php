@@ -24,6 +24,8 @@ class LeadResource extends Resource
 
     protected static ?string $navigationLabel = 'Lead & Opportunity';
 
+    protected static ?int $navigationSort = 2;
+
     /**
      * A partner may only ever see/edit their own leads - never another
      * partner's, even by guessing the record ID.

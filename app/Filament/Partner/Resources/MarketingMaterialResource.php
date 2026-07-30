@@ -21,6 +21,8 @@ class MarketingMaterialResource extends Resource
 
     protected static ?string $navigationLabel = 'Marketing Center';
 
+    protected static ?int $navigationSort = 8;
+
     public static function canCreate(): bool
     {
         return false;

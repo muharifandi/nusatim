@@ -25,6 +25,8 @@ class CustomerResource extends Resource
 
     protected static ?string $navigationLabel = 'Customer';
 
+    protected static ?int $navigationSort = 4;
+
     public static function canCreate(): bool
     {
         // Customer selalu berasal dari Lead yang ditandai Won, bukan input manual.

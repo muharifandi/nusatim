@@ -14,6 +14,8 @@ class Pipeline extends Page
 
     protected static ?string $navigationLabel = 'Sales Pipeline';
 
+    protected static ?int $navigationSort = 3;
+
     protected static string $view = 'filament.partner.pages.pipeline';
 
     public const STATUSES = [

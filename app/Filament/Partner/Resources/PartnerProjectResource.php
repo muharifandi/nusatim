@@ -24,6 +24,8 @@ class PartnerProjectResource extends Resource
 
     protected static ?string $navigationLabel = 'Project Board';
 
+    protected static ?int $navigationSort = 5;
+
     public static function canCreate(): bool
     {
         return false;
