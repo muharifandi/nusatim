@@ -30,6 +30,7 @@ class Partner extends Authenticatable implements FilamentUser
         'bank_account_number',
         'bank_account_holder',
         'agreement_accepted_at',
+        'email_notifications_enabled',
     ];
 
     protected $hidden = [
@@ -43,6 +44,7 @@ class Partner extends Authenticatable implements FilamentUser
             'password' => 'hashed',
             'approved_at' => 'datetime',
             'agreement_accepted_at' => 'datetime',
+            'email_notifications_enabled' => 'boolean',
         ];
     }
 

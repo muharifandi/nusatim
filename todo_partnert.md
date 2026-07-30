@@ -27,10 +27,13 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 12 — Marketing Center | ✅ Selesai | 2026-07-29 |
 | Fase 21 (Admin) — Marketing Material | ✅ Selesai (dikerjakan bareng Fase 12) | 2026-07-29 |
 | Fase 13 — Notification Center | ✅ Selesai | 2026-07-30 |
+| Fase 14 — Profile Partner | ✅ Selesai | 2026-07-30 |
 | Fase 15 (Admin) — Partner Management | ⚠️ Preview minimal (dikerjakan bareng Fase 1) | 2026-07-29 |
-| Fase 5, 14, 22–23 lainnya | belum dikerjakan | — |
+| Fase 5, 22–23 lainnya | belum dikerjakan | — |
 
-**Berikutnya**: Fase 14 (Profile Partner) — modul mandiri lagi (edit biodata/foto/password/rekening/KTP/NPWP milik sendiri), datanya semua sudah ada di tabel `partners` sejak Fase 1, jadi tinggal bangun form edit-profile-nya. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8/9/10).
+**Semua modul partner-facing selesai** kecuali Fase 2/5/8 yang sengaja ditunda. Sisa pekerjaan murni sisi admin.
+
+**Berikutnya**: Fase 22 (Reports) — semua data sumbernya (Lead, Customer, Project, Commission, Withdrawal, Partner) sudah ada, jadi bisa dibangun penuh sekarang. Satu keputusan kecil perlu diambil: format export (PDF vs Excel, disebut sebagai pertanyaan terbuka di Fase 0) — rencana pakai CSV dulu sebagai default netral yang universal, mudah diganti PDF/Excel nanti kalau memang dibutuhkan spesifik. Fase 23 (Partner Settings penuh) sebagian masih nyangkut ke "Workflow Approval" yang belum diputuskan di Fase 0. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8/9/10).
 
 ---
 
@@ -281,15 +284,21 @@ Diverifikasi lewat `tests/Feature/NotificationCenterTest.php` (10 test): tiap 5 
 
 ---
 
-## Fase 14 — Profile Partner
+## Fase 14 — Profile Partner ✅ (selesai 2026-07-30)
 
-- [ ] Edit Biodata
-- [ ] Ganti Foto
-- [ ] Ganti Password
-- [ ] Edit Data Rekening
-- [ ] Update KTP
-- [ ] Update NPWP
-- [ ] Preferensi Notifikasi (partner pilih notifikasi mana yang mau diterima, mis. lewat email vs in-app saja)
+- [x] Edit Biodata — `/partner/profile`, otomatis muncul di dropdown user-menu lewat fitur bawaan Filament `Panel::profile()`
+- [x] Ganti Foto
+- [x] Ganti Password
+- [x] Edit Data Rekening
+- [x] Update KTP
+- [x] Update NPWP
+- [x] Preferensi Notifikasi (partner pilih notifikasi mana yang mau diterima, mis. lewat email vs in-app saja) — **diinterpretasikan**: notifikasi in-app (Fase 13) selalu aktif (itu Notification Center itu sendiri, tidak masuk akal dimatikan), field `email_notifications_enabled` cuma menggerbang EMAIL TAMBAHAN yang sudah dikirim berdampingan dengan notifikasi in-app (`PartnerProject::approveClaim()`/`rejectClaim()`). Email akun inti (registrasi diterima/disetujui/ditolak, Fase 1) tidak ikut digerbang — itu komunikasi yang harus selalu sampai apapun preferensinya.
+
+Ganti Foto/Update KTP/Update NPWP otomatis membersihkan file lama dari disk (reuse trait `DeletesOldFiles` yang sudah ada sejak Fase 1, tidak ada kode baru untuk itu).
+
+**Bonus perbaikan kecil**: `PartnerProject::rejectClaim()` sebelumnya cuma kirim email, tidak ada notifikasi in-app (beda dari `approveClaim()` yang sudah dapat keduanya sejak Fase 13). Ditambahkan sekalian di sini supaya partner yang mematikan email tidak sama sekali tidak tahu klaimnya ditolak.
+
+Diverifikasi lewat `tests/Feature/PartnerProfileTest.php` (5 test): update biodata & rekening tersimpan, ganti KTP menghapus file lama, ganti password bisa dipakai login, mematikan preferensi email menghentikan email tapi notifikasi in-app tetap jalan, render halaman.
 
 ---
 

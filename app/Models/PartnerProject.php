@@ -85,9 +85,11 @@ class PartnerProject extends Model
         $this->ensureCustomerExists();
 
         if ($this->partner) {
-            Mail::to($this->partner->email)->send(
-                new PartnerProjectClaimApproved($this, $this->partner, SiteSetting::current())
-            );
+            if ($this->partner->email_notifications_enabled) {
+                Mail::to($this->partner->email)->send(
+                    new PartnerProjectClaimApproved($this, $this->partner, SiteSetting::current())
+                );
+            }
 
             Notification::make()
                 ->title("Klaim project \"{$this->name}\" disetujui")
@@ -164,9 +166,19 @@ class PartnerProject extends Model
         ]);
 
         if ($rejectedPartner) {
-            Mail::to($rejectedPartner->email)->send(
-                new PartnerProjectClaimRejected($this, $rejectedPartner, SiteSetting::current())
-            );
+            if ($rejectedPartner->email_notifications_enabled) {
+                Mail::to($rejectedPartner->email)->send(
+                    new PartnerProjectClaimRejected($this, $rejectedPartner, SiteSetting::current())
+                );
+            }
+
+            // Fase 13 only wired a database notification for the approved
+            // path - added here too now that email is gate-able, so
+            // disabling email doesn't leave a rejection completely silent.
+            Notification::make()
+                ->title("Klaim project \"{$this->name}\" ditolak")
+                ->danger()
+                ->sendToDatabase($rejectedPartner);
         }
     }
 
