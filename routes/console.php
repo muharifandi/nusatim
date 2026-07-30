@@ -11,3 +11,5 @@ Artisan::command('inspire', function () {
 // Requires the cron job in SPEC.md/deploy notes: `php artisan schedule:run`
 // once a minute. Country lookups happen here, never in the request path.
 Schedule::command('pageviews:resolve-countries --limit=100')->everyFiveMinutes();
+
+Schedule::command('reminders:notify-due')->everyFiveMinutes();

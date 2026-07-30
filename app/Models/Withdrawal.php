@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -87,6 +88,13 @@ class Withdrawal extends Model
     public function approve(): void
     {
         $this->update(['status' => 'approved']);
+
+        if ($this->partner) {
+            Notification::make()
+                ->title('Withdrawal Rp'.number_format((float) $this->amount, 0, ',', '.').' disetujui')
+                ->success()
+                ->sendToDatabase($this->partner);
+        }
     }
 
     public function reject(?string $reason = null): void

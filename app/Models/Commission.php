@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -94,7 +95,7 @@ class Commission extends Model
             default => 0,
         };
 
-        return static::create([
+        $commission = static::create([
             'customer_id' => $customer->id,
             'partner_id' => $customer->partner_id,
             'commission_scheme_id' => $scheme?->id,
@@ -105,6 +106,15 @@ class Commission extends Model
             'type' => $scheme?->type ?? 'flat',
             'status' => 'pending',
         ]);
+
+        if ($customer->partner) {
+            Notification::make()
+                ->title('Komisi masuk: Rp'.number_format($amount, 0, ',', '.'))
+                ->body($customer->name)
+                ->sendToDatabase($customer->partner);
+        }
+
+        return $commission;
     }
 
     public function markWaitingClientPayment(): void

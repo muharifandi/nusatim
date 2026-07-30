@@ -29,6 +29,7 @@ class PartnerPanelProvider extends PanelProvider
             ->login()
             ->registration(\App\Filament\Partner\Pages\Auth\Register::class)
             ->passwordReset()
+            ->databaseNotifications()
             ->colors([
                 'primary' => Color::Indigo,
             ])

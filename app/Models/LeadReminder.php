@@ -13,11 +13,13 @@ class LeadReminder extends Model
         'remind_at',
         'note',
         'completed_at',
+        'notified_at',
     ];
 
     protected $casts = [
         'remind_at' => 'datetime',
         'completed_at' => 'datetime',
+        'notified_at' => 'datetime',
     ];
 
     public function lead(): BelongsTo

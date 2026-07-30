@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -42,6 +43,12 @@ class Lead extends Model
                 'type' => 'status_change',
                 'body' => "Status berubah dari {$lead->getOriginal('status')} ke {$lead->status}.",
             ]);
+
+            if ($lead->partner) {
+                Notification::make()
+                    ->title("Lead {$lead->name}: status jadi {$lead->status}")
+                    ->sendToDatabase($lead->partner);
+            }
 
             // Lives in the model event (not just markWon()) so a Customer is
             // always created the moment status becomes 'won' - regardless of

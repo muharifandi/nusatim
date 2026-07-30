@@ -74,7 +74,7 @@ class PartnerProjectResource extends Resource
                     ->icon('heroicon-o-globe-alt')
                     ->color('success')
                     ->visible(fn (PartnerProject $record) => $record->status === 'draft')
-                    ->action(fn (PartnerProject $record) => $record->update(['status' => 'available'])),
+                    ->action(fn (PartnerProject $record) => $record->publish()),
                 Tables\Actions\Action::make('assignPartner')
                     ->label('Assign Partner')
                     ->icon('heroicon-o-user-plus')

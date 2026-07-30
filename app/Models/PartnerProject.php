@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Mail\PartnerProjectClaimApproved;
 use App\Mail\PartnerProjectClaimRejected;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Mail;
@@ -87,7 +88,28 @@ class PartnerProject extends Model
             Mail::to($this->partner->email)->send(
                 new PartnerProjectClaimApproved($this, $this->partner, SiteSetting::current())
             );
+
+            Notification::make()
+                ->title("Klaim project \"{$this->name}\" disetujui")
+                ->success()
+                ->sendToDatabase($this->partner);
         }
+    }
+
+    /**
+     * Admin publishing a project (draft -> available) - broadcasts a
+     * database notification to every approved partner, since this is the
+     * first moment the project becomes visible/claimable on the board.
+     */
+    public function publish(): void
+    {
+        $this->update(['status' => 'available']);
+
+        Partner::where('status', 'approved')->get()->each(
+            fn (Partner $partner) => Notification::make()
+                ->title("Project baru tersedia: {$this->name}")
+                ->sendToDatabase($partner)
+        );
     }
 
     /**

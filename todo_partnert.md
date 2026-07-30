@@ -26,10 +26,11 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 20 (Admin) — Withdrawal Management | ✅ Selesai (dikerjakan bareng Fase 10) | 2026-07-29 |
 | Fase 12 — Marketing Center | ✅ Selesai | 2026-07-29 |
 | Fase 21 (Admin) — Marketing Material | ✅ Selesai (dikerjakan bareng Fase 12) | 2026-07-29 |
+| Fase 13 — Notification Center | ✅ Selesai | 2026-07-30 |
 | Fase 15 (Admin) — Partner Management | ⚠️ Preview minimal (dikerjakan bareng Fase 1) | 2026-07-29 |
-| Fase 5, 13–14, 22–23 lainnya | belum dikerjakan | — |
+| Fase 5, 14, 22–23 lainnya | belum dikerjakan | — |
 
-**Berikutnya**: Fase 13 (Notification Center) — infrastrukturnya bisa pakai fitur notification bawaan Laravel (`Partner` sudah pakai trait `Notifiable` sejak Fase 1), dan semua titik trigger yang diminta (perubahan status Lead, Project baru tersedia, klaim disetujui, reminder, komisi masuk, withdrawal approved) sudah jadi event nyata di kode sejak fase-fase sebelumnya — tinggal disambungkan. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8/9/10).
+**Berikutnya**: Fase 14 (Profile Partner) — modul mandiri lagi (edit biodata/foto/password/rekening/KTP/NPWP milik sendiri), datanya semua sudah ada di tabel `partners` sejak Fase 1, jadi tinggal bangun form edit-profile-nya. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8/9/10).
 
 ---
 
@@ -262,17 +263,21 @@ Diverifikasi lewat `tests/Feature/MarketingCenterTest.php` (5 test): partner cum
 
 ---
 
-## Fase 13 — Notification Center
+## Fase 13 — Notification Center ✅ (selesai 2026-07-30)
 
-- [ ] Infrastruktur notifikasi in-app (tabel `notifications` atau pakai fitur notification bawaan Laravel)
-- [ ] Trigger notifikasi: Lead Update
-- [ ] Trigger notifikasi: Project Baru (tersedia untuk diklaim)
-- [ ] Trigger notifikasi: Project Assignment (klaim disetujui)
-- [ ] Trigger notifikasi: Reminder Follow Up
-- [ ] Trigger notifikasi: Reminder Meeting
-- [ ] Trigger notifikasi: Komisi Masuk
-- [ ] Trigger notifikasi: Withdrawal Approved
-- [ ] Trigger notifikasi: Pengumuman (broadcast dari admin ke semua/sebagian partner)
+- [x] Infrastruktur notifikasi in-app (tabel `notifications` atau pakai fitur notification bawaan Laravel) — pakai tabel `notifications` standar Laravel + fitur `->databaseNotifications()` bawaan Filament (bell icon di topbar `/partner`), bukan bikin sistem sendiri
+- [x] Trigger notifikasi: Lead Update — `Lead` model event, saat status berubah
+- [x] Trigger notifikasi: Project Baru (tersedia untuk diklaim) — `PartnerProject::publish()` (method baru, menggantikan `update()` inline di admin resource), broadcast ke semua partner `approved`
+- [x] Trigger notifikasi: Project Assignment (klaim disetujui) — `PartnerProject::approveClaim()`, berdampingan dengan email yang sudah ada (bukan menggantikan)
+- [x] Trigger notifikasi: Reminder Follow Up
+- [x] Trigger notifikasi: Reminder Meeting — keduanya lewat command baru `reminders:notify-due` (scheduled `everyFiveMinutes()`, pola sama persis `pageviews:resolve-countries`), kolom baru `lead_reminders.notified_at` supaya tidak dikirim dobel
+- [x] Trigger notifikasi: Komisi Masuk — `Commission::generateForCustomer()`
+- [x] Trigger notifikasi: Withdrawal Approved — `Withdrawal::approve()`
+- [x] Trigger notifikasi: Pengumuman (broadcast dari admin ke semua/sebagian partner) — halaman baru `/admin/send-announcement` (pilih Semua Partner approved atau partner tertentu)
+
+Semua notifikasi pakai `Filament\Notifications\Notification::make()->sendToDatabase($partner)` (API resmi Filament untuk database notifications), bukan bikin 7 class `Illuminate\Notifications\Notification` custom terpisah.
+
+Diverifikasi lewat `tests/Feature/NotificationCenterTest.php` (10 test): tiap 5 trigger event-based mengirim notifikasi ke partner yang benar, `publish()` broadcast ke SEMUA partner approved (bukan cuma satu), `approveClaim()` tetap kirim email DAN notifikasi (tidak saling menggantikan), command reminder tidak mengirim dobel untuk reminder yang sama, reminder yang belum jatuh tempo tidak ikut ke-notify, broadcast admin ke "semua" vs "partner tertentu" keduanya benar, render halaman admin.
 
 ---
 
