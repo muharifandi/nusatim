@@ -18,6 +18,8 @@ class PartnerProjectResource extends Resource
 {
     protected static ?string $model = PartnerProject::class;
 
+    protected static ?string $modelLabel = 'Project';
+
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
 
     protected static ?string $navigationLabel = 'Project Board';

@@ -19,6 +19,8 @@ class MarketingMaterialResource extends Resource
 
     protected static ?string $model = MarketingMaterial::class;
 
+    protected static ?string $modelLabel = 'Marketing Material';
+
     protected static ?string $navigationIcon = 'heroicon-o-megaphone';
 
     protected static ?string $navigationLabel = 'Marketing Material';

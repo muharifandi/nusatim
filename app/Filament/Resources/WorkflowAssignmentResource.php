@@ -20,6 +20,8 @@ class WorkflowAssignmentResource extends Resource
 
     protected static ?string $model = WorkflowAssignment::class;
 
+    protected static ?string $modelLabel = 'Workflow Assignment';
+
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
 
     protected static ?string $navigationLabel = 'Workflow Assignment';

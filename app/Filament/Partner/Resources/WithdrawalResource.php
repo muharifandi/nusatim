@@ -16,6 +16,8 @@ class WithdrawalResource extends Resource
 {
     protected static ?string $model = Withdrawal::class;
 
+    protected static ?string $modelLabel = 'Withdrawal';
+
     protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';
 
     protected static ?string $navigationLabel = 'Withdrawal';
