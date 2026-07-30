@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Concerns\AuthorizesModule;
 use App\Filament\Resources\PartnerResource\Pages;
 use App\Mail\PartnerRegistrationApproved;
 use App\Mail\PartnerRegistrationRejected;
@@ -19,6 +20,10 @@ use Illuminate\Support\HtmlString;
 
 class PartnerResource extends Resource
 {
+    use AuthorizesModule;
+
+    protected static string $permissionModule = 'partner';
+
     protected static ?string $model = Partner::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';

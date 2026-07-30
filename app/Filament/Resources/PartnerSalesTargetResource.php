@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Concerns\AuthorizesModule;
 use App\Filament\Resources\PartnerSalesTargetResource\Pages;
 use App\Models\Partner;
 use App\Models\PartnerSalesTarget;
@@ -13,6 +14,10 @@ use Filament\Tables\Table;
 
 class PartnerSalesTargetResource extends Resource
 {
+    use AuthorizesModule;
+
+    protected static string $permissionModule = 'partner_sales_target';
+
     protected static ?string $model = PartnerSalesTarget::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-flag';

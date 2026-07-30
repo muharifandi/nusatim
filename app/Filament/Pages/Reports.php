@@ -15,6 +15,11 @@ class Reports extends Page
 
     protected static string $view = 'filament.pages.reports';
 
+    public static function canAccess(): bool
+    {
+        return (bool) auth('web')->user()?->can('report.view');
+    }
+
     public ?string $dateFrom = null;
 
     public ?string $dateTo = null;
