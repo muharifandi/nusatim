@@ -175,7 +175,7 @@ class PartnerResource extends Resource
                             ->label('Level Partner')
                             ->options(Partner::LEVELS)
                             ->placeholder('Tidak ada level')
-                            ->helperText('Menentukan rate default di Commission Scheme (cakupan "Per Level") kalau partner ini tidak punya skema khusus sendiri.'),
+                            ->helperText('Atribut informational saja (badge, loyalty program, prioritas project, dashboard/reporting) - tidak mempengaruhi perhitungan Commission Scheme.'),
                     ])
                     ->action(fn (Partner $record, array $data) => $record->update(['level' => $data['level']])),
                 Tables\Actions\Action::make('resetPassword')

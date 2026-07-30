@@ -16,7 +16,6 @@ class CommissionScheme extends Model
         'service_id',
         'partner_id',
         'partner_project_id',
-        'level',
         'starts_at',
         'ends_at',
         'is_active',
@@ -61,16 +60,19 @@ class CommissionScheme extends Model
 
     /**
      * Priority when more than one scheme could apply to a customer:
-     * project-specific > partner-specific > partner's level/tier
-     * (Fase 15's Level Partner - standard tiered-partner-program pattern:
-     * an individual partner's own negotiated rate always wins over their
-     * tier's standard rate) > service-specific > the explicit "Commission
-     * Scheme Default" set in Partner Settings (Fase 23) > a scope-less
-     * scheme (all scope columns null, the older implicit-fallback
-     * convention from Fase 9 - kept working alongside the newer explicit
-     * setting, not replaced by it). This ordering is an assumption - the
-     * spec doesn't state what happens when multiple schemes match, only
-     * that the scope types "harus bisa hidup berdampingan".
+     * project-specific > partner-specific > service-specific > the
+     * explicit "Commission Scheme Default" set in Partner Settings
+     * (Fase 23) > a scope-less scheme (all scope columns null, the
+     * older implicit-fallback convention from Fase 9 - kept working
+     * alongside the newer explicit setting, not replaced by it). This
+     * ordering is an assumption - the spec doesn't state what happens
+     * when multiple schemes match, only that the scope types "harus
+     * bisa hidup berdampingan".
+     *
+     * Partner Level is deliberately NOT a scope here - a final business
+     * decision (2026-07-30) ruled Level Partner out of Commission Scheme
+     * resolution entirely (it's a purely informational attribute), after
+     * briefly being added as a scope earlier the same day.
      */
     public static function resolveFor(Customer $customer): ?self
     {
@@ -90,16 +92,6 @@ class CommissionScheme extends Model
 
         if ($match) {
             return $match;
-        }
-
-        if ($customer->partner?->level) {
-            $match = static::active()->currentlyValid()
-                ->where('level', $customer->partner->level)
-                ->first();
-
-            if ($match) {
-                return $match;
-            }
         }
 
         if ($customer->service_id) {
@@ -126,7 +118,6 @@ class CommissionScheme extends Model
             ->whereNull('service_id')
             ->whereNull('partner_id')
             ->whereNull('partner_project_id')
-            ->whereNull('level')
             ->first();
     }
 }
