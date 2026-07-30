@@ -11,6 +11,7 @@ use App\Http\Controllers\PartnerDocumentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ReportExportController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TeamController;
@@ -54,3 +55,7 @@ Route::get('/lead-documents/{leadDocument}', [LeadDocumentController::class, 'sh
 Route::get('/withdrawal-documents/{withdrawal}/{type}', [WithdrawalDocumentController::class, 'show'])
     ->middleware(['auth:web,partner'])
     ->name('withdrawal.documents.show');
+
+Route::get('/admin/reports/export/{report}', [ReportExportController::class, 'export'])
+    ->middleware(['auth:web'])
+    ->name('admin.reports.export');

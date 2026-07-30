@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Filament\Pages;
+
+use App\Services\ReportService;
+use Filament\Pages\Page;
+
+class Reports extends Page
+{
+    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+
+    protected static ?string $navigationLabel = 'Reports';
+
+    protected static ?string $navigationGroup = 'Partner Program';
+
+    protected static string $view = 'filament.pages.reports';
+
+    public ?string $dateFrom = null;
+
+    public ?string $dateTo = null;
+
+    protected function service(): ReportService
+    {
+        return new ReportService($this->dateFrom, $this->dateTo);
+    }
+
+    public function partnerReport(): array
+    {
+        return $this->service()->partnerReport();
+    }
+
+    public function leadReport()
+    {
+        return $this->service()->leadReport();
+    }
+
+    public function projectReport()
+    {
+        return $this->service()->projectReport();
+    }
+
+    public function closingReport()
+    {
+        return $this->service()->closingReport();
+    }
+
+    public function commissionReport(): array
+    {
+        return $this->service()->commissionReport();
+    }
+
+    public function withdrawalReport(): array
+    {
+        return $this->service()->withdrawalReport();
+    }
+
+    public function partnerPerformanceReport()
+    {
+        return $this->service()->partnerPerformanceReport();
+    }
+
+    public function totalSalesReport(): float
+    {
+        return $this->service()->totalSalesReport();
+    }
+
+    public function exportUrl(string $report): string
+    {
+        return route('admin.reports.export', [
+            'report' => $report,
+            'date_from' => $this->dateFrom,
+            'date_to' => $this->dateTo,
+        ]);
+    }
+}

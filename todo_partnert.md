@@ -29,11 +29,12 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 13 — Notification Center | ✅ Selesai | 2026-07-30 |
 | Fase 14 — Profile Partner | ✅ Selesai | 2026-07-30 |
 | Fase 15 (Admin) — Partner Management | ⚠️ Preview minimal (dikerjakan bareng Fase 1) | 2026-07-29 |
-| Fase 5, 22–23 lainnya | belum dikerjakan | — |
+| Fase 22 (Admin) — Reports | ✅ Selesai | 2026-07-30 |
+| Fase 5, 23 lainnya | belum dikerjakan | — |
 
-**Semua modul partner-facing selesai** kecuali Fase 2/5/8 yang sengaja ditunda. Sisa pekerjaan murni sisi admin.
+**Semua modul partner-facing selesai** kecuali Fase 2/5/8 yang sengaja ditunda. Sisa pekerjaan: Fase 23 (satu-satunya fase admin yang belum disentuh sama sekali).
 
-**Berikutnya**: Fase 22 (Reports) — semua data sumbernya (Lead, Customer, Project, Commission, Withdrawal, Partner) sudah ada, jadi bisa dibangun penuh sekarang. Satu keputusan kecil perlu diambil: format export (PDF vs Excel, disebut sebagai pertanyaan terbuka di Fase 0) — rencana pakai CSV dulu sebagai default netral yang universal, mudah diganti PDF/Excel nanti kalau memang dibutuhkan spesifik. Fase 23 (Partner Settings penuh) sebagian masih nyangkut ke "Workflow Approval" yang belum diputuskan di Fase 0. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8/9/10).
+**Berikutnya**: Fase 23 (Partner Settings, versi lengkap) — sebagian besar field-nya (Commission Scheme Default, Project Claim Rule, Notifikasi) bisa dibangun sekarang. "Pengaturan Workflow Approval" tetap nyangkut ke keputusan bisnis yang belum dijawab sejak Fase 0 (siapa approve apa) — akan dilewati/dibuat placeholder, bukan menunda seluruh fase. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8/9/10).
 
 ---
 
@@ -383,17 +384,21 @@ Sesuai catatan di atas, `/admin/marketing-materials` menangani **semua 11 katego
 
 ---
 
-## Fase 22 (Admin) — Reports
+## Fase 22 (Admin) — Reports ✅ (selesai 2026-07-30)
 
-- [ ] Laporan Partner (jumlah, status, performa ringkas)
-- [ ] Laporan Lead (jumlah per status, per partner, per periode)
-- [ ] Laporan Project (jumlah, status, nilai)
-- [ ] Laporan Closing (tren closing per periode)
-- [ ] Laporan Komisi (total, per status, per partner)
-- [ ] Laporan Withdrawal (total, per status, per partner)
-- [ ] Laporan Performa Partner (ranking/perbandingan antar partner)
-- [ ] Laporan Nilai Penjualan (total omzet dari seluruh partner)
-- [ ] Fitur export laporan (PDF/Excel — konfirmasi format yang dibutuhkan)
+- [x] Laporan Partner (jumlah, status, performa ringkas) — `/admin/reports`
+- [x] Laporan Lead (jumlah per status, per partner, per periode)
+- [x] Laporan Project (jumlah, status, nilai)
+- [x] Laporan Closing (tren closing per periode)
+- [x] Laporan Komisi (total, per status, per partner)
+- [x] Laporan Withdrawal (total, per status, per partner)
+- [x] Laporan Performa Partner (ranking/perbandingan antar partner)
+- [x] Laporan Nilai Penjualan (total omzet dari seluruh partner)
+- [x] Fitur export laporan (PDF/Excel — konfirmasi format yang dibutuhkan) — **diputuskan pakai CSV** sebagai default (universal, tidak nambah dependency baru seperti `dompdf`/`maatwebsite/excel` yang belum terpasang). Kalau nanti benar-benar butuh PDF/Excel asli, tinggal ganti format export di atas fondasi query yang sama (`app/Services/ReportService.php`).
+
+Satu halaman gabungan (bukan 8 halaman terpisah) dengan filter tanggal global (dari/sampai), tiap laporan punya tombol Export CSV sendiri (bukan satu file gabungan — struktur kolom tiap laporan beda-beda). Logic query dipusatkan di `ReportService` supaya angka yang tampil di halaman dan yang di-export selalu sama persis (dipakai berdua, bukan dua implementasi terpisah yang bisa drift).
+
+Diverifikasi lewat `tests/Feature/ReportsTest.php` (7 test): agregasi Laporan Partner benar, filter tanggal benar-benar mengecualikan data di luar rentang, breakdown Komisi/Withdrawal per status & per partner benar, ranking Performa Partner terurut descending, export CSV menghasilkan file dengan header kolom benar, nama laporan tidak dikenal ditolak (404), render halaman.
 
 ---
 
