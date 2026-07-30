@@ -114,4 +114,71 @@ class Lead extends Model
     {
         $this->update(['status' => 'lost']);
     }
+
+    /**
+     * Fase 17's anti-duplicate check, upgraded from a plain exact
+     * phone/email match to tolerate the messiness of real lead data: phone
+     * numbers entered with different formats (+62/62/0 prefix, dashes,
+     * spaces) and small typos in the lead name. Still a small, in-memory
+     * comparison (not a DB-level fuzzy query) since lead volume here is
+     * small business scale, not a call center.
+     */
+    public function findPotentialDuplicates(): \Illuminate\Support\Collection
+    {
+        $normalizedPhone = static::normalizePhone($this->phone);
+        $normalizedEmail = $this->email ? strtolower(trim($this->email)) : null;
+
+        return static::query()
+            ->where('id', '!=', $this->id)
+            ->with('partner')
+            ->get()
+            ->filter(function (self $other) use ($normalizedPhone, $normalizedEmail) {
+                if ($normalizedPhone && static::normalizePhone($other->phone) === $normalizedPhone) {
+                    return true;
+                }
+
+                if ($normalizedEmail && $other->email && strtolower(trim($other->email)) === $normalizedEmail) {
+                    return true;
+                }
+
+                return static::namesAreSimilar($this->name, $other->name);
+            })
+            ->values();
+    }
+
+    /**
+     * Strips everything but digits, then canonicalizes the Indonesian
+     * country code prefix to the local "0..." form, so "+6281234567890",
+     * "6281234567890", and "081234567890" all normalize to the same value
+     * instead of missing each other under an exact-string comparison.
+     */
+    public static function normalizePhone(?string $phone): ?string
+    {
+        if (! $phone) {
+            return null;
+        }
+
+        $digits = preg_replace('/\D+/', '', $phone) ?? '';
+
+        if ($digits === '') {
+            return null;
+        }
+
+        if (str_starts_with($digits, '62')) {
+            $digits = '0'.substr($digits, 2);
+        }
+
+        return $digits;
+    }
+
+    protected static function namesAreSimilar(?string $a, ?string $b): bool
+    {
+        if (! $a || ! $b) {
+            return false;
+        }
+
+        similar_text(strtolower($a), strtolower($b), $percent);
+
+        return $percent >= 85.0;
+    }
 }
