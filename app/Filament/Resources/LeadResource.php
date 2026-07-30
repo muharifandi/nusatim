@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Concerns\AuthorizesModule;
 use App\Filament\Resources\LeadResource\Pages;
 use App\Models\Lead;
 use App\Models\Partner;
@@ -20,6 +21,10 @@ use Illuminate\Support\HtmlString;
  */
 class LeadResource extends Resource
 {
+    use AuthorizesModule;
+
+    protected static string $permissionModule = 'lead';
+
     protected static ?string $model = Lead::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-funnel';

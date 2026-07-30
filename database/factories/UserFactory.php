@@ -42,4 +42,19 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Every factory-made User defaults to full access (RBAC's "Super
+     * Admin" role, seeded in seed_rbac_modules_and_super_admin_role) so
+     * the ~30 existing tests that do `User::factory()->create()` and
+     * expect full admin access keep passing unmodified now that
+     * permission checks are enforced. Tests that specifically want to
+     * verify restricted access assign/sync a different role afterwards.
+     */
+    public function configure(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $user->assignRole('Super Admin');
+        });
+    }
 }

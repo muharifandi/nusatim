@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Concerns\AuthorizesModule;
 use App\Filament\Resources\CommissionSchemeResource\Pages;
 use App\Models\CommissionScheme;
 use App\Models\Partner;
@@ -15,6 +16,10 @@ use Filament\Tables\Table;
 
 class CommissionSchemeResource extends Resource
 {
+    use AuthorizesModule;
+
+    protected static string $permissionModule = 'commission_scheme';
+
     protected static ?string $model = CommissionScheme::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-calculator';

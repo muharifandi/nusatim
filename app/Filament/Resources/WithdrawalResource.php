@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Concerns\AuthorizesModule;
 use App\Filament\Resources\WithdrawalResource\Pages;
 use App\Models\Withdrawal;
 use Filament\Forms;
@@ -14,6 +15,10 @@ use Illuminate\Support\HtmlString;
 
 class WithdrawalResource extends Resource
 {
+    use AuthorizesModule;
+
+    protected static string $permissionModule = 'withdrawal';
+
     protected static ?string $model = Withdrawal::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';

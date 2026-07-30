@@ -32,7 +32,7 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 22 (Admin) — Reports | ✅ Selesai | 2026-07-30 |
 | Fase 23 (Admin) — Partner Settings | ✅ Selesai | 2026-07-30 |
 | Fase 5 — Sales Workspace | ✅ Selesai (dikerjakan bareng Fase 8) | 2026-07-30 |
-| Fase 24 (Admin) — RBAC (Role & Permission) | 🔧 Sedang dikerjakan | 2026-07-30 |
+| Fase 24 (Admin) — RBAC (Role & Permission) | ✅ Selesai | 2026-07-30 |
 | Fase 25 (Admin) — Workflow Assignment | 🔧 Sedang dikerjakan | 2026-07-30 |
 | Fase 26 (Admin+Partner) — Support Ticket | 🔧 Sedang dikerjakan | 2026-07-30 |
 | Fase 27 (Admin) — Audit Log | 🔧 Sedang dikerjakan | 2026-07-30 |
@@ -462,16 +462,20 @@ Dokumen "Final Review" dari klien menetapkan keputusan-keputusan berikut sebagai
 
 ---
 
-## Fase 24 (Admin) — RBAC (Role & Permission)
+## Fase 24 (Admin) — RBAC (Role & Permission) ✅ (selesai 2026-07-30)
 
 Menggantikan placeholder "Workflow Approval" di Fase 23 sepenuhnya. Pakai `spatie/laravel-permission`, guard `web` (staff/admin) saja — Partner tetap guard terpisah tanpa RBAC sendiri (lihat "Final Business Decisions").
 
-- [ ] Admin bisa membuat Role
-- [ ] Admin bisa mengatur Permission per Modul — 15 modul (Partner, Lead, Project Board, Commission Scheme, Commission, Withdrawal, Marketing Material, Sales Target, Reports, Partner Settings, Support Ticket, Role, User, Workflow Assignment, Audit Log), masing-masing dengan permission minimum: View/Create/Update/Delete/Approve/Reject/Assign/Export
-- [ ] Admin bisa assign User (staff) ke Role — `UserResource` baru (belum pernah ada UI kelola staff user sebelumnya)
-- [ ] Modul-modul existing (Partner, Lead, Project Board, Commission Scheme, Commission, Withdrawal, Marketing Material, Sales Target, Partner Settings) digating oleh permission ini di CRUD standarnya
+- [x] Admin bisa membuat Role — `RoleResource` baru (`/admin/roles`)
+- [x] Admin bisa mengatur Permission per Modul — 15 modul (Partner, Lead, Project Board, Commission Scheme, Commission, Withdrawal, Marketing Material, Sales Target, Reports, Partner Settings, Support Ticket, Role, User, Workflow Assignment, Audit Log), masing-masing dengan permission minimum: View/Create/Update/Delete/Approve/Reject/Assign/Export — di-seed otomatis lewat migration `seed_rbac_modules_and_super_admin_role` (bukan seeder terpisah, supaya jalan otomatis di `RefreshDatabase` test juga), dipilih lewat `CheckboxList` di form Role
+- [x] Admin bisa assign User (staff) ke Role — `UserResource` baru (`/admin/users`, belum pernah ada UI kelola staff user sebelumnya)
+- [x] Modul-modul existing (Partner, Lead, Project Board, Commission Scheme, Commission, Withdrawal, Marketing Material, Sales Target, Partner Settings, Reports) digating oleh permission ini di CRUD standarnya — lewat trait kecil `App\Filament\Concerns\AuthorizesModule` (dipasang di 8 Resource) + `canAccess()` manual di 2 Page (Reports, Partner Settings)
 
 **Batasan lingkup**: RBAC ini cuma berlaku untuk resource-resource **Portal Partner/Sales Partner Management** (sesuai lingkup dokumen ini), tidak termasuk 12 resource CMS situs profile yang sudah ada duluan (Client/Faq/Menu/Page/Post/PricingPlan/Project/Promotion/Service/TeamMember/Testimonial/ContactMessage) — itu di luar lingkup modul Partner Program.
+
+**Pencegahan regresi/lockout**: role `Super Admin` (semua permission) di-seed otomatis dan di-assign ke semua `users` yang sudah ada lewat migration data-seed yang sama — aman untuk data produksi yang sudah berjalan. `UserFactory` juga di-update supaya tiap User baru dari factory otomatis dapat role `Super Admin`, supaya ~30 test existing yang pakai `User::factory()->create()` tidak mendadak kehilangan akses begitu gating aktif.
+
+Diverifikasi lewat `tests/Feature/RoleManagementTest.php` (6 test): migration seed menghasilkan 15×8=120 permission + role Super Admin dengan semua permission, User dari factory otomatis Super Admin dan bisa akses semua resource yang di-gate, admin bisa buat Role dengan permission tertentu, admin bisa assign User ke Role, User tanpa permission diblokir (403) dari resource manapun, User dengan permission `lead.view` saja bisa akses Lead tapi diblokir dari Partner.
 
 ---
 

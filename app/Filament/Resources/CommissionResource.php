@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Concerns\AuthorizesModule;
 use App\Filament\Resources\CommissionResource\Pages;
 use App\Models\Commission;
 use App\Models\Customer;
@@ -13,6 +14,10 @@ use Filament\Tables\Table;
 
 class CommissionResource extends Resource
 {
+    use AuthorizesModule;
+
+    protected static string $permissionModule = 'commission';
+
     protected static ?string $model = Commission::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';

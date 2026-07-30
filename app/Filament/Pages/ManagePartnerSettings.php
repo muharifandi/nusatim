@@ -31,6 +31,11 @@ class ManagePartnerSettings extends Page implements HasActions, HasForms
 
     protected static string $view = 'filament.pages.manage-partner-settings';
 
+    public static function canAccess(): bool
+    {
+        return (bool) auth('web')->user()?->can('partner_setting.update');
+    }
+
     public ?array $data = [];
 
     public function mount(): void

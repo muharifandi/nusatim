@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Concerns\AuthorizesModule;
 use App\Filament\Resources\MarketingMaterialResource\Pages;
 use App\Models\MarketingMaterial;
 use Filament\Forms;
@@ -12,6 +13,10 @@ use Filament\Tables\Table;
 
 class MarketingMaterialResource extends Resource
 {
+    use AuthorizesModule;
+
+    protected static string $permissionModule = 'marketing_material';
+
     protected static ?string $model = MarketingMaterial::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-megaphone';
