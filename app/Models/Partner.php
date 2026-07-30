@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\DeletesOldFiles;
+use App\Models\Concerns\LogsAudit;
 use Database\Factories\PartnerFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -14,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
 class Partner extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<PartnerFactory> */
-    use DeletesOldFiles, HasFactory, Notifiable;
+    use DeletesOldFiles, HasFactory, LogsAudit, Notifiable;
 
     /**
      * Fixed tier list. Purely an informational business attribute (badge,

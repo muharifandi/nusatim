@@ -35,13 +35,13 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 24 (Admin) — RBAC (Role & Permission) | ✅ Selesai | 2026-07-30 |
 | Fase 25 (Admin) — Workflow Assignment | ✅ Selesai | 2026-07-30 |
 | Fase 26 (Admin+Partner) — Support Ticket | ✅ Selesai | 2026-07-30 |
-| Fase 27 (Admin) — Audit Log | 🔧 Sedang dikerjakan | 2026-07-30 |
+| Fase 27 (Admin) — Audit Log | ✅ Selesai | 2026-07-30 |
 
-**Final Review klien (2026-07-30 sore)** menetapkan beberapa keputusan bisnis final yang merevisi/menyelesaikan item-item yang sebelumnya masih asumsi/placeholder — lihat bagian **"Final Business Decisions (Client Sign-off)"** di bawah untuk detail lengkap. Ringkasnya: Workflow Approval (Fase 23) direvisi total jadi RBAC sungguhan (Fase 24+25, sedang dikerjakan), Partner Level (yang sempat ditambahkan sebagai bagian Commission Scheme di hari yang sama) di-revert jadi murni atribut informational, Produk/Export/dll dikonfirmasi final tanpa perubahan kode, dan 2 modul baru ditambahkan ke scope (Support Ticket, Audit Log).
+**Final Review klien (2026-07-30 sore)** menetapkan beberapa keputusan bisnis final yang merevisi/menyelesaikan item-item yang sebelumnya masih asumsi/placeholder — lihat bagian **"Final Business Decisions (Client Sign-off)"** di bawah untuk detail lengkap. Ringkasnya: Workflow Approval (Fase 23) direvisi total jadi RBAC sungguhan (Fase 24+25, selesai), Partner Level (yang sempat ditambahkan sebagai bagian Commission Scheme di hari yang sama) di-revert jadi murni atribut informational, Produk/Export/dll dikonfirmasi final tanpa perubahan kode, dan 2 modul baru ditambahkan ke scope (Support Ticket/Fase 26, Audit Log/Fase 27) — semuanya sudah selesai per 2026-07-30.
 
 ### Sisa pekerjaan (ringkasan cepat)
 
-**Sedang dikerjakan** (per Final Review 2026-07-30): Fase 24 (RBAC), Fase 25 (Workflow Assignment), Fase 26 (Support Ticket, modul baru), Fase 27 (Audit Log, modul baru). Plus revert kecil di Fase 15/Commission Scheme untuk Partner Level.
+**Belum dikerjakan sama sekali:** tidak ada — Fase 24-27 dari Final Review sudah semua selesai, plus revert Partner Level di Commission Scheme.
 
 **Sudah "selesai" tapi sengaja belum 100% lengkap:**
 - Fase 9 (Commission — Recurring Percentage): **dikonfirmasi final sebagai future enhancement**, bukan MVP (butuh Invoice Management + Payment Tracking + Scheduler/Recurring Engine terpisah)
@@ -515,13 +515,17 @@ Diverifikasi lewat `tests/Feature/SupportTicketTest.php` (5 test): partner bisa 
 
 ---
 
-## Fase 27 (Admin) — Audit Log
+## Fase 27 (Admin) — Audit Log ✅ (selesai 2026-07-30)
 
 Disarankan klien, beda dari Status History yang sudah ada (Fase 9/10) — Status History cuma mencatat histori status; Audit Log mencatat **siapa** melakukan **perubahan apa** pada **kapan**, lintas model.
 
-- [ ] Tabel `audit_logs` generik (model manapun, aktor manapun — staff `User` atau `Partner`)
-- [ ] Terpasang otomatis (lewat model event, bukan instrumentasi manual per-action) di: Partner, Lead, Customer, Project Board, Commission, Withdrawal, Support Ticket, Role & Permission, Workflow Assignment
-- [ ] Halaman admin read-only untuk melihat/filter Audit Log (per model, per user, per aksi, per tanggal)
+- [x] Tabel `audit_logs` generik (model manapun via `auditable_type`/`auditable_id` polymorphic, aktor manapun — staff `User` atau `Partner` — via `user_type`/`user_id` polymorphic). Immutable (tidak ada `updated_at`, row tidak pernah diedit setelah ditulis).
+- [x] Terpasang otomatis (lewat trait `App\Models\Concerns\LogsAudit` yang hook ke event `created`/`updated`/`deleted`, bukan instrumentasi manual per-action) di: Partner, Lead, Customer, Project Board (`PartnerProject`), Commission, Withdrawal, Support Ticket, Role & Permission (`App\Models\Role`, subclass kecil dari Role bawaan `spatie/laravel-permission` supaya perubahan Role ikut kecatat — `config('permission.models.role')` diarahkan ke sini), Workflow Assignment. Karena approve/reject/publish/dst semuanya `update()` biasa di model existing, hook generik `updated` ini otomatis menangkap perubahan status itu sebagai diff before/after — tidak perlu kode tambahan per action.
+- [x] Halaman admin read-only untuk melihat/filter Audit Log (per model, per aksi, per tanggal) — `/admin/audit-logs`, `canCreate`/`canEdit`/`canDelete` semua `false`
+
+Diverifikasi lewat `tests/Feature/AuditLogTest.php` (6 test): create model tercatat `action=created`, update tercatat `action=updated` dengan diff before/after yang benar, delete tercatat `action=deleted`, aktor tercatat benar untuk staff `User` yang login, aktor tercatat benar untuk `Partner` yang login, halaman admin render.
+
+**Catatan urutan migration**: migration `create_audit_logs_table` sengaja diberi timestamp lebih awal dari `create_workflow_assignments_table`/`seed_workflow_assignments` — `WorkflowAssignment` ikut dipasangi `LogsAudit`, dan baris workflow di-seed lewat migration (Fase 25), jadi tabel `audit_logs` harus sudah ada sebelum seed itu jalan (baik di fresh install maupun `RefreshDatabase` test).
 
 ---
 

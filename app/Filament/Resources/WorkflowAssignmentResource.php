@@ -4,13 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Concerns\AuthorizesModule;
 use App\Filament\Resources\WorkflowAssignmentResource\Pages;
+use App\Models\Role;
 use App\Models\WorkflowAssignment;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Spatie\Permission\Models\Role;
 
 class WorkflowAssignmentResource extends Resource
 {

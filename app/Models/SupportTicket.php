@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsAudit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SupportTicket extends Model
 {
+    use LogsAudit;
+
     protected $fillable = [
         'partner_id',
         'subject',
