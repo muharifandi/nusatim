@@ -34,13 +34,10 @@ class PartnerPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Indigo,
             ])
-            // Placeholder landing page until the real dashboard is built in
-            // Fase 2 - without at least one navigable page, Filament's own
-            // getUrl() falls back to the panel's bare path, which would
-            // redirect an approved partner back to /partner in a loop.
-            ->pages([
-                \Filament\Pages\Dashboard::class,
-            ])
+            // Fase 2's real Dashboard (app/Filament/Partner/Pages/Dashboard.php)
+            // is picked up by discoverPages() below, same as the admin
+            // panel's own custom Dashboard - no explicit ->pages() needed
+            // anymore now that a real one exists to discover.
             ->discoverResources(in: app_path('Filament/Partner/Resources'), for: 'App\\Filament\\Partner\\Resources')
             ->discoverPages(in: app_path('Filament/Partner/Pages'), for: 'App\\Filament\\Partner\\Pages')
             ->discoverWidgets(in: app_path('Filament/Partner/Widgets'), for: 'App\\Filament\\Partner\\Widgets')

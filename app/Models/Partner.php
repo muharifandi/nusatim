@@ -107,4 +107,16 @@ class Partner extends Authenticatable implements FilamentUser
     {
         return (float) $this->commissions()->where('status', 'approved')->sum('amount');
     }
+
+    public function salesTargets(): HasMany
+    {
+        return $this->hasMany(PartnerSalesTarget::class);
+    }
+
+    public function currentSalesTarget(): ?PartnerSalesTarget
+    {
+        return $this->salesTargets()
+            ->whereDate('period', now()->startOfMonth()->toDateString())
+            ->first();
+    }
 }

@@ -10,7 +10,7 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 |---|---|---|
 | Fase 0 — Keputusan Arsitektur | ✅ Selesai (bagian teknis) | 2026-07-29 |
 | Fase 1 — Registrasi & Autentikasi Partner | ✅ Selesai | 2026-07-29 |
-| Fase 2 — Dashboard Partner | ⏸️ Ditunda (perlu data Fase 3/4/8/9) | — |
+| Fase 2 — Dashboard Partner | ✅ Selesai | 2026-07-30 |
 | Fase 3 — Lead & Opportunity Management | ✅ Selesai | 2026-07-29 |
 | Fase 4 — Customer Management | ✅ Selesai | 2026-07-29 |
 | Fase 6 — Sales Pipeline (Kanban) | ✅ Selesai | 2026-07-29 |
@@ -33,14 +33,13 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 23 (Admin) — Partner Settings | ✅ Selesai | 2026-07-30 |
 | Fase 5 | ⏸️ Ditunda (murni agregat dari data Fase 3/4/7/8/9/10) | — |
 
-**Seluruh `todo_partnert.md` sudah selesai dikerjakan**, kecuali Fase 2, 5, dan 8 yang sengaja ditunda (bukan lupa/terlewat — lihat catatan masing-masing fase di bawah untuk alasannya, semuanya soal "tunggu data lebih matang dulu", bukan blocker teknis). Kalau nanti mau lanjut ke tiga fase itu, tinggal kabari — datanya (Lead/Customer/Project/Commission/Withdrawal) sudah cukup untuk mulai kapan saja.
+**Sedang menyelesaikan sisa pekerjaan** (2026-07-30): Fase 2 sekarang sudah selesai (penundaannya sudah tidak berlaku, semua data sumbernya sudah ada). Fase 8 dan Fase 5 sedang dikerjakan berikutnya (urutan yang sama).
 
 ### Sisa pekerjaan (ringkasan cepat)
 
 **Belum dikerjakan sama sekali:**
-- Fase 2 — Dashboard Partner (ditunda)
-- Fase 5 — Sales Workspace (ditunda)
-- Fase 8 — Project Management (ditunda)
+- Fase 5 — Sales Workspace (sedang dikerjakan)
+- Fase 8 — Project Management (sedang dikerjakan)
 
 **Sudah "selesai" tapi sengaja belum 100% lengkap:**
 - Fase 15 (admin Partner Management): belum ada Suspend/Aktifkan Partner, Reset Password dari admin, UI "Kelola Level Partner"
@@ -112,19 +111,20 @@ Dikerjakan bersama fondasi teknis Fase 0 (guard `partner`, panel Filament kedua,
 
 ---
 
-## Fase 2 — Dashboard Partner ⏸️ (sengaja ditunda)
+## Fase 2 — Dashboard Partner ✅ (selesai 2026-07-30)
 
-**Belum dikerjakan, bukan lupa.** Semua isi fase ini adalah angka ringkasan/grafik dari tabel yang saat Fase 1 selesai belum ada sama sekali (`leads`, `customers`, `partner_projects`, `commissions`). Membangunnya lebih dulu cuma menghasilkan halaman kosong yang harus dibongkar ulang begitu data aslinya ada. Placeholder `Filament\Pages\Dashboard` bawaan (dipasang di Fase 1 supaya panel partner tidak infinite-redirect) dipakai sementara. Item "Total Lead"/"Total Customer" di bawah ini sudah bisa dikerjakan sekarang setelah Fase 3+4 selesai (datanya sudah ada) — sisanya (Project/Komisi/Withdrawal) menunggu fase terkait.
+Penundaan sebelumnya sudah tidak berlaku — semua tabel sumbernya (Lead/Customer/Project/Commission/Withdrawal) sudah ada sejak Fase 3/4/7/9/10. Dikerjakan sekarang, menggantikan placeholder `Filament\Pages\Dashboard` bawaan yang dipasang sementara di Fase 1.
 
-- [ ] Query/summary: Total Lead, Total Opportunity, Total Customer, Total Project
-- [ ] Query/summary: Project Available (jumlah project yang bisa diklaim)
-- [ ] Query/summary: Follow Up Hari Ini, Meeting Hari Ini (dari data reminder di Fase 3)
-- [ ] Query/summary: Total Nilai Project
-- [ ] Query/summary: Total Komisi, Komisi Pending, Komisi Ready Withdrawal, Total Withdrawal
-- [ ] Target Penjualan (input target oleh admin per partner/periode, ditampilkan progress-nya)
-- [ ] Grafik Pipeline (jumlah lead per tahapan pipeline)
-- [ ] Grafik Closing (tren closing per periode)
-- [ ] Grafik Komisi (tren komisi per periode)
+- [x] Query/summary: Total Lead, Total Opportunity, Total Customer, Total Project — widget `PartnerActivityStats`. "Opportunity" diinterpretasikan sebagai lead berstatus `opportunity`/`proposal`/`negotiation` (sudah lewat tahap awal, belum closing) — tidak didefinisikan eksplisit di spec.
+- [x] Query/summary: Project Available (jumlah project yang bisa diklaim) — global (semua partner), bukan cuma milik partner yang login, karena itu yang bisa diklaim siapa saja.
+- [x] Query/summary: Follow Up Hari Ini, Meeting Hari Ini (dari data reminder di Fase 3)
+- [x] Query/summary: Total Nilai Project, Total Komisi, Komisi Pending, Komisi Ready Withdrawal, Total Withdrawal — widget `PartnerFinanceStats`
+- [x] Target Penjualan (input target oleh admin per partner/periode, ditampilkan progress-nya) — tabel baru `partner_sales_targets` (satu target per partner per bulan), admin input lewat `/admin/partner-sales-targets`, partner lihat progress-nya di dashboard
+- [x] Grafik Pipeline (jumlah lead per tahapan pipeline) — `PartnerPipelineChart` (doughnut)
+- [x] Grafik Closing (tren closing per periode) — `PartnerClosingChart` (line, 12 bulan terakhir)
+- [x] Grafik Komisi (tren komisi per periode) — `PartnerCommissionChart` (line, 12 bulan terakhir)
+
+Diverifikasi lewat `tests/Feature/PartnerDashboardTest.php` (5 test): angka stats benar dan ter-scope ke partner yang login (data partner lain tidak ikut terhitung), reminder hari ini terpisah follow-up/meeting dengan benar, progress target penjualan menghitung persentase benar dan menampilkan pesan yang tepat kalau belum diset, render halaman dashboard partner & halaman admin sales target.
 
 > Bisa reuse pola chart yang sudah ada di dashboard admin situs profile ini (`TrafficChart` widget) sebagai referensi teknis — tapi ini widget/halaman terpisah, bukan bagian dari dashboard admin existing.
 
