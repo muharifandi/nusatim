@@ -22,6 +22,8 @@ class SupportTicketResource extends Resource
 
     protected static ?string $model = SupportTicket::class;
 
+    protected static ?string $modelLabel = 'Support Ticket';
+
     protected static ?string $navigationIcon = 'heroicon-o-lifebuoy';
 
     protected static ?string $navigationLabel = 'Support Ticket';

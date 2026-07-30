@@ -22,6 +22,8 @@ class CommissionSchemeResource extends Resource
 
     protected static ?string $model = CommissionScheme::class;
 
+    protected static ?string $modelLabel = 'Commission Scheme';
+
     protected static ?string $navigationIcon = 'heroicon-o-calculator';
 
     protected static ?string $navigationLabel = 'Commission Scheme';

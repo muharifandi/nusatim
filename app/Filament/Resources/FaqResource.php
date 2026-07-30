@@ -17,6 +17,12 @@ class FaqResource extends Resource
 {
     protected static ?string $model = Faq::class;
 
+    protected static ?string $modelLabel = 'FAQ';
+
+    // Filament's default pluralization would append 's' onto the whole
+    // all-caps label ('FAQS') - override explicitly for correct casing.
+    protected static ?string $pluralModelLabel = 'FAQs';
+
     protected static ?string $navigationIcon = 'heroicon-o-question-mark-circle';
 
     protected static ?string $navigationGroup = 'Website';

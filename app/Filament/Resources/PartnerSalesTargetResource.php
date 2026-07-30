@@ -20,6 +20,8 @@ class PartnerSalesTargetResource extends Resource
 
     protected static ?string $model = PartnerSalesTarget::class;
 
+    protected static ?string $modelLabel = 'Sales Target';
+
     protected static ?string $navigationIcon = 'heroicon-o-flag';
 
     protected static ?string $navigationLabel = 'Sales Target';

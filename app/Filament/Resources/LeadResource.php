@@ -27,6 +27,8 @@ class LeadResource extends Resource
 
     protected static ?string $model = Lead::class;
 
+    protected static ?string $modelLabel = 'Lead';
+
     protected static ?string $navigationIcon = 'heroicon-o-funnel';
 
     protected static ?string $navigationLabel = 'Lead Monitoring';

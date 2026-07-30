@@ -22,7 +22,7 @@ class ManagePartnerSettings extends Page implements HasActions, HasForms
     use InteractsWithActions;
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
+    protected static ?string $navigationIcon = 'heroicon-o-adjustments-horizontal';
 
     protected static ?string $navigationLabel = 'Partner Settings';
 

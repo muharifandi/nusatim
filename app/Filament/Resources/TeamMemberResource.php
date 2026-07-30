@@ -17,6 +17,8 @@ class TeamMemberResource extends Resource
 {
     protected static ?string $model = TeamMember::class;
 
+    protected static ?string $modelLabel = 'Team Member';
+
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationGroup = 'Website';
