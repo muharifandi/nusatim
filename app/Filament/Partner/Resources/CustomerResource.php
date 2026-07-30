@@ -76,6 +76,58 @@ class CustomerResource extends Resource
                         Infolists\Components\TextEntry::make('payment_status')->label('Status Pembayaran')->badge(),
                     ])
                     ->columns(2),
+                Infolists\Components\Section::make('Status Project')
+                    ->visible(fn (Customer $record) => $record->partnerProject !== null)
+                    ->schema([
+                        Infolists\Components\TextEntry::make('partnerProject.name')->label('Nama Project'),
+                        Infolists\Components\TextEntry::make('partnerProject.status')->label('Status Project')->badge(),
+                        Infolists\Components\TextEntry::make('partnerProject.progress')->label('Progress')->suffix('%'),
+                    ])
+                    ->columns(3),
+                Infolists\Components\Section::make('Status Komisi')
+                    ->visible(fn (Customer $record) => $record->commission !== null)
+                    ->schema([
+                        Infolists\Components\TextEntry::make('commission.status')->label('Status')->badge(),
+                        Infolists\Components\TextEntry::make('commission.amount')->label('Nominal')->money('IDR'),
+                    ])
+                    ->columns(2),
+                Infolists\Components\Section::make('Follow Up')
+                    ->schema([
+                        Infolists\Components\RepeatableEntry::make('follow_ups')
+                            ->hiddenLabel()
+                            ->schema([
+                                Infolists\Components\TextEntry::make('remind_at')->label('Tanggal/Waktu')->dateTime(),
+                                Infolists\Components\TextEntry::make('note')->placeholder('-'),
+                                Infolists\Components\IconEntry::make('completed_at')->label('Selesai')->boolean(),
+                            ])
+                            ->columns(3),
+                    ]),
+                Infolists\Components\Section::make('Meeting')
+                    ->schema([
+                        Infolists\Components\RepeatableEntry::make('meetings')
+                            ->hiddenLabel()
+                            ->schema([
+                                Infolists\Components\TextEntry::make('remind_at')->label('Tanggal/Waktu')->dateTime(),
+                                Infolists\Components\TextEntry::make('note')->placeholder('-'),
+                                Infolists\Components\IconEntry::make('completed_at')->label('Selesai')->boolean(),
+                            ])
+                            ->columns(3),
+                    ]),
+                Infolists\Components\Section::make('Proposal')
+                    ->description('Dokumen yang diupload di Lead asal (belum ada entitas Proposal terpisah di sistem ini).')
+                    ->schema([
+                        Infolists\Components\RepeatableEntry::make('proposal_documents')
+                            ->hiddenLabel()
+                            ->schema([
+                                Infolists\Components\TextEntry::make('name'),
+                                Infolists\Components\TextEntry::make('url')
+                                    ->label('')
+                                    ->formatStateUsing(fn () => 'Lihat')
+                                    ->url(fn ($state) => $state)
+                                    ->openUrlInNewTab(),
+                            ])
+                            ->columns(2),
+                    ]),
                 Infolists\Components\Section::make('Riwayat Aktivitas')
                     ->description('Gabungan timeline dari lead asal dan aktivitas setelah jadi customer.')
                     ->schema([
@@ -87,6 +139,29 @@ class CustomerResource extends Resource
                                 Infolists\Components\TextEntry::make('created_at')->dateTime(),
                             ])
                             ->columns(4),
+                    ]),
+                Infolists\Components\Section::make('Aktivitas')
+                    ->description('Event otomatis (dibuat, perubahan status, dokumen).')
+                    ->schema([
+                        Infolists\Components\RepeatableEntry::make('system_activities')
+                            ->hiddenLabel()
+                            ->schema([
+                                Infolists\Components\TextEntry::make('type')->badge(),
+                                Infolists\Components\TextEntry::make('body')->columnSpan(2),
+                                Infolists\Components\TextEntry::make('created_at')->dateTime(),
+                            ])
+                            ->columns(4),
+                    ]),
+                Infolists\Components\Section::make('Catatan')
+                    ->description('Catatan manual saja.')
+                    ->schema([
+                        Infolists\Components\RepeatableEntry::make('notes')
+                            ->hiddenLabel()
+                            ->schema([
+                                Infolists\Components\TextEntry::make('body')->columnSpan(2),
+                                Infolists\Components\TextEntry::make('created_at')->dateTime(),
+                            ])
+                            ->columns(3),
                     ]),
             ]);
     }
@@ -107,12 +182,30 @@ class CustomerResource extends Resource
                         'partial' => 'warning',
                         default => 'gray',
                     }),
+                Tables\Columns\TextColumn::make('partnerProject.name')->label('Nama Project')->placeholder('-'),
+                Tables\Columns\TextColumn::make('partnerProject.status')->label('Status Project')->badge()->placeholder('-'),
+                Tables\Columns\TextColumn::make('partnerProject.progress')->label('Progress')->suffix('%')->placeholder('-'),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('updateProgress')
+                    ->label('Update Progress')
+                    ->icon('heroicon-o-arrow-trending-up')
+                    ->visible(fn (Customer $record) => $record->partnerProject !== null)
+                    ->form([
+                        Forms\Components\TextInput::make('progress')
+                            ->label('Progress')
+                            ->numeric()
+                            ->minValue(0)
+                            ->maxValue(100)
+                            ->suffix('%')
+                            ->required(),
+                    ])
+                    ->fillForm(fn (Customer $record) => ['progress' => $record->partnerProject?->progress])
+                    ->action(fn (Customer $record, array $data) => $record->partnerProject->update(['progress' => $data['progress']])),
             ]);
     }
 

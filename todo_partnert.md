@@ -15,7 +15,7 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 4 — Customer Management | ✅ Selesai | 2026-07-29 |
 | Fase 6 — Sales Pipeline (Kanban) | ✅ Selesai | 2026-07-29 |
 | Fase 7 — Project Board (Available Project) | ✅ Selesai | 2026-07-29 |
-| Fase 8 — Project Management | ⏸️ Ditunda (2 sumber data sudah nyambung sejak Fase 9, tinggal tunggu data lebih banyak) | — |
+| Fase 8 — Project Management | ✅ Selesai | 2026-07-30 |
 | Fase 9 — Commission Management (sisi Partner) | ✅ Selesai | 2026-07-29 |
 | Fase 10 — Withdrawal (Partner) | ✅ Selesai | 2026-07-29 |
 | Fase 11 — Withdrawal History | ✅ Selesai (dikerjakan bareng Fase 10) | 2026-07-29 |
@@ -31,15 +31,13 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 15 (Admin) — Partner Management | ⚠️ Preview minimal (dikerjakan bareng Fase 1) | 2026-07-29 |
 | Fase 22 (Admin) — Reports | ✅ Selesai | 2026-07-30 |
 | Fase 23 (Admin) — Partner Settings | ✅ Selesai | 2026-07-30 |
-| Fase 5 | ⏸️ Ditunda (murni agregat dari data Fase 3/4/7/8/9/10) | — |
+| Fase 5 — Sales Workspace | ✅ Selesai (dikerjakan bareng Fase 8) | 2026-07-30 |
 
-**Sedang menyelesaikan sisa pekerjaan** (2026-07-30): Fase 2 sekarang sudah selesai (penundaannya sudah tidak berlaku, semua data sumbernya sudah ada). Fase 8 dan Fase 5 sedang dikerjakan berikutnya (urutan yang sama).
+**Sedang menyelesaikan sisa pekerjaan** (2026-07-30): Fase 2, Fase 8, dan Fase 5 sudah selesai semua (penundaan sebelumnya sudah tidak berlaku, semua data sumbernya sudah ada). Sisa item terakhir: pelengkap Fase 15 dan Fase 17, plus 2 item besar yang masih butuh keputusan produk terpisah (lihat di bawah).
 
 ### Sisa pekerjaan (ringkasan cepat)
 
-**Belum dikerjakan sama sekali:**
-- Fase 5 — Sales Workspace (sedang dikerjakan)
-- Fase 8 — Project Management (sedang dikerjakan)
+**Belum dikerjakan sama sekali:** tidak ada lagi — semua fase di daftar sudah dikerjakan (lihat pengecualian "sengaja belum 100% lengkap" di bawah).
 
 **Sudah "selesai" tapi sengaja belum 100% lengkap:**
 - Fase 15 (admin Partner Management): belum ada Suspend/Aktifkan Partner, Reset Password dari admin, UI "Kelola Level Partner"
@@ -165,22 +163,24 @@ Diverifikasi lewat `tests/Feature/LeadManagementTest.php` (7 test: create lead +
 
 ---
 
-## Fase 5 — Sales Workspace
+## Fase 5 — Sales Workspace ✅ (selesai 2026-07-30, dikerjakan bareng Fase 8)
 
-- [ ] Rancang satu halaman gabungan (workspace) per customer/project yang menampilkan semua modul sekaligus tanpa pindah halaman:
-  - [ ] Panel Informasi Customer
-  - [ ] Panel Timeline
-  - [ ] Panel Aktivitas
-  - [ ] Panel Follow Up
-  - [ ] Panel Meeting
-  - [ ] Panel Proposal
-  - [ ] Panel Catatan
-  - [ ] Panel Nilai Project
-  - [ ] Panel Status Project
-  - [ ] Panel Status Pembayaran
-  - [ ] Panel Status Komisi
+Diimplementasikan sebagai **perluasan `infolist()` di `CustomerResource` (Fase 4) yang sudah ada** — bukan halaman/resource baru — karena "satu halaman gabungan per customer" secara harfiah sudah ada (`ViewCustomer`). Semua panel bawah ini adalah Section baru yang ditambahkan di situ:
 
-> Ini murni UI/UX — datanya semua sudah ada dari Fase 3, 4, 8, 9. Kerjakan setelah fase-fase itu selesai, supaya tidak membangun data ulang.
+- [x] Panel Informasi Customer — section existing (Fase 4), tidak diubah
+- [x] Panel Nilai Project & Status Pembayaran — section existing (Fase 4), tidak diubah
+- [x] Panel Status Project — baru, dari `partnerProject.status`/`progress`, hanya tampil kalau ada `partnerProject` terkait
+- [x] Panel Timeline — section "Riwayat Aktivitas" existing (Fase 4), gabungan penuh, tidak diubah
+- [x] Panel Aktivitas — baru, `Customer::getSystemActivitiesAttribute()`, subset timeline yang sama (filter tipe `created`/`status_change`/`document`)
+- [x] Panel Catatan — baru, `Customer::getNotesAttribute()`, subset timeline yang sama (filter tipe `note`)
+- [x] Panel Follow Up — baru, `Customer::getFollowUpsAttribute()`, dari `lead.reminders` (kosong kalau customer tidak berasal dari Lead)
+- [x] Panel Meeting — baru, `Customer::getMeetingsAttribute()`, sama seperti Follow Up beda filter tipe
+- [x] Panel Proposal — baru, `Customer::getProposalDocumentsAttribute()`. **Interpretasi**: tidak ada entitas "Proposal" terpisah di sistem ini, jadi diinterpretasikan sebagai dokumen yang sudah diupload ke Lead asal (`lead.documents`, Fase 3) — dicatat jelas di kode sebagai interpretasi, bukan didefinisikan eksplisit di spec
+- [x] Panel Status Komisi — baru, dari `Customer::commission` (relasi sudah ada sejak Fase 9)
+
+Timeline/Aktivitas/Catatan secara teknis dari satu sumber data yang sama (`Customer::activityTimeline()`), cuma beda filter — bukan 3 tabel terpisah.
+
+Diverifikasi lewat `tests/Feature/ProjectManagementTest.php` (lihat detail test di Fase 8 di bawah, satu file test dipakai untuk kedua fase karena keduanya diimplementasikan di file yang sama).
 
 ---
 
@@ -218,13 +218,19 @@ Diverifikasi lewat `tests/Feature/PartnerProjectTest.php` (8 test): board partne
 
 ---
 
-## Fase 8 — Project Management ⏸️ (sengaja ditunda)
+## Fase 8 — Project Management ✅ (selesai 2026-07-30)
 
-**Belum dikerjakan, bukan lupa** — roll-up view dari data project/customer. **Update dari Fase 9**: alasan awal fase ini ditunda (2 sumber data terpisah tanpa hubungan) **sudah tidak berlaku lagi** — sejak Fase 9, `PartnerProject` yang `Assigned` otomatis bikin/hubungkan `Customer` (`customers.partner_project_id`), jadi sekarang tinggal query `Customer` (opsional join ke `partnerProject` untuk data status/progress project-nya) sebagai satu sumber. Tetap ditunda bukan karena masalah arsitektur lagi, tapi supaya ada data asli lebih banyak dulu (dari Fase 3/4/7) sebelum bangun UI ringkasannya. Kolom `progress` sudah disiapkan di tabel `partner_projects` (default 0) supaya tidak perlu migration tambahan nanti.
+Diimplementasikan sebagai **penambahan kolom & action ke `CustomerResource` (partner) yang sudah ada** — `Customer` sudah jadi satu-satunya sumber "deal tertutup" sejak Fase 9 (baik dari Lead-Won maupun dari PartnerProject-Assigned), jadi tidak perlu resource/listing baru.
 
-- [ ] Listing project yang sudah terjual (hasil dari Fase 7 yang `Assigned`/`In Progress`, atau dari closing Lead di Fase 3)
-- [ ] Tampilkan: Nama Project, Customer, Produk, Nilai Project, Status Pembayaran, Status Project, Progress
-- [ ] Update progress project (oleh partner atau admin — masih belum diputuskan, lihat Fase 0)
+- [x] Listing project yang sudah terjual — kolom baru di tabel `CustomerResource`: Nama Project, Status Project (badge), Progress (`%`), semua dari relasi `partnerProject` yang sudah ada sejak Fase 9. Placeholder `-` untuk Customer yang berasal dari Lead-Won murni (tidak ada `partnerProject` terkait)
+- [x] Tampilkan: Nama Project, Customer, Produk, Nilai Project, Status Pembayaran (sudah ada dari Fase 4), Status Project, Progress (baru, lihat di atas)
+- [x] Update progress project — **dibuka untuk keduanya sebagai default sementara**, keputusan resmi siapa yang berwenang masih menunggu Fase 0:
+  - Partner: action baru `updateProgress` di tabel `CustomerResource` (partner), cuma muncul kalau ada `partnerProject` terkait, form 1 field numeric 0–100
+  - Admin: field `progress` baru ditambahkan ke form `PartnerProjectResource` (Fase 16, sudah full-CRUD)
+
+Diverifikasi lewat `tests/Feature/ProjectManagementTest.php` (7 test): Customer dari `partner_project_id` menampilkan Nama Project/Status Project/Progress dengan benar; Customer dari Lead-Won murni tidak punya `partnerProject`; update progress via `PartnerProject::update()` tercermin di Customer; admin bisa update `progress` lewat form edit `PartnerProjectResource`; panel Follow Up/Meeting/Proposal/Aktivitas/Catatan/Status Komisi (Fase 5) menampilkan data yang benar dan terpisah sesuai filter masing-masing; Customer tanpa Lead punya array kosong untuk Follow Up/Meeting/Proposal; render halaman index & view `CustomerResource` untuk kedua kasus (dengan & tanpa `partnerProject`).
+
+Full regression: 89/90 test lulus (1 kegagalan adalah `ExampleTest` yang sudah gagal sebelum sesi ini, tidak terkait — tidak pakai `RefreshDatabase`, bukan regresi dari perubahan ini).
 
 ---
 
@@ -433,7 +439,7 @@ Diverifikasi lewat `tests/Feature/ReportsTest.php` (7 test): agregasi Laporan Pa
 - [x] Pengaturan Workflow Approval (siapa approve apa, sesuai keputusan di Fase 0) — ⚠️ **placeholder teks bebas** (`approval_workflow_notes`), bukan sistem role sungguhan — sama pola dengan "Level Partner" di Fase 1, karena `spatie/laravel-permission` belum terpasang dan pertanyaan "siapa approve apa" belum dijawab sejak Fase 0
 - [x] Pengaturan Notifikasi (kanal default, template pesan) — **"kanal default" dibangun** (`default_email_notifications_enabled`, dipakai `Register::handleRegistration()` untuk partner baru). ⚠️ **"Template pesan" (isi teks tiap jenis email/notifikasi editable admin) SENGAJA TIDAK dibangun** — perlu sistem templating dinamis menggantikan Blade view yang di-hardcode di `resources/views/emails/*.blade.php`, itu perubahan besar terpisah, bukan bagian dari fase ini.
 
-**Ini menandai semua fase di `todo_partnert.md` selesai dikerjakan**, kecuali Fase 2 (Dashboard), Fase 5 (Sales Workspace), dan Fase 8 (Project Management) yang sengaja ditunda menunggu kebutuhan data yang lebih matang (lihat catatan masing-masing di atas) — bukan lupa atau terlewat.
+**Ini menandai semua fase di `todo_partnert.md` selesai dikerjakan pada saat ditulis (2026-07-29/30)** — Fase 2 (Dashboard), Fase 5 (Sales Workspace), dan Fase 8 (Project Management) waktu itu masih sengaja ditunda, tapi ketiganya sudah diselesaikan juga per 2026-07-30 (lihat catatan masing-masing fase di atas dan ringkasan "Sisa Pekerjaan" di bagian Progress).
 
 Diverifikasi lewat `tests/Feature/PartnerSettingsExtendedTest.php` (7 test): default skema eksplisit menang lawan fallback lama tapi kalah lawan skema lebih spesifik, klaim ditolak begitu di batas concurrent (dan tidak terpengaruh kalau setting kosong), command expire-stale-claims cuma memproses yang benar-benar lewat batas waktu, registrasi baru memakai kanal notifikasi default dari setting.
 

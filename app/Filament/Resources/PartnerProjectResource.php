@@ -42,6 +42,12 @@ class PartnerProjectResource extends Resource
                     ->numeric()
                     ->prefix('Rp')
                     ->helperText('Angka referensi untuk partner, bukan hasil hitungan skema komisi (belum ada).'),
+                Forms\Components\TextInput::make('progress')
+                    ->numeric()
+                    ->minValue(0)
+                    ->maxValue(100)
+                    ->suffix('%')
+                    ->helperText('Default sementara: bisa diupdate admin di sini, atau oleh partner lewat action "Update Progress" di Customer - keputusan resmi siapa yang berwenang belum ditetapkan.'),
             ]);
     }
 
@@ -53,6 +59,7 @@ class PartnerProjectResource extends Resource
                 Tables\Columns\TextColumn::make('service.title')->label('Produk')->placeholder('-'),
                 Tables\Columns\TextColumn::make('partner.name')->label('Partner')->placeholder('-'),
                 Tables\Columns\TextColumn::make('budget')->money('IDR')->placeholder('-'),
+                Tables\Columns\TextColumn::make('progress')->suffix('%')->placeholder('-'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state) => match ($state) {
