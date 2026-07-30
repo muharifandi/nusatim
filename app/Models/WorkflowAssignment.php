@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsAudit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Spatie\Permission\Models\Role;
 
 /**
  * Fase 25 - completes RBAC (Fase 24) by deciding WHO (which Role) is the
@@ -14,6 +14,8 @@ use Spatie\Permission\Models\Role;
  */
 class WorkflowAssignment extends Model
 {
+    use LogsAudit;
+
     public const PARTNER_REGISTRATION = 'partner_registration';
 
     public const PROJECT_CLAIM = 'project_claim';

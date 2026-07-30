@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Mail\PartnerProjectClaimApproved;
 use App\Mail\PartnerProjectClaimRejected;
+use App\Models\Concerns\LogsAudit;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,8 @@ use Illuminate\Validation\ValidationException;
 
 class PartnerProject extends Model
 {
+    use LogsAudit;
+
     protected $fillable = [
         'name',
         'description',

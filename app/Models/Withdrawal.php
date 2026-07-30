@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsAudit;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,8 @@ use Illuminate\Validation\ValidationException;
 
 class Withdrawal extends Model
 {
+    use LogsAudit;
+
     protected $fillable = [
         'partner_id',
         'amount',

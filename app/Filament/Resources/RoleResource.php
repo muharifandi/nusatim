@@ -4,13 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Concerns\AuthorizesModule;
 use App\Filament\Resources\RoleResource\Pages;
+use App\Models\Role;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class RoleResource extends Resource
 {

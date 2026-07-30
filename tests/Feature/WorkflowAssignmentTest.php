@@ -3,11 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\Partner;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Withdrawal;
 use App\Models\WorkflowAssignment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class WorkflowAssignmentTest extends TestCase
