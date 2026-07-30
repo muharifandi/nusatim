@@ -100,6 +100,7 @@ class Register extends BaseRegister
             ...$data,
             'status' => 'pending_review',
             'agreement_accepted_at' => now(),
+            'email_notifications_enabled' => PartnerSetting::current()->default_email_notifications_enabled,
         ]);
 
         Mail::to($partner->email)->send(

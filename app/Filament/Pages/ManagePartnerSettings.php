@@ -2,12 +2,16 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\CommissionScheme;
 use App\Models\PartnerSetting;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -46,13 +50,45 @@ class ManagePartnerSettings extends Page implements HasActions, HasForms
                             ->hiddenLabel(),
                     ]),
                 Section::make('Withdrawal')
-                    ->description('Bagian minimal dari Fase 23 (Partner Settings) - baru berisi yang dibutuhkan Fase 10 (Withdrawal). Field lain (default commission scheme, project claim rule, dst) menyusul.')
                     ->schema([
                         TextInput::make('minimum_withdrawal')
                             ->label('Minimum Penarikan')
                             ->numeric()
                             ->prefix('Rp')
                             ->helperText('Kosongkan untuk tidak ada batas minimum.'),
+                    ]),
+                Section::make('Commission Scheme Default')
+                    ->description('Skema fallback kalau produk/partner/project tidak punya skema khusus. Urutan prioritas: Project → Partner → Produk → Default di sini → skema tanpa cakupan sama sekali (kalau ada).')
+                    ->schema([
+                        Select::make('default_commission_scheme_id')
+                            ->label('Skema Default')
+                            ->options(fn () => CommissionScheme::pluck('name', 'id'))
+                            ->searchable(),
+                    ]),
+                Section::make('Project Claim Rule')
+                    ->schema([
+                        TextInput::make('max_concurrent_claimed_projects')
+                            ->label('Maksimal Project Diklaim Bersamaan')
+                            ->numeric()
+                            ->helperText('Kosongkan untuk tidak ada batas.'),
+                        TextInput::make('claim_processing_hours')
+                            ->label('Batas Waktu Proses Klaim (jam)')
+                            ->numeric()
+                            ->helperText('Klaim yang masih Pending Approval melebihi jam ini otomatis ditolak (dibuka lagi untuk partner lain). Kosongkan untuk tidak ada batas waktu.'),
+                    ])->columns(2),
+                Section::make('Workflow Approval')
+                    ->description('Dokumentasi kebijakan (teks bebas) - belum ada sistem role/permission sungguhan untuk mengatur ini secara otomatis.')
+                    ->schema([
+                        Textarea::make('approval_workflow_notes')
+                            ->label('')
+                            ->hiddenLabel()
+                            ->rows(4),
+                    ]),
+                Section::make('Notifikasi')
+                    ->description('Kanal default untuk partner yang baru mendaftar (partner tetap bisa ubah preferensinya sendiri di Fase 14). Isi/template teks tiap jenis notifikasi belum bisa diedit dari sini.')
+                    ->schema([
+                        Toggle::make('default_email_notifications_enabled')
+                            ->label('Kirim email tambahan secara default untuk partner baru'),
                     ]),
             ])
             ->statePath('data');

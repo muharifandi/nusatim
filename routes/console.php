@@ -13,3 +13,5 @@ Artisan::command('inspire', function () {
 Schedule::command('pageviews:resolve-countries --limit=100')->everyFiveMinutes();
 
 Schedule::command('reminders:notify-due')->everyFiveMinutes();
+
+Schedule::command('projects:expire-stale-claims')->hourly();

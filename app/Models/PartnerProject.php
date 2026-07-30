@@ -8,6 +8,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 
 class PartnerProject extends Model
 {
@@ -47,9 +48,29 @@ class PartnerProject extends Model
      * Conditional update (not check-then-save) so two partners racing to
      * claim the same project can't both succeed - only the first UPDATE
      * that actually matches status='available' takes effect.
+     *
+     * @throws ValidationException if the partner is already at the
+     *      "Project Claim Rule" concurrent-claim limit from Partner
+     *      Settings (Fase 23) - distinct from a plain `false` return,
+     *      which means someone else won the race for this project.
      */
     public function claim(Partner $partner): bool
     {
+        $maxConcurrent = PartnerSetting::current()->max_concurrent_claimed_projects;
+
+        if ($maxConcurrent) {
+            $activeCount = static::query()
+                ->where('partner_id', $partner->id)
+                ->whereIn('status', ['pending_approval', 'assigned', 'in_progress'])
+                ->count();
+
+            if ($activeCount >= $maxConcurrent) {
+                throw ValidationException::withMessages([
+                    'project' => "Sudah mencapai batas maksimal {$maxConcurrent} project yang diklaim bersamaan.",
+                ]);
+            }
+        }
+
         $affected = static::query()
             ->where('id', $this->id)
             ->where('status', 'available')

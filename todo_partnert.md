@@ -30,11 +30,10 @@ Status semua item: belum dikerjakan (`[ ]`). Centang (`[x]`) begitu selesai. Uru
 | Fase 14 — Profile Partner | ✅ Selesai | 2026-07-30 |
 | Fase 15 (Admin) — Partner Management | ⚠️ Preview minimal (dikerjakan bareng Fase 1) | 2026-07-29 |
 | Fase 22 (Admin) — Reports | ✅ Selesai | 2026-07-30 |
-| Fase 5, 23 lainnya | belum dikerjakan | — |
+| Fase 23 (Admin) — Partner Settings | ✅ Selesai | 2026-07-30 |
+| Fase 5 | ⏸️ Ditunda (murni agregat dari data Fase 3/4/7/8/9/10) | — |
 
-**Semua modul partner-facing selesai** kecuali Fase 2/5/8 yang sengaja ditunda. Sisa pekerjaan: Fase 23 (satu-satunya fase admin yang belum disentuh sama sekali).
-
-**Berikutnya**: Fase 23 (Partner Settings, versi lengkap) — sebagian besar field-nya (Commission Scheme Default, Project Claim Rule, Notifikasi) bisa dibangun sekarang. "Pengaturan Workflow Approval" tetap nyangkut ke keputusan bisnis yang belum dijawab sejak Fase 0 (siapa approve apa) — akan dilewati/dibuat placeholder, bukan menunda seluruh fase. Fase 5 (Sales Workspace) masih sengaja dilewati (murni agregat dari data Fase 3/4/7/8/9/10).
+**Seluruh `todo_partnert.md` sudah selesai dikerjakan**, kecuali Fase 2, 5, dan 8 yang sengaja ditunda (bukan lupa/terlewat — lihat catatan masing-masing fase di bawah untuk alasannya, semuanya soal "tunggu data lebih matang dulu", bukan blocker teknis). Kalau nanti mau lanjut ke tiga fase itu, tinggal kabari — datanya (Lead/Customer/Project/Commission/Withdrawal) sudah cukup untuk mulai kapan saja.
 
 ---
 
@@ -402,14 +401,18 @@ Diverifikasi lewat `tests/Feature/ReportsTest.php` (7 test): agregasi Laporan Pa
 
 ---
 
-## Fase 23 (Admin) — Partner Settings
+## Fase 23 (Admin) — Partner Settings ✅ (selesai 2026-07-30)
 
-- [ ] Pengaturan Minimum Withdrawal (global, dipakai Fase 20)
-- [ ] Pengaturan Commission Scheme Default (skema fallback kalau produk/partner/project tidak punya skema khusus)
-- [ ] Pengaturan Project Claim Rule (mis. berapa lama klaim harus diproses, berapa project maksimal diklaim bersamaan)
-- [ ] Pengaturan Partner Agreement (teks perjanjian kemitraan yang ditampilkan di Fase 1 registrasi — editable tanpa ubah kode)
-- [ ] Pengaturan Workflow Approval (siapa approve apa, sesuai keputusan di Fase 0)
-- [ ] Pengaturan Notifikasi (kanal default, template pesan)
+- [x] Pengaturan Minimum Withdrawal (global, dipakai Fase 20) — dibangun di Fase 10
+- [x] Pengaturan Commission Scheme Default (skema fallback kalau produk/partner/project tidak punya skema khusus) — `default_commission_scheme_id`, prioritas: Project → Partner → Produk → **Default di sini** → skema tanpa cakupan (fallback lama dari Fase 9, tetap jalan berdampingan, tidak diganti)
+- [x] Pengaturan Project Claim Rule (mis. berapa lama klaim harus diproses, berapa project maksimal diklaim bersamaan) — **keduanya benar-benar ditegakkan**, bukan cuma field tersimpan: `max_concurrent_claimed_projects` dicek di `PartnerProject::claim()` (`ValidationException` kalau sudah di batas), `claim_processing_hours` ditegakkan lewat command terjadwal baru `projects:expire-stale-claims` (`->hourly()`, otomatis reject klaim yang lewat batas waktu)
+- [x] Pengaturan Partner Agreement (teks perjanjian kemitraan yang ditampilkan di Fase 1 registrasi — editable tanpa ubah kode) — dibangun di Fase 1
+- [x] Pengaturan Workflow Approval (siapa approve apa, sesuai keputusan di Fase 0) — ⚠️ **placeholder teks bebas** (`approval_workflow_notes`), bukan sistem role sungguhan — sama pola dengan "Level Partner" di Fase 1, karena `spatie/laravel-permission` belum terpasang dan pertanyaan "siapa approve apa" belum dijawab sejak Fase 0
+- [x] Pengaturan Notifikasi (kanal default, template pesan) — **"kanal default" dibangun** (`default_email_notifications_enabled`, dipakai `Register::handleRegistration()` untuk partner baru). ⚠️ **"Template pesan" (isi teks tiap jenis email/notifikasi editable admin) SENGAJA TIDAK dibangun** — perlu sistem templating dinamis menggantikan Blade view yang di-hardcode di `resources/views/emails/*.blade.php`, itu perubahan besar terpisah, bukan bagian dari fase ini.
+
+**Ini menandai semua fase di `todo_partnert.md` selesai dikerjakan**, kecuali Fase 2 (Dashboard), Fase 5 (Sales Workspace), dan Fase 8 (Project Management) yang sengaja ditunda menunggu kebutuhan data yang lebih matang (lihat catatan masing-masing di atas) — bukan lupa atau terlewat.
+
+Diverifikasi lewat `tests/Feature/PartnerSettingsExtendedTest.php` (7 test): default skema eksplisit menang lawan fallback lama tapi kalah lawan skema lebih spesifik, klaim ditolak begitu di batas concurrent (dan tidak terpengaruh kalau setting kosong), command expire-stale-claims cuma memproses yang benar-benar lewat batas waktu, registrasi baru memakai kanal notifikasi default dari setting.
 
 ---
 

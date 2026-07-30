@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class PartnerProjectResource extends Resource
 {
@@ -89,7 +90,18 @@ class PartnerProjectResource extends Resource
                     ->action(function (PartnerProject $record) {
                         $partner = Auth::guard('partner')->user();
 
-                        if (! $record->claim($partner)) {
+                        try {
+                            $claimed = $record->claim($partner);
+                        } catch (ValidationException $exception) {
+                            Notification::make()
+                                ->title(collect($exception->errors())->flatten()->first())
+                                ->danger()
+                                ->send();
+
+                            return;
+                        }
+
+                        if (! $claimed) {
                             Notification::make()
                                 ->title('Project ini baru saja diklaim partner lain')
                                 ->danger()

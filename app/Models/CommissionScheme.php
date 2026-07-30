@@ -60,10 +60,14 @@ class CommissionScheme extends Model
 
     /**
      * Priority when more than one scheme could apply to a customer:
-     * project-specific > partner-specific > service-specific > global
-     * (all three scope columns null). This ordering is an assumption -
-     * the spec doesn't state what happens when multiple schemes match,
-     * only that the three scope types "harus bisa hidup berdampingan".
+     * project-specific > partner-specific > service-specific > the
+     * explicit "Commission Scheme Default" set in Partner Settings
+     * (Fase 23) > a scope-less scheme (all three scope columns null,
+     * the older implicit-fallback convention from Fase 9 - kept working
+     * alongside the newer explicit setting, not replaced by it). This
+     * ordering is an assumption - the spec doesn't state what happens
+     * when multiple schemes match, only that the three scope types
+     * "harus bisa hidup berdampingan".
      */
     public static function resolveFor(Customer $customer): ?self
     {
@@ -89,6 +93,16 @@ class CommissionScheme extends Model
             $match = static::active()->currentlyValid()
                 ->where('service_id', $customer->service_id)
                 ->first();
+
+            if ($match) {
+                return $match;
+            }
+        }
+
+        $defaultSchemeId = PartnerSetting::current()->default_commission_scheme_id;
+
+        if ($defaultSchemeId) {
+            $match = static::active()->currentlyValid()->find($defaultSchemeId);
 
             if ($match) {
                 return $match;
