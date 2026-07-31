@@ -98,6 +98,7 @@ class AuditLogResource extends Resource
                         'created' => 'success',
                         'updated' => 'warning',
                         'deleted' => 'danger',
+                        'impersonated' => 'info',
                         default => 'gray',
                     }),
                 Tables\Columns\TextColumn::make('user_type')
@@ -124,6 +125,7 @@ class AuditLogResource extends Resource
                         'created' => 'Created',
                         'updated' => 'Updated',
                         'deleted' => 'Deleted',
+                        'impersonated' => 'Impersonated',
                     ]),
                 Tables\Filters\Filter::make('created_at')
                     ->form([

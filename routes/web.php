@@ -59,3 +59,16 @@ Route::get('/withdrawal-documents/{withdrawal}/{type}', [WithdrawalDocumentContr
 Route::get('/admin/reports/export/{report}', [ReportExportController::class, 'export'])
     ->middleware(['auth:web'])
     ->name('admin.reports.export');
+
+Route::get('/partner/stop-impersonating', function () {
+    // Guard 'web' is never touched by impersonation (see PartnerResource's
+    // 'impersonate' action) - it either was, and still is, a valid admin
+    // session, or it never was, in which case a spoofed session flag alone
+    // grants nothing (this route never performs a login, only a logout).
+    if (session()->has('impersonating_admin_id') && \Illuminate\Support\Facades\Auth::guard('web')->check()) {
+        \Illuminate\Support\Facades\Auth::guard('partner')->logout();
+        session()->forget('impersonating_admin_id');
+    }
+
+    return redirect('/admin/partners');
+})->middleware(['auth:partner'])->name('partner.stop-impersonating');

@@ -6,6 +6,7 @@ use App\Filament\Concerns\AuthorizesModule;
 use App\Filament\Resources\PartnerResource\Pages;
 use App\Mail\PartnerRegistrationApproved;
 use App\Mail\PartnerRegistrationRejected;
+use App\Models\AuditLog;
 use App\Models\Partner;
 use App\Models\SiteSetting;
 use App\Models\WorkflowAssignment;
@@ -15,6 +16,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\HtmlString;
@@ -213,6 +215,33 @@ class PartnerResource extends Resource
                                 : 'Gagal mengirim link reset password')
                             ->color($status === Password::RESET_LINK_SENT ? 'success' : 'danger')
                             ->send();
+                    }),
+                Tables\Actions\Action::make('impersonate')
+                    ->label('Login as Partner')
+                    ->icon('heroicon-o-arrow-right-on-rectangle')
+                    ->color('gray')
+                    ->requiresConfirmation()
+                    ->modalDescription(fn (Partner $record) => "Anda akan login sebagai {$record->name} di panel partner. Aktivitas ini tercatat di Audit Log.")
+                    ->visible(fn (Partner $record) => $record->status === 'approved' && auth()->user()?->can('partner.update'))
+                    ->action(function (Partner $record) {
+                        // Guard 'web' (admin) and guard 'partner' keep
+                        // separate session state, so logging into 'partner'
+                        // here doesn't touch the admin's own session at all -
+                        // "return to admin" (routes/web.php,
+                        // partner.stop-impersonating) just logs the
+                        // 'partner' guard back out, no re-login needed.
+                        AuditLog::create([
+                            'auditable_type' => Partner::class,
+                            'auditable_id' => $record->id,
+                            'user_type' => Auth::guard('web')->user()::class,
+                            'user_id' => Auth::guard('web')->id(),
+                            'action' => 'impersonated',
+                        ]);
+
+                        session(['impersonating_admin_id' => Auth::guard('web')->id()]);
+                        Auth::guard('partner')->login($record);
+
+                        return redirect('/partner');
                     }),
             ]);
     }
