@@ -32,7 +32,11 @@ class PartnerPanelProvider extends PanelProvider
             ->profile(\App\Filament\Partner\Pages\Auth\EditProfile::class)
             ->databaseNotifications()
             ->colors([
-                'primary' => Color::Indigo,
+                // Warm burnt-orange - deliberately distinct hue from the
+                // admin panel's teal (still functions as an at-a-glance
+                // "which panel am I in" cue) and reads as sales/growth
+                // energy rather than a generic Tailwind swatch name.
+                'primary' => Color::hex('#a6541a'),
             ])
             ->font('Instrument Sans')
             // Fase 2's real Dashboard (app/Filament/Partner/Pages/Dashboard.php)
