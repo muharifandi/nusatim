@@ -65,6 +65,10 @@ class PartnerPanelProvider extends PanelProvider
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 fn () => view('filament.hooks.panel-polish'),
+            )
+            ->renderHook(
+                PanelsRenderHook::BODY_START,
+                fn () => view('filament.hooks.impersonation-banner'),
             );
     }
 }
