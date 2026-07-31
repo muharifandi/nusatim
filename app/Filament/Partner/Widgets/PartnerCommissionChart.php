@@ -23,7 +23,12 @@ class PartnerCommissionChart extends ChartWidget
     protected function getData(): array
     {
         $partnerId = Auth::guard('partner')->id();
-        $months = collect(range(11, 0))->map(fn ($i) => Carbon::now()->subMonths($i)->startOfMonth());
+        // startOfMonth() BEFORE subMonths(), not after - Carbon's month
+        // arithmetic overflows when the current day doesn't exist in the
+        // target month (e.g. subtracting from the 31st lands on the 1st-3rd
+        // of the month after a 30-day month), which silently duplicates/
+        // skips months in the rolling window if done in the other order.
+        $months = collect(range(11, 0))->map(fn ($i) => Carbon::now()->startOfMonth()->subMonths($i));
 
         $sums = Commission::query()
             ->where('partner_id', $partnerId)

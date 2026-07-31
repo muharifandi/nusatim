@@ -26,6 +26,28 @@ class Reports extends Page
 
     public ?string $dateTo = null;
 
+    /**
+     * Widgets don't automatically receive this page's $dateFrom/$dateTo
+     * Livewire properties, so they show a fixed window (12 bulan
+     * terakhir/all-time) as a visual summary - the detailed tables below
+     * remain the precisely date-filtered source of truth. See the notice
+     * in reports.blade.php.
+     */
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            \App\Filament\Widgets\AdminClosingTrendChart::class,
+            \App\Filament\Widgets\AdminCommissionStatusChart::class,
+            \App\Filament\Widgets\AdminProjectStatusChart::class,
+            \App\Filament\Widgets\AdminPartnerPerformanceChart::class,
+        ];
+    }
+
+    public function getHeaderWidgetsColumns(): int|string|array
+    {
+        return 2;
+    }
+
     protected function service(): ReportService
     {
         return new ReportService($this->dateFrom, $this->dateTo);
