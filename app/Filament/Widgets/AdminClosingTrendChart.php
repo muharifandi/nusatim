@@ -17,6 +17,11 @@ class AdminClosingTrendChart extends ChartWidget
 {
     protected static ?string $heading = 'Tren Closing (12 Bulan Terakhir)';
 
+    // Matches the existing TrafficChart/BlogCategoryChart widgets - without
+    // an explicit max height the canvas has no height constraint to size
+    // against and renders squashed/oversized depending on its column width.
+    protected static ?string $maxHeight = '260px';
+
     protected int|string|array $columnSpan = 1;
 
     protected function getType(): string
@@ -50,6 +55,22 @@ class AdminClosingTrendChart extends ChartWidget
                 ],
             ],
             'labels' => $months->map(fn (Carbon $m) => $m->translatedFormat('M Y'))->all(),
+        ];
+    }
+
+    protected function getOptions(): array
+    {
+        // Without beginAtZero, Chart.js auto-scales the y-axis around
+        // whatever data exists - with an all-zero (or near-zero) dataset
+        // that produces a nonsensical floating scale (e.g. a lone "-5"
+        // tick) instead of a flat line sitting on a real 0 baseline.
+        return [
+            'scales' => [
+                'y' => [
+                    'beginAtZero' => true,
+                    'ticks' => ['precision' => 0],
+                ],
+            ],
         ];
     }
 }
