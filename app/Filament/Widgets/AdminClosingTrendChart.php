@@ -1,17 +1,21 @@
 <?php
 
-namespace App\Filament\Partner\Widgets;
+namespace App\Filament\Widgets;
 
 use App\Models\Customer;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 
-class PartnerClosingChart extends ChartWidget
+/**
+ * Reports page (Fase 22) ringkasan visual - jendela waktu tetap (12 bulan
+ * terakhir, semua partner), TIDAK ikut filter tanggal di atasnya (tabel
+ * detail di bawah tetap yang presisi sesuai filter). Widget Filament tidak
+ * otomatis menerima property Livewire dari Page induknya, jadi ini
+ * sengaja berdiri sendiri - pola sama seperti chart dashboard partner.
+ */
+class AdminClosingTrendChart extends ChartWidget
 {
-    protected static ?string $heading = 'Grafik Closing';
-
-    protected static ?int $sort = 4;
+    protected static ?string $heading = 'Tren Closing (12 Bulan Terakhir)';
 
     protected int|string|array $columnSpan = 1;
 
@@ -22,7 +26,6 @@ class PartnerClosingChart extends ChartWidget
 
     protected function getData(): array
     {
-        $partnerId = Auth::guard('partner')->id();
         // startOfMonth() BEFORE subMonths(), not after - Carbon's month
         // arithmetic overflows when the current day doesn't exist in the
         // target month (e.g. subtracting from the 31st lands on the 1st-3rd
@@ -31,7 +34,6 @@ class PartnerClosingChart extends ChartWidget
         $months = collect(range(11, 0))->map(fn ($i) => Carbon::now()->startOfMonth()->subMonths($i));
 
         $counts = Customer::query()
-            ->where('partner_id', $partnerId)
             ->where('created_at', '>=', $months->first())
             ->get()
             ->countBy(fn (Customer $c) => $c->created_at->format('Y-m'));
@@ -39,10 +41,10 @@ class PartnerClosingChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Closing',
+                    'label' => 'Customer Closing',
                     'data' => $months->map(fn (Carbon $m) => $counts->get($m->format('Y-m'), 0))->all(),
-                    'borderColor' => '#34d399',
-                    'backgroundColor' => 'rgba(52, 211, 153, 0.12)',
+                    'borderColor' => '#0f6674',
+                    'backgroundColor' => 'rgba(15, 102, 116, 0.12)',
                     'fill' => true,
                     'tension' => 0.35,
                 ],

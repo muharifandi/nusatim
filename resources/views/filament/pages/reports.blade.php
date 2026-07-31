@@ -12,6 +12,10 @@
         </div>
     </x-filament::section>
 
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+        Grafik ringkasan di bawah ini menampilkan jendela waktu tetap (12 bulan terakhir / all-time) dan tidak ikut berubah mengikuti filter tanggal di atas - tabel-tabel detail di bawahnya tetap yang presisi sesuai filter.
+    </p>
+
     @php($partner = $this->partnerReport())
     <x-filament::section>
         <x-slot name="heading">Laporan Partner</x-slot>
