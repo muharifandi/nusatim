@@ -540,6 +540,12 @@ Tiga permintaan tambahan setelah semua fase di atas selesai.
 
 Diverifikasi lewat `tests/Feature/PartnerImpersonationTest.php` (6 test), `tests/Feature/ReportsChartsTest.php` (3 test, termasuk assert eksplisit angka chart benar setelah fix bug tanggal), plus verifikasi warna/ikon lewat render HTML langsung (bukan cuma lolos compile). Full regression tetap hijau di tiap commit.
 
+**Susulan (bug report user, screenshot "hasil berantakan")** — 2 bug nyata ditemukan di 4 chart widget baru di atas:
+- 4 widget chart baru tampil visual rusak (garis chart datar dengan tick sumbu-Y "-5", doughnut kosong/blank, bar horizontal tak terlihat, satu doughnut jadi lingkaran biru penuh dengan garis putih artefak). Root cause, dibandingkan dengan `TrafficChart`/`BlogCategoryChart` (widget lama yang render benar): (a) keempatnya tidak set `$maxHeight`, jadi canvas tidak punya batas tinggi dan render squashed/oversized; (b) dataset doughnut tidak punya `borderWidth => 0`, menyebabkan garis border putih artefak antar-slice; (c) sumbu nilai line/bar tidak punya `beginAtZero`, menyebabkan Chart.js auto-scale ke tick negatif/pecahan yang tidak masuk akal untuk data sparse; (d) doughnut dengan data all-zero tetap dipaksa render lingkaran penuh oleh Chart.js (bukan blank) — sekarang ada fallback slice abu-abu tunggal "Belum ada data". Diperbaiki di keempat widget.
+- Keempat widget baru itu juga tanpa sengaja ikut nongol di Dashboard utama, padahal dimaksudkan cuma untuk halaman Reports — `AdminPanelProvider`'s `->discoverWidgets()` mendaftarkan semua widget di direktori itu secara panel-wide (global), bukan per-halaman, dan `App\Filament\Pages\Dashboard` sebelumnya tidak override `getWidgets()` jadi ikut warisan default Filament (`Filament::getWidgets()` = semua widget). Diperbaiki dengan override `getWidgets()` di `Dashboard.php` yang exclude keempat widget Reports-only tsb secara eksplisit (`array_diff`, bukan rewrite jadi allow-list, supaya widget lain yang sudah ada tidak ikut terpengaruh).
+
+Diverifikasi lewat `tests/Feature/ReportsChartsTest.php` (tetap hijau), inspeksi render HTML langsung (`max-height: 260px` muncul di keempat widget) dan Reflection-based `getWidgets()` check (Dashboard tidak lagi memuat keempat class Reports-only). Full regression 141/142 (1 gagal pre-existing tidak terkait, `ExampleTest`).
+
 ---
 
 ## Ringkasan Modul (dari spec asli)

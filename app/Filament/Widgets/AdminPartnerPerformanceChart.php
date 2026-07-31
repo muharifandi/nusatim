@@ -13,6 +13,11 @@ class AdminPartnerPerformanceChart extends ChartWidget
 {
     protected static ?string $heading = 'Top 8 Partner (Komisi Approved + Paid, All-time)';
 
+    // Matches the existing TrafficChart/BlogCategoryChart widgets - without
+    // an explicit max height the canvas has no height constraint to size
+    // against and renders squashed/oversized depending on its column width.
+    protected static ?string $maxHeight = '260px';
+
     protected int|string|array $columnSpan = 1;
 
     protected function getType(): string
@@ -47,9 +52,14 @@ class AdminPartnerPerformanceChart extends ChartWidget
     protected function getOptions(): array
     {
         // indexAxis 'y' membuat bar horizontal - lebih mudah dibaca untuk
-        // label nama partner yang panjang dibanding bar vertikal.
+        // label nama partner yang panjang dibanding bar vertikal. Dengan
+        // indexAxis 'y', sumbu NILAI (yang butuh beginAtZero) jadi 'x',
+        // bukan 'y' seperti bar chart vertikal biasa.
         return [
             'indexAxis' => 'y',
+            'scales' => [
+                'x' => ['beginAtZero' => true],
+            ],
         ];
     }
 }
