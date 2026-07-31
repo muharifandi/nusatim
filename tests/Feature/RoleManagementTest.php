@@ -39,17 +39,49 @@ class RoleManagementTest extends TestCase
     {
         $admin = User::factory()->create();
 
+        // Permission matrix form: one CheckboxList per module
+        // (permission_verbs.$module), not a flat list of permission IDs -
+        // grouping by module with short View/Create/... labels is what
+        // replaced the original single 120-item wall of "module.verb"
+        // strings that was hard to scan.
         \Livewire\Livewire::actingAs($admin)
             ->test(\App\Filament\Resources\RoleResource\Pages\ManageRoles::class)
             ->callAction('create', data: [
                 'name' => 'Staff Lead Viewer',
-                'permissions' => [
-                    Permission::where('name', 'lead.view')->value('id'),
+                'permission_verbs' => [
+                    'lead' => ['view'],
                 ],
             ]);
 
         $role = Role::where('name', 'Staff Lead Viewer')->firstOrFail();
         $this->assertTrue($role->hasPermissionTo('lead.view'));
+        $this->assertFalse($role->hasPermissionTo('lead.delete'));
+    }
+
+    public function test_admin_can_edit_a_roles_permissions_via_the_grouped_matrix(): void
+    {
+        $admin = User::factory()->create();
+        $role = Role::create(['name' => 'Editable Role', 'guard_name' => 'web']);
+        $role->syncPermissions(['lead.view']);
+
+        \Livewire\Livewire::actingAs($admin)
+            ->test(\App\Filament\Resources\RoleResource\Pages\ManageRoles::class)
+            ->mountTableAction('edit', $role)
+            ->assertTableActionDataSet(['permission_verbs' => ['lead' => ['view']]])
+            ->setTableActionData([
+                'name' => 'Editable Role',
+                'permission_verbs' => [
+                    'lead' => ['view', 'update'],
+                    'commission' => ['approve'],
+                ],
+            ])
+            ->callMountedTableAction()
+            ->assertHasNoTableActionErrors();
+
+        $role->refresh();
+        $this->assertTrue($role->hasPermissionTo('lead.view'));
+        $this->assertTrue($role->hasPermissionTo('lead.update'));
+        $this->assertTrue($role->hasPermissionTo('commission.approve'));
         $this->assertFalse($role->hasPermissionTo('lead.delete'));
     }
 
