@@ -29,7 +29,12 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                // Custom brand teal instead of a stock Tailwind-named
+                // preset (Amber/Indigo/etc are the first thing every
+                // Filament tutorial reaches for) - deep teal reads as
+                // trust/technology, distinct from the generic blue/indigo
+                // used almost everywhere else.
+                'primary' => Color::hex('#0f6674'),
             ])
             ->font('Instrument Sans')
             ->sidebarWidth('15rem')

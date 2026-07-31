@@ -27,8 +27,8 @@
             0 1px 3px 0 rgb(0 0 0 / 0.06);
     }
 
-    /* Stat widgets: accent top border + gentle hover lift so the dashboard
-       reads as a set of distinct cards rather than a flat grid of numbers */
+    /* Stat widgets: gentle hover lift so the dashboard reads as a set of
+       distinct cards rather than a flat grid of numbers */
     .fi-wi-stats-overview-stat {
         position: relative;
         overflow: hidden;
@@ -36,14 +36,6 @@
             0 1px 2px 0 rgb(0 0 0 / 0.04),
             0 1px 3px 0 rgb(0 0 0 / 0.06);
         transition: transform 150ms ease, box-shadow 150ms ease;
-    }
-
-    .fi-wi-stats-overview-stat::before {
-        content: '';
-        position: absolute;
-        inset: 0 0 auto 0;
-        height: 3px;
-        background: linear-gradient(90deg, var(--primary-600), var(--primary-300));
     }
 
     .fi-wi-stats-overview-stat:hover {
