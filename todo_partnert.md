@@ -529,6 +529,19 @@ Diverifikasi lewat `tests/Feature/AuditLogTest.php` (6 test): create model terca
 
 ---
 
+## Fase 28 — Login as Partner, Refinement Desain, Chart di Reports ✅ (selesai 2026-07-31)
+
+Tiga permintaan tambahan setelah semua fase di atas selesai.
+
+- [x] **Login as Partner (impersonation)** — action baru "Login as Partner" di `PartnerResource` (admin), digating permission `partner.update` yang sudah ada (bukan verb RBAC baru), cuma untuk partner `approved`. Guard `web` dan `partner` punya session terpisah sehingga impersonation tidak logout sesi admin — "Kembali ke Admin" (banner di panel partner selama sesi impersonasi aktif) cukup logout guard `partner`. Tercatat di Audit Log (`action='impersonated'`). Route baru `GET /partner/stop-impersonating`.
+- [x] **Refinement desain** — warna panel diganti dari preset Filament bawaan (Amber/Indigo) ke warna custom (`#0f6674` teal untuk admin, `#a6541a` terracotta untuk partner). Ditemukan & diperbaiki bug: `Stat::make()->color()` di versi Filament ini ternyata tidak benar-benar mempengaruhi ikon utama stat widget (cuma description-icon & chart yang dinamis) — diperbaiki lewat override Blade vendor (`resources/views/vendor/filament-widgets/stats-overview-widget/stat.blade.php`, pola sama seperti override pagination yang sudah ada) supaya ikon tiap stat benar-benar berwarna sesuai semantiknya. Pola "gradient bar" di atas stat card (ciri generic AI-generated) dihapus, diganti icon chip berwarna.
+- [x] **Chart di Reports** — 4 widget chart baru (`AdminClosingTrendChart`, `AdminCommissionStatusChart`, `AdminProjectStatusChart`, `AdminPartnerPerformanceChart`) di halaman Reports, jendela waktu tetap (12 bulan/all-time, tidak ikut filter tanggal di halaman — dicatat jelas, tabel detail di bawahnya tetap presisi sesuai filter).
+- [x] **Bug ditemukan & diperbaiki sekalian**: pola `Carbon::now()->subMonths($i)->startOfMonth()` (dipakai generate rentang 12 bulan terakhir) kena Carbon month-overflow persis saat tanggal hari ini 29/30/31, menghasilkan bulan duplikat/terlewat di chart. Bukan cuma di chart baru — 2 widget lama (`PartnerClosingChart`, `PartnerCommissionChart` di dashboard partner) ternyata sudah kena bug yang sama sejak dibuat. Diperbaiki di ketiganya (urutan ditukar: `startOfMonth()` dulu baru `subMonths()`).
+
+Diverifikasi lewat `tests/Feature/PartnerImpersonationTest.php` (6 test), `tests/Feature/ReportsChartsTest.php` (3 test, termasuk assert eksplisit angka chart benar setelah fix bug tanggal), plus verifikasi warna/ikon lewat render HTML langsung (bukan cuma lolos compile). Full regression tetap hijau di tiap commit.
+
+---
+
 ## Ringkasan Modul (dari spec asli)
 
 | No | Modul | Partner | Admin |
