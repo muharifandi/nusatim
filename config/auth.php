@@ -51,6 +51,14 @@ return [
             'driver' => 'session',
             'provider' => 'partners',
         ],
+
+        // Token-based (Sanctum), used only by routes/api.php for the mobile
+        // app - fully separate from the 'partner' session guard above, so
+        // the existing Filament Partner Portal panel is untouched.
+        'api' => [
+            'driver' => 'sanctum',
+            'provider' => 'partners',
+        ],
     ],
 
     /*

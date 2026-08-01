@@ -25,10 +25,19 @@ class PartnerSetting extends Model
 
     /**
      * Partner settings is a singleton - always return (and lazily create) row #1.
+     *
+     * ->refresh() after firstOrCreate() matters: when the row didn't exist
+     * yet, Eloquent's in-memory model only reflects the attributes explicitly
+     * passed to create() (just `id`), not server-side column defaults like
+     * default_email_notifications_enabled's `default(true)` - callers reading
+     * that attribute right after a lazy first-create would see null instead
+     * of true, which then fails the partners table's NOT NULL constraint
+     * when Register::handleRegistration()/AuthController::register() copy it
+     * onto a new Partner.
      */
     public static function current(): self
     {
-        return static::query()->firstOrCreate(['id' => 1]);
+        return static::query()->firstOrCreate(['id' => 1])->refresh();
     }
 
     public function defaultCommissionScheme(): BelongsTo
