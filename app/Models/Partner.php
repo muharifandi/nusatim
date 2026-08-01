@@ -11,11 +11,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Partner extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<PartnerFactory> */
-    use DeletesOldFiles, HasFactory, LogsAudit, Notifiable;
+    use DeletesOldFiles, HasApiTokens, HasFactory, LogsAudit, Notifiable;
 
     /**
      * Fixed tier list. Purely an informational business attribute (badge,
