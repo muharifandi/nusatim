@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\PartnerDocumentController;
 use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -49,8 +50,10 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
     // Authenticated AND approved - all business-data modules.
     Route::middleware(['auth:api', 'partner.approved.api'])->group(function () {
-        // dashboard, leads, pipeline, customers, projects, commissions,
-        // withdrawals, marketing-materials, support-tickets, notifications
-        // routes added in Fase 3-11
+        Route::get('dashboard', [DashboardController::class, 'summary'])->name('dashboard');
+
+        // leads, pipeline, customers, projects, commissions, withdrawals,
+        // marketing-materials, support-tickets, notifications routes added
+        // in Fase 4-11
     });
 });
