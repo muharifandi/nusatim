@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\LeadActivityController;
 use App\Http\Controllers\Api\LeadController;
 use App\Http\Controllers\Api\LeadDocumentController;
 use App\Http\Controllers\Api\LeadReminderController;
+use App\Http\Controllers\Api\MarketingMaterialController;
 use App\Http\Controllers\Api\PartnerDocumentController;
 use App\Http\Controllers\Api\PipelineController;
 use App\Http\Controllers\Api\ProfileController;
@@ -114,7 +115,11 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('{withdrawal}/documents/{type}', [WithdrawalDocumentController::class, 'show'])->name('documents');
         });
 
-        // marketing-materials, support-tickets, notifications routes added
-        // in Fase 9-11
+        Route::prefix('marketing-materials')->name('marketing-materials.')->group(function () {
+            Route::get('/', [MarketingMaterialController::class, 'index'])->name('index');
+            Route::get('{marketingMaterial}', [MarketingMaterialController::class, 'show'])->name('show');
+        });
+
+        // support-tickets, notifications routes added in Fase 10-11
     });
 });
