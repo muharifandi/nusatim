@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\PartnerDocumentController;
 use App\Http\Controllers\Api\PipelineController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\SupportTicketController;
 use App\Http\Controllers\Api\WithdrawalController;
 use App\Http\Controllers\Api\WithdrawalDocumentController;
 use Illuminate\Support\Facades\Route;
@@ -120,6 +121,12 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('{marketingMaterial}', [MarketingMaterialController::class, 'show'])->name('show');
         });
 
-        // support-tickets, notifications routes added in Fase 10-11
+        Route::prefix('support-tickets')->name('support-tickets.')->group(function () {
+            Route::get('/', [SupportTicketController::class, 'index'])->name('index');
+            Route::post('/', [SupportTicketController::class, 'store'])->name('store');
+            Route::get('{supportTicket}', [SupportTicketController::class, 'show'])->name('show');
+        });
+
+        // notifications routes added in Fase 11
     });
 });
