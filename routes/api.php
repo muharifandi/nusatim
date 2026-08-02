@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\LeadController;
 use App\Http\Controllers\Api\LeadDocumentController;
 use App\Http\Controllers\Api\LeadReminderController;
 use App\Http\Controllers\Api\MarketingMaterialController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PartnerDocumentController;
 use App\Http\Controllers\Api\PipelineController;
 use App\Http\Controllers\Api\ProfileController;
@@ -127,6 +128,11 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('{supportTicket}', [SupportTicketController::class, 'show'])->name('show');
         });
 
-        // notifications routes added in Fase 11
+        Route::prefix('notifications')->name('notifications.')->group(function () {
+            Route::get('/', [NotificationController::class, 'index'])->name('index');
+            Route::get('unread-count', [NotificationController::class, 'unreadCount'])->name('unread-count');
+            Route::patch('read-all', [NotificationController::class, 'markAllRead'])->name('read-all');
+            Route::patch('{notification}/read', [NotificationController::class, 'markRead'])->name('read');
+        });
     });
 });
