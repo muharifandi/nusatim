@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\LeadActivityController;
 use App\Http\Controllers\Api\LeadController;
@@ -82,7 +83,14 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::post('{lead}/activities', [LeadActivityController::class, 'store'])->name('activities.store');
         });
 
-        // customers, projects, commissions, withdrawals, marketing-materials,
-        // support-tickets, notifications routes added in Fase 5-11
+        Route::prefix('customers')->name('customers.')->group(function () {
+            Route::get('/', [CustomerController::class, 'index'])->name('index');
+            Route::get('{customer}', [CustomerController::class, 'show'])->name('show');
+            Route::put('{customer}', [CustomerController::class, 'update'])->name('update');
+            Route::patch('{customer}/progress', [CustomerController::class, 'updateProgress'])->name('progress');
+        });
+
+        // projects, commissions, withdrawals, marketing-materials,
+        // support-tickets, notifications routes added in Fase 6-11
     });
 });
