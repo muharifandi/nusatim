@@ -548,6 +548,39 @@ Diverifikasi lewat `tests/Feature/ReportsChartsTest.php` (tetap hijau), inspeksi
 
 ---
 
+## Fase 29 — REST API Partner Portal (Mobile) + Dokumentasi Swagger ✅ (selesai 2026-08-03)
+
+Permintaan: partner bisa akses fitur Portal Partner lewat aplikasi mobile lewat REST API, plus dokumentasi Swagger. Full paritas dengan panel Filament partner — 11 modul, 54 endpoint, semua membungkus logic model/business rule yang sudah ada (bukan menulis ulang).
+
+**Keputusan arsitektur:**
+- **Auth**: Laravel Sanctum (token Bearer), guard baru `api` (driver `sanctum`, provider `partners`) di `config/auth.php`. **Penting**: middleware route pakai `auth:api`, BUKAN `auth:sanctum` — Sanctum sendiri auto-register guard literal bernama `sanctum` dengan `provider: null` (fallback ke provider default `users`/`App\Models\User`), jadi `auth:sanctum` diam-diam salah provider kalau dipakai untuk partner.
+- **Versioning**: prefix `/api/v1/...`.
+- **Approval gating**: middleware baru `EnsurePartnerApprovedApi` (versi JSON 403 dari `EnsurePartnerApproved` yang meredirect di panel) dipasang di semua modul bisnis KECUALI auth/profile — partner `pending_review`/`rejected`/`suspended` tetap bisa urus profil sendiri & lihat status approval-nya.
+- **Dokumen privat** (foto profil/KTP/NPWP/bukti withdrawal, disk `partner_documents`): tidak pernah dikirim sebagai path mentah, selalu lewat endpoint stream ber-auth Sanctum sendiri (pola sama seperti `PartnerDocumentController`/`LeadDocumentController`/`WithdrawalDocumentController` yang sudah ada). Marketing Material (disk publik `media`) cukup `asset()` langsung.
+- **Swagger**: `darkaonline/l5-swagger`, anotasi PHP attribute (`#[OA\...]`) langsung di tiap method controller — `/api/documentation` (Swagger UI), `/docs` (JSON spec). 54 route persis 54 operasi terdokumentasi, 12 schema komponen.
+
+**11 modul (semua discope ke partner yang login, pola sama seperti Filament Resource masing-masing):**
+1. **Auth** — register (1 request multipart, field sama seperti wizard registrasi Filament), login, logout (revoke token aktif saja, multi-device diizinkan), me.
+2. **Profile** — biodata/bank/notifikasi, ganti foto/KTP/NPWP (auto-hapus file lama lewat `DeletesOldFiles`), ganti password, stream dokumen sendiri.
+3. **Dashboard** — satu payload gabungan dari 4 widget dashboard partner yang sudah ada (activity stats, finance stats, pipeline breakdown, tren closing+komisi 12 bulan), query persis sama termasuk fix Carbon month-overflow dari Fase 28.
+4. **Lead & Opportunity / Pipeline** — CRUD lead, reminder follow-up/meeting, upload dokumen/proposal, timeline+catatan, papan pipeline kanban. Transisi status won/lost tidak butuh endpoint khusus — efek sampingnya (auto-create Customer, notifikasi) hidup di `Lead::booted()`.
+5. **Customer Management** — tidak bisa create manual (selalu dari Lead Won/klaim project), update field, update progress project terkait. Reuse accessor Customer yang sudah ada (`timeline`/`follow_ups`/`meetings`/dst) kecuali `proposal_documents` yang dibangun ulang supaya mengarah ke endpoint download API sendiri (bukan route web yang digating session guard).
+6. **Project Board** — papan available+pernah diklaim, `claim()`/`cancelClaim()` didelegasikan penuh ke method model yang sudah race-safe.
+7. **Commission Management** — read-only (sama seperti `canCreate()` false di Filament).
+8. **Withdrawal** — create selalu lewat `Withdrawal::submit()` (validasi saldo/minimum di situ), endpoint tambahan `GET /withdrawals/balance`, stream dokumen KTP/bukti transfer.
+9. **Marketing Center** — read-only, dikelompokkan per kategori, `download_url` langsung `asset()` (disk publik).
+10. **Support Ticket** — partner cuma create+lihat, resolusi admin-only.
+11. **Notification Center** — wrapper tipis di atas trait `Notifiable` bawaan Laravel yang sudah dipakai `Partner`.
+
+**Bug nyata ditemukan & diperbaiki sepanjang jalan (bukan cuma di scope API, sama kelas bug — DB column default tidak terefleksi ke model in-memory setelah `create()` tanpa field itu eksplisit dikirim):**
+- `PartnerSetting::current()` — `firstOrCreate()` tidak reflect default kolom `default_email_notifications_enabled` (`true`), crash NOT NULL saat partner pertama register sebelum admin pernah buka halaman Partner Settings. Fix: `->refresh()`.
+- `bootstrap/app.php` — default `redirectGuestsTo(route('login'))` bawaan Laravel crash (`RouteNotFoundException`) untuk request tanpa header `Accept:application/json` ke route ber-`auth:` manapun, karena app ini tidak punya route bernama `login`. Fix: null-kan redirect khusus path `api/*` (biar `shouldRenderJsonWhen` yang sudah ada render 401 JSON bersih).
+- `Lead::create()`/`SupportTicket::create()` tanpa `status` eksplisit balikin `status: null` di response walau kolomnya punya DB-default (`new`/`open`) — Eloquent `create()` tidak merefleksikan default kolom ke model in-memory. Fix: default eksplisit di controller.
+
+Diverifikasi: ~65 test baru di 13 file (`tests/Feature/Api/*ApiTest.php`), full regression 216/217 (1 gagal pre-existing tidak terkait, `ExampleTest`), `swagger:generate` sukses (54 operasi = 54 route persis, 12 schema), spot-check end-to-end lewat curl ke server dev asli (register → login → me → stream dokumen → logout → token ditolak).
+
+---
+
 ## Ringkasan Modul (dari spec asli)
 
 | No | Modul | Partner | Admin |
