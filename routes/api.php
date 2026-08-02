@@ -2,7 +2,12 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\LeadActivityController;
+use App\Http\Controllers\Api\LeadController;
+use App\Http\Controllers\Api\LeadDocumentController;
+use App\Http\Controllers\Api\LeadReminderController;
 use App\Http\Controllers\Api\PartnerDocumentController;
+use App\Http\Controllers\Api\PipelineController;
 use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,8 +57,32 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::middleware(['auth:api', 'partner.approved.api'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'summary'])->name('dashboard');
 
-        // leads, pipeline, customers, projects, commissions, withdrawals,
-        // marketing-materials, support-tickets, notifications routes added
-        // in Fase 4-11
+        Route::get('pipeline', [PipelineController::class, 'board'])->name('pipeline.board');
+
+        Route::prefix('leads')->name('leads.')->group(function () {
+            Route::get('/', [LeadController::class, 'index'])->name('index');
+            Route::post('/', [LeadController::class, 'store'])->name('store');
+            Route::get('{lead}', [LeadController::class, 'show'])->name('show');
+            Route::put('{lead}', [LeadController::class, 'update'])->name('update');
+            Route::patch('{lead}/status', [LeadController::class, 'updateStatus'])->name('status');
+            Route::delete('{lead}', [LeadController::class, 'destroy'])->name('destroy');
+
+            Route::get('{lead}/reminders', [LeadReminderController::class, 'index'])->name('reminders.index');
+            Route::post('{lead}/reminders', [LeadReminderController::class, 'store'])->name('reminders.store');
+            Route::put('{lead}/reminders/{reminder}', [LeadReminderController::class, 'update'])->name('reminders.update');
+            Route::patch('{lead}/reminders/{reminder}/complete', [LeadReminderController::class, 'complete'])->name('reminders.complete');
+            Route::delete('{lead}/reminders/{reminder}', [LeadReminderController::class, 'destroy'])->name('reminders.destroy');
+
+            Route::get('{lead}/documents', [LeadDocumentController::class, 'index'])->name('documents.index');
+            Route::post('{lead}/documents', [LeadDocumentController::class, 'store'])->name('documents.store');
+            Route::get('{lead}/documents/{document}/download', [LeadDocumentController::class, 'download'])->name('documents.download');
+            Route::delete('{lead}/documents/{document}', [LeadDocumentController::class, 'destroy'])->name('documents.destroy');
+
+            Route::get('{lead}/activities', [LeadActivityController::class, 'index'])->name('activities.index');
+            Route::post('{lead}/activities', [LeadActivityController::class, 'store'])->name('activities.store');
+        });
+
+        // customers, projects, commissions, withdrawals, marketing-materials,
+        // support-tickets, notifications routes added in Fase 5-11
     });
 });
