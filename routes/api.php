@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\LeadReminderController;
 use App\Http\Controllers\Api\PartnerDocumentController;
 use App\Http\Controllers\Api\PipelineController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -90,7 +91,14 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::patch('{customer}/progress', [CustomerController::class, 'updateProgress'])->name('progress');
         });
 
-        // projects, commissions, withdrawals, marketing-materials,
-        // support-tickets, notifications routes added in Fase 6-11
+        Route::prefix('projects')->name('projects.')->group(function () {
+            Route::get('/', [ProjectController::class, 'index'])->name('index');
+            Route::get('{project}', [ProjectController::class, 'show'])->name('show');
+            Route::post('{project}/claim', [ProjectController::class, 'claim'])->name('claim');
+            Route::post('{project}/cancel-claim', [ProjectController::class, 'cancelClaim'])->name('cancel-claim');
+        });
+
+        // commissions, withdrawals, marketing-materials, support-tickets,
+        // notifications routes added in Fase 7-11
     });
 });
