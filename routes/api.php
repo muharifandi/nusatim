@@ -12,6 +12,8 @@ use App\Http\Controllers\Api\PartnerDocumentController;
 use App\Http\Controllers\Api\PipelineController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\WithdrawalController;
+use App\Http\Controllers\Api\WithdrawalDocumentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -104,7 +106,15 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('{commission}', [CommissionController::class, 'show'])->name('show');
         });
 
-        // withdrawals, marketing-materials, support-tickets, notifications
-        // routes added in Fase 8-11
+        Route::prefix('withdrawals')->name('withdrawals.')->group(function () {
+            Route::get('balance', [WithdrawalController::class, 'balance'])->name('balance');
+            Route::get('/', [WithdrawalController::class, 'index'])->name('index');
+            Route::post('/', [WithdrawalController::class, 'store'])->name('store');
+            Route::get('{withdrawal}', [WithdrawalController::class, 'show'])->name('show');
+            Route::get('{withdrawal}/documents/{type}', [WithdrawalDocumentController::class, 'show'])->name('documents');
+        });
+
+        // marketing-materials, support-tickets, notifications routes added
+        // in Fase 9-11
     });
 });
