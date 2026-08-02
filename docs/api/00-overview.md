@@ -21,6 +21,8 @@ Dokumentasi tiap grup endpoint ada di file terpisah di folder ini:
 
 Selain itu, ada folder [testing/](testing/00-overview.md) berisi **skenario test** per grup yang sama (satu file per modul, penomoran sama) — daftar kasus uji (happy path, validasi gagal, kepemilikan data, dsb) yang diambil langsung dari test otomatis backend yang sudah hijau. Cocok dipakai sebagai checklist QA atau referensi saat menulis unit/instrumented test di sisi Android.
 
+Untuk spesifikasi **layar aplikasi** (layout, komponen, state, navigasi, sistem desain Material 3) yang memetakan tiap modul API ini ke UI mobile, lihat [../mobile-ui/00-overview.md](../mobile-ui/00-overview.md).
+
 Ada juga dokumentasi interaktif (Swagger UI) di `/api/documentation` pada server yang sama — kalau butuh coba langsung endpoint dari browser atau lihat schema JSON mentahnya, itu tempatnya. File-file `.md` di folder ini fokus ke *cara pakai* dan *alasan di balik perilakunya*, bukan cuma daftar field.
 
 ## Base URL
