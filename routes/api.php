@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CommissionController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\LeadActivityController;
@@ -98,7 +99,12 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::post('{project}/cancel-claim', [ProjectController::class, 'cancelClaim'])->name('cancel-claim');
         });
 
-        // commissions, withdrawals, marketing-materials, support-tickets,
-        // notifications routes added in Fase 7-11
+        Route::prefix('commissions')->name('commissions.')->group(function () {
+            Route::get('/', [CommissionController::class, 'index'])->name('index');
+            Route::get('{commission}', [CommissionController::class, 'show'])->name('show');
+        });
+
+        // withdrawals, marketing-materials, support-tickets, notifications
+        // routes added in Fase 8-11
     });
 });
