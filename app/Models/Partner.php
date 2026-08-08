@@ -57,15 +57,12 @@ class Partner extends Authenticatable implements FilamentUser
         'remember_token',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-            'approved_at' => 'datetime',
-            'agreement_accepted_at' => 'datetime',
-            'email_notifications_enabled' => 'boolean',
-        ];
-    }
+    protected $casts = [
+        'password' => 'hashed',
+        'approved_at' => 'datetime',
+        'agreement_accepted_at' => 'datetime',
+        'email_notifications_enabled' => 'boolean',
+    ];
 
     /**
      * Approval status is gated by EnsurePartnerApproved (redirects

@@ -8,6 +8,7 @@ use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,7 +29,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // We already vendor-published and committed our own
+        // personal_access_tokens migration (database/migrations/
+        // 2026_08_01_194208_create_personal_access_tokens_table.php) -
+        // Sanctum's own loadMigrationsFrom() would otherwise also try to
+        // create the same table and collide with it.
+        Sanctum::ignoreMigrations();
     }
 
     /**

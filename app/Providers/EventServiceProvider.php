@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+
+class EventServiceProvider extends ServiceProvider
+{
+    /**
+     * The event to listener mappings for the application.
+     *
+     * No custom Event/Listener classes exist in this app.
+     *
+     * @var array<class-string, array<int, class-string>>
+     */
+    protected $listen = [
+        //
+    ];
+
+    /**
+     * Register any events for your application.
+     */
+    public function boot(): void
+    {
+        //
+    }
+}

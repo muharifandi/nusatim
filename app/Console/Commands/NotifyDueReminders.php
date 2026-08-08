@@ -4,14 +4,14 @@ namespace App\Console\Commands;
 
 use App\Models\LeadReminder;
 use Filament\Notifications\Notification;
-use Illuminate\Console\Attributes\Description;
-use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
-#[Signature('reminders:notify-due')]
-#[Description('Send a database notification to the owning partner for any lead reminder whose time has arrived.')]
 class NotifyDueReminders extends Command
 {
+    protected $signature = 'reminders:notify-due';
+
+    protected $description = 'Send a database notification to the owning partner for any lead reminder whose time has arrived.';
+
     public function handle(): int
     {
         $reminders = LeadReminder::query()

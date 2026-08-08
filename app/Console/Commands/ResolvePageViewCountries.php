@@ -4,14 +4,14 @@ namespace App\Console\Commands;
 
 use App\Models\PageView;
 use App\Services\GeoLookupService;
-use Illuminate\Console\Attributes\Description;
-use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
-#[Signature('pageviews:resolve-countries {--limit=50}')]
-#[Description('Resolve country for recently logged page views that don\'t have one yet.')]
 class ResolvePageViewCountries extends Command
 {
+    protected $signature = 'pageviews:resolve-countries {--limit=50}';
+
+    protected $description = 'Resolve country for recently logged page views that don\'t have one yet.';
+
     public function handle(GeoLookupService $geo): int
     {
         $limit = (int) $this->option('limit');
