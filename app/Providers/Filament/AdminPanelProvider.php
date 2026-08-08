@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->passwordReset()
             ->colors([
                 // Custom brand teal instead of a stock Tailwind-named
                 // preset (Amber/Indigo/etc are the first thing every

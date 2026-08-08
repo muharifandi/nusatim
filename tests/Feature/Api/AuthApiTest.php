@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\Api;
 
+use App\Mail\PartnerPasswordResetRequested;
 use App\Mail\PartnerRegistrationReceived;
 use App\Models\Partner;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -119,6 +121,81 @@ class AuthApiTest extends TestCase
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['email']);
+    }
+
+    public function test_forgot_password_sends_reset_email_for_existing_partner(): void
+    {
+        Mail::fake();
+        $partner = Partner::factory()->create(['email' => 'budi@example.com']);
+
+        $response = $this->postJson('/api/v1/auth/forgot-password', [
+            'email' => 'budi@example.com',
+        ]);
+
+        $response->assertOk();
+        Mail::assertSent(PartnerPasswordResetRequested::class, fn ($mail) => $mail->partner->is($partner) && ! empty($mail->token));
+    }
+
+    public function test_forgot_password_returns_generic_message_and_sends_nothing_for_unknown_email(): void
+    {
+        Mail::fake();
+
+        $response = $this->postJson('/api/v1/auth/forgot-password', [
+            'email' => 'tidak-ada@example.com',
+        ]);
+
+        // Same response as the "found" case above - avoids leaking which
+        // emails have a partner account.
+        $response->assertOk();
+        $response->assertJsonPath('message', 'Jika email terdaftar, kode reset password telah dikirim.');
+        Mail::assertNothingSent();
+    }
+
+    public function test_partner_can_reset_password_with_a_valid_token(): void
+    {
+        $partner = Partner::factory()->create([
+            'email' => 'budi@example.com',
+            'password' => Hash::make('old-password'),
+        ]);
+        $oldToken = $partner->createToken('mobile')->plainTextToken;
+        $resetToken = Password::broker('partners')->createToken($partner);
+
+        $response = $this->postJson('/api/v1/auth/reset-password', [
+            'email' => 'budi@example.com',
+            'token' => $resetToken,
+            'password' => 'new-password-123',
+            'password_confirmation' => 'new-password-123',
+        ]);
+
+        $response->assertOk();
+        $this->assertTrue(Hash::check('new-password-123', $partner->fresh()->password));
+
+        // Resetting the password should revoke pre-existing API tokens.
+        $this->assertDatabaseCount('personal_access_tokens', 0);
+
+        $this->postJson('/api/v1/auth/login', [
+            'email' => 'budi@example.com',
+            'password' => 'new-password-123',
+        ])->assertOk();
+    }
+
+    public function test_reset_password_fails_with_an_invalid_token(): void
+    {
+        $partner = Partner::factory()->create([
+            'email' => 'budi@example.com',
+            'password' => Hash::make('old-password'),
+        ]);
+
+        $response = $this->postJson('/api/v1/auth/reset-password', [
+            'email' => 'budi@example.com',
+            'token' => 'not-a-real-token',
+            'password' => 'new-password-123',
+            'password_confirmation' => 'new-password-123',
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['email']);
+        $this->assertTrue(Hash::check('old-password', $partner->fresh()->password));
     }
 
     public function test_logout_revokes_the_current_token(): void

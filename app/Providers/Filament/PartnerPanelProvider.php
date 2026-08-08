@@ -26,6 +26,13 @@ class PartnerPanelProvider extends PanelProvider
             ->id('partner')
             ->path('partner')
             ->authGuard('partner')
+            // Without this, Filament's password-reset flow falls back to the
+            // default 'users' broker (config('auth.defaults.passwords')) even
+            // though this panel authenticates against the 'partner' guard -
+            // it would silently look up the reset token/email against the
+            // `users` table instead of `partners`, so a partner's "forgot
+            // password" would never find their account.
+            ->authPasswordBroker('partners')
             ->login()
             ->registration(\App\Filament\Partner\Pages\Auth\Register::class)
             ->passwordReset()

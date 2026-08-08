@@ -579,6 +579,20 @@ Permintaan: partner bisa akses fitur Portal Partner lewat aplikasi mobile lewat 
 
 Diverifikasi: ~65 test baru di 13 file (`tests/Feature/Api/*ApiTest.php`), full regression 216/217 (1 gagal pre-existing tidak terkait, `ExampleTest`), `swagger:generate` sukses (54 operasi = 54 route persis, 12 schema), spot-check end-to-end lewat curl ke server dev asli (register → login → me → stream dokumen → logout → token ditolak).
 
+## Fase 30 — Lupa Password (Admin, Partner Web, Mobile API) ✅ (selesai 2026-08-09)
+
+Permintaan: tambahkan fitur lupa password di ketiga permukaan login yang ada (panel Admin, panel Partner web, API mobile).
+
+**Temuan penting — bug laten di panel Partner:** `PartnerPanelProvider` sudah punya `->passwordReset()` sejak awal, tapi **tanpa** `->authPasswordBroker('partners')` eksplisit. Filament resolve broker password lewat `Filament::getAuthPasswordBroker()`, yang default-nya `null` lalu jatuh ke `config('auth.defaults.passwords')` = `'users'` — BUKAN ikut `authGuard('partner')` secara otomatis. Akibatnya kalau partner klik "Lupa Password", sistem diam-diam mencari email itu di tabel `users` (staf admin), bukan `partners` — partner manapun yang lupa password tidak akan pernah menerima email reset. Fix: tambah `->authPasswordBroker('partners')` di `PartnerPanelProvider`.
+
+**Perubahan lain:**
+- `AdminPanelProvider` — tambah `->passwordReset()` (sebelumnya tidak ada sama sekali, cuma `->login()`). Broker `users` sudah benar secara default, tidak perlu `authPasswordBroker()` eksplisit.
+- **Mobile API** — 2 endpoint baru: `POST /api/v1/auth/forgot-password` (publik, selalu balas pesan generik terlepas email terdaftar atau tidak — cegah enumerasi akun) dan `POST /api/v1/auth/reset-password` (publik, tukar kode+password baru). Keduanya lewat `Password::broker('partners')` langsung (bukan lewat halaman Filament), dengan Mailable baru `App\Mail\PartnerPasswordResetRequested` (bukan `Illuminate\Auth\Notifications\ResetPassword` bawaan — notifikasi bawaan itu butuh route bernama `password.reset` yang tidak ada di app API-only ini, akan throw `RouteNotFoundException` kalau dipakai apa adanya). Reset password sukses **mencabut semua token API partner itu** (`$partner->tokens()->delete()`) supaya token yang mungkin bocor tidak tetap valid.
+
+**Gotcha lain yang ditemukan saat verifikasi (bukan bug, tapi mudah salah simulasi):** `Filament\Notifications\Auth\ResetPassword` (dipakai internal oleh halaman Filament sendiri) juga `implements ShouldQueue` — sama seperti gotcha notifikasi Filament yang sudah didokumentasikan di README (lihat bagian Konfigurasi/Troubleshooting `QUEUE_CONNECTION`). Saat `QUEUE_CONNECTION=database` tanpa worker jalan, email reset password panel Admin/Partner juga akan nyangkut sebagai job tertunda, bukan gagal — ini bukan regresi dari perubahan Fase 30, murni karakteristik package yang baru kelihatan begitu fitur ini dipakai untuk pertama kali.
+
+Diverifikasi: 4 test baru di `AuthApiTest.php` (forgot-password sukses/email-tak-terdaftar, reset-password sukses/token-salah), full regression 220/221 (1 gagal pre-existing tidak terkait, `ExampleTest`). End-to-end manual: curl penuh untuk mobile (forgot → ambil kode dari log mail → reset → login pakai password baru → token lama tercabut → replay kode ditolak), simulasi persis alur internal Filament (`Password::broker()->sendResetLink()` dengan callback yang sama seperti `RequestPasswordReset` page) untuk kedua panel Admin dan Partner, drain `queue:work` untuk verifikasi isi email & URL reset ter-scope ke panel yang benar (`/admin/password-reset/reset?...` vs `/partner/password-reset/reset?...`, masing-masing dengan signature valid).
+
 ---
 
 ## Ringkasan Modul (dari spec asli)

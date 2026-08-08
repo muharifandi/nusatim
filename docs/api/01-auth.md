@@ -7,6 +7,7 @@ Registrasi, login, dan logout partner. Ini satu-satunya grup yang punya endpoint
 - **Register** menerima semua data sekaligus dalam satu request (akun, dokumen KYC, rekening bank, persetujuan perjanjian) — beda dari panel web yang membaginya jadi wizard 4 langkah, tapi hasil akhirnya sama: partner baru langsung berstatus `pending_review`, menunggu admin approve. Email konfirmasi otomatis terkirim ke partner.
 - **Login** memverifikasi email+password, lalu menerbitkan token baru. Token lama (dari login sebelumnya, device lain) tetap berlaku — tidak ada logout paksa di device lain.
 - **Logout** cuma mencabut token yang sedang dipakai request itu sendiri. Kalau partner login di 2 device, logout di device A tidak memengaruhi sesi di device B.
+- **Lupa password** dua langkah: `forgot-password` mengirim kode ke email, lalu `reset-password` menukar kode itu + password baru. Kode berlaku 60 menit, sekali pakai, dan me-revoke **semua** token API partner tersebut begitu password berhasil direset (device lain otomatis ter-logout, mencegah token lama yang mungkin bocor tetap valid).
 - Tidak ada endpoint "refresh token" — token Sanctum tidak kedaluwarsa otomatis, jadi tidak perlu mekanisme refresh.
 
 ---
@@ -111,6 +112,79 @@ Simpan `token` untuk dipakai di header `Authorization: Bearer <token>` pada semu
   "message": "The email field is required. (and 1 more error)",
   "errors": {
     "email": ["Email atau password salah."]
+  }
+}
+```
+
+---
+
+## `POST /auth/forgot-password`
+
+Publik, tidak butuh token.
+
+**Request** — JSON:
+
+```json
+{
+  "email": "budi@example.com"
+}
+```
+
+Kalau email terdaftar, sistem mengirim email berisi kode reset (berlaku 60 menit) ke partner tersebut. Tampilkan layar "Masukkan kode + password baru" setelah request ini sukses.
+
+**Response — selalu `200 OK`**, terlepas email terdaftar atau tidak (sengaja disamakan supaya orang luar tidak bisa menebak email mana yang punya akun):
+
+```json
+{
+  "message": "Jika email terdaftar, kode reset password telah dikirim."
+}
+```
+
+**Response gagal — `422 Unprocessable Content`** (terlalu sering meminta kode untuk email yang sama dalam waktu singkat)
+
+```json
+{
+  "message": "Mohon tunggu sebelum meminta kode reset password lagi.",
+  "errors": {
+    "email": ["Mohon tunggu sebelum meminta kode reset password lagi."]
+  }
+}
+```
+
+---
+
+## `POST /auth/reset-password`
+
+Publik, tidak butuh token.
+
+**Request** — JSON:
+
+```json
+{
+  "email": "budi@example.com",
+  "token": "a973fcaa717032e1024e800f7c7a9170a08c3a0f01af42bb7c3801cdb8483567",
+  "password": "password_baru_123",
+  "password_confirmation": "password_baru_123"
+}
+```
+
+`token` adalah kode dari email `forgot-password`. Setelah sukses, **semua token API partner ini dicabut** (termasuk yang sedang dipakai device lain) — partner perlu login ulang dengan password baru di setiap device.
+
+**Response sukses — `200 OK`**
+
+```json
+{
+  "message": "Password berhasil direset, silakan login dengan password baru."
+}
+```
+
+**Response gagal — `422 Unprocessable Content`** (kode salah, sudah dipakai, atau sudah kedaluwarsa)
+
+```json
+{
+  "message": "Kode reset password tidak valid atau sudah kedaluwarsa.",
+  "errors": {
+    "email": ["Kode reset password tidak valid atau sudah kedaluwarsa."]
   }
 }
 ```

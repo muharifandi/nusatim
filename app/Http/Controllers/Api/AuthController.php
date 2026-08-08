@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\ForgotPasswordRequest;
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Requests\Api\RegisterPartnerRequest;
+use App\Http\Requests\Api\ResetPasswordRequest;
 use App\Http\Resources\Api\PartnerResource;
+use App\Mail\PartnerPasswordResetRequested;
 use App\Mail\PartnerRegistrationReceived;
 use App\Models\Partner;
 use App\Models\PartnerSetting;
 use App\Models\SiteSetting;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use OpenApi\Attributes as OA;
 
@@ -123,6 +128,100 @@ class AuthController extends Controller
         return response()->json([
             'token' => $token,
             'partner' => new PartnerResource($partner),
+        ]);
+    }
+
+    #[OA\Post(
+        path: '/auth/forgot-password',
+        tags: ['Auth'],
+        summary: 'Minta kode reset password',
+        description: 'Mengirim kode reset password ke email partner (berlaku 60 menit). Selalu mengembalikan pesan sukses yang sama baik email terdaftar maupun tidak, untuk mencegah enumerasi akun.',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['email'],
+                properties: [
+                    new OA\Property(property: 'email', type: 'string', format: 'email'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: 'Jika email terdaftar, kode reset dikirim', content: new OA\JsonContent(properties: [
+                new OA\Property(property: 'message', type: 'string'),
+            ])),
+            new OA\Response(response: 422, description: 'Validasi gagal / terlalu sering meminta ulang'),
+        ]
+    )]
+    public function forgotPassword(ForgotPasswordRequest $request): JsonResponse
+    {
+        $status = Password::broker('partners')->sendResetLink(
+            $request->only('email'),
+            function (Partner $partner, string $token): void {
+                Mail::to($partner->email)->send(
+                    new PartnerPasswordResetRequested($partner, $token, SiteSetting::current())
+                );
+            }
+        );
+
+        if ($status === Password::RESET_THROTTLED) {
+            throw ValidationException::withMessages([
+                'email' => ['Mohon tunggu sebelum meminta kode reset password lagi.'],
+            ]);
+        }
+
+        // Same response whether or not the email is registered - avoids
+        // leaking which emails have a partner account.
+        return response()->json([
+            'message' => 'Jika email terdaftar, kode reset password telah dikirim.',
+        ]);
+    }
+
+    #[OA\Post(
+        path: '/auth/reset-password',
+        tags: ['Auth'],
+        summary: 'Reset password menggunakan kode dari email',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['email', 'token', 'password', 'password_confirmation'],
+                properties: [
+                    new OA\Property(property: 'email', type: 'string', format: 'email'),
+                    new OA\Property(property: 'token', type: 'string', description: 'Kode dari email reset password'),
+                    new OA\Property(property: 'password', type: 'string', format: 'password'),
+                    new OA\Property(property: 'password_confirmation', type: 'string', format: 'password'),
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: 'Password berhasil direset', content: new OA\JsonContent(properties: [
+                new OA\Property(property: 'message', type: 'string'),
+            ])),
+            new OA\Response(response: 422, description: 'Kode tidak valid/kedaluwarsa, atau validasi gagal'),
+        ]
+    )]
+    public function resetPassword(ResetPasswordRequest $request): JsonResponse
+    {
+        $status = Password::broker('partners')->reset(
+            $request->only('email', 'token', 'password', 'password_confirmation'),
+            function (Partner $partner, string $password): void {
+                $partner->forceFill(['password' => Hash::make($password)])->save();
+
+                // Revoke existing API tokens so a stolen/leaked token can't
+                // keep a session alive after the partner resets their password.
+                $partner->tokens()->delete();
+
+                event(new PasswordReset($partner));
+            }
+        );
+
+        if ($status !== Password::PASSWORD_RESET) {
+            throw ValidationException::withMessages([
+                'email' => ['Kode reset password tidak valid atau sudah kedaluwarsa.'],
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Password berhasil direset, silakan login dengan password baru.',
         ]);
     }
 
