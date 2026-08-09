@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Models\SiteSetting;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -17,6 +18,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -28,7 +30,11 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->passwordReset()
+            ->passwordReset(\App\Filament\Pages\Auth\RequestPasswordReset::class)
+            ->favicon(fn () => static::siteAsset('favicon'))
+            ->brandLogo(fn () => static::siteAsset('logo_dark'))
+            ->darkModeBrandLogo(fn () => static::siteAsset('logo_light'))
+            ->brandLogoHeight('2.25rem')
             ->colors([
                 // Custom brand teal instead of a stock Tailwind-named
                 // preset (Amber/Indigo/etc are the first thing every
@@ -94,5 +100,21 @@ class AdminPanelProvider extends PanelProvider
                     \App\Filament\Widgets\RecentActivity::class,
                 ],
             );
+    }
+
+    /**
+     * Resolves a SiteSetting file field (favicon, logo_dark, logo_light) to
+     * a public URL, or null to fall back to Filament's own default - guarded
+     * against running before the site_settings table/migration exists.
+     */
+    private static function siteAsset(string $field): ?string
+    {
+        if (! Schema::hasTable('site_settings')) {
+            return null;
+        }
+
+        $path = SiteSetting::current()->{$field};
+
+        return $path ? asset($path) : null;
     }
 }

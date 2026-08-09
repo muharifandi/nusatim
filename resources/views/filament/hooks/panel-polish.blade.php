@@ -50,6 +50,14 @@
         box-shadow: 1px 0 0 0 rgb(0 0 0 / 0.04);
     }
 
+    /* Sidebar nav groups: Filament's default gap-y-7 (28px) between each
+       collapsed group (Partner Management, Commission & Withdrawal, ...)
+       reads as too much dead space between short one-line headers - tighten
+       it to something a dense admin sidebar actually needs. */
+    .fi-sidebar-nav-groups {
+        row-gap: 0.5rem;
+    }
+
     .fi-sidebar-item.fi-active .fi-sidebar-item-button {
         box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     }

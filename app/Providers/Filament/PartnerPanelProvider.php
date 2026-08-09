@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Http\Middleware\EnsurePartnerApproved;
+use App\Models\SiteSetting;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -16,6 +17,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class PartnerPanelProvider extends PanelProvider
@@ -35,9 +37,13 @@ class PartnerPanelProvider extends PanelProvider
             ->authPasswordBroker('partners')
             ->login()
             ->registration(\App\Filament\Partner\Pages\Auth\Register::class)
-            ->passwordReset()
+            ->passwordReset(\App\Filament\Partner\Pages\Auth\RequestPasswordReset::class)
             ->profile(\App\Filament\Partner\Pages\Auth\EditProfile::class)
             ->databaseNotifications()
+            ->favicon(fn () => static::siteAsset('favicon'))
+            ->brandLogo(fn () => static::siteAsset('logo_dark'))
+            ->darkModeBrandLogo(fn () => static::siteAsset('logo_light'))
+            ->brandLogoHeight('2.25rem')
             ->colors([
                 // Warm burnt-orange - deliberately distinct hue from the
                 // admin panel's teal (still functions as an at-a-glance
@@ -81,5 +87,21 @@ class PartnerPanelProvider extends PanelProvider
                 PanelsRenderHook::BODY_START,
                 fn () => view('filament.hooks.impersonation-banner'),
             );
+    }
+
+    /**
+     * Resolves a SiteSetting file field (favicon, logo_dark, logo_light) to
+     * a public URL, or null to fall back to Filament's own default - guarded
+     * against running before the site_settings table/migration exists.
+     */
+    private static function siteAsset(string $field): ?string
+    {
+        if (! Schema::hasTable('site_settings')) {
+            return null;
+        }
+
+        $path = SiteSetting::current()->{$field};
+
+        return $path ? asset($path) : null;
     }
 }

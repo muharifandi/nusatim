@@ -35,6 +35,10 @@ class PageResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Toggle::make('is_active')
+                    ->label('Aktif')
+                    ->helperText('Nonaktifkan untuk membuat halaman ini 404 di situs publik, tanpa menghapus datanya.')
+                    ->default(true),
                 Forms\Components\TextInput::make('meta_title')
                     ->maxLength(255)
                     ->default(null),
@@ -65,6 +69,8 @@ class PageResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->label('Aktif'),
                 Tables\Columns\TextColumn::make('meta_title')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('meta_description')

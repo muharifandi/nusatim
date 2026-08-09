@@ -12,6 +12,7 @@ class Page extends Model
     protected $fillable = [
         'slug',
         'name',
+        'is_active',
         'meta_title',
         'meta_description',
         'meta_keywords',
@@ -21,6 +22,7 @@ class Page extends Model
 
     protected $casts = [
         'content' => 'array',
+        'is_active' => 'boolean',
     ];
 
     /**
@@ -31,9 +33,20 @@ class Page extends Model
         return data_get($this->content, $key, $default);
     }
 
+    /**
+     * Every public controller (Home, About, Blog, ...) looks its page up
+     * this way and treats the result the same - abort 404 here rather than
+     * in each of the 10 call sites when an admin deactivates a page. Admin
+     * editing goes through Eloquent directly (PageResource), not this
+     * method, so deactivated pages stay editable in the panel.
+     */
     public static function bySlug(string $slug): ?self
     {
-        return static::query()->where('slug', $slug)->first();
+        $page = static::query()->where('slug', $slug)->first();
+
+        abort_if($page && ! $page->is_active, 404);
+
+        return $page;
     }
 
     protected function fileFields(): array
