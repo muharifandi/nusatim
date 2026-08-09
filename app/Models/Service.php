@@ -16,6 +16,8 @@ class Service extends Model
         'image',
         'short_description',
         'cta_url',
+        'cta_text',
+        'cta_visible',
         'content',
         'features',
         'order',
@@ -27,6 +29,7 @@ class Service extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'cta_visible' => 'boolean',
         'features' => 'array',
     ];
 

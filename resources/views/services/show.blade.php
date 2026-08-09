@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+	<link rel="stylesheet" href="{{ asset('assets/css/services-detail.css') }}?v={{ filemtime(public_path('assets/css/services-detail.css')) }}">
+
 	@include('partials.page-banner', ['title' => $service->title, 'breadcrumbParent' => 'Layanan'])
 
 	<section class="service-details-wrap section-padding-md-equal bg-color-accent2">

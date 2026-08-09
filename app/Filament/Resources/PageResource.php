@@ -71,7 +71,31 @@ class PageResource extends Resource
                     ->valueLabel('Text')
                     ->reorderable()
                     ->columnSpanFull()
-                    ->helperText('Semua judul/label/teks section untuk halaman ini. Contoh key untuk Home: hero_title, hero_subtitle, hero_text, about_preview_title, dst. Untuk halaman Layanan, gambar about_1_image/about_2_image diatur lewat uploader di atas, bukan di sini.'),
+                    ->helperText('Semua judul/label/teks section untuk halaman ini. Contoh key untuk Home: hero_title, hero_subtitle, hero_text, about_preview_title, dst. Untuk halaman Layanan, gambar about_1_image/about_2_image dan tombol "Selengkapnya" diatur lewat field khusus di bawah, bukan di sini. Teks/URL tombol "Selengkapnya" pada card layanan diatur per-layanan di menu Website > Services (setiap layanan tombolnya beda tujuan).'),
+                Forms\Components\Section::make('Tombol "Selengkapnya" section About (khusus halaman Layanan)')
+                    ->visible(fn (?Page $record) => $record?->slug === 'services')
+                    ->schema([
+                        Forms\Components\TextInput::make('content.about_1_button_text')
+                            ->label('Teks tombol - "Kolaborasi Erat dengan Tim Anda"')
+                            ->placeholder('Selengkapnya')
+                            ->maxLength(100),
+                        Forms\Components\TextInput::make('content.about_1_button_url')
+                            ->label('URL tombol - "Kolaborasi Erat dengan Tim Anda"')
+                            ->placeholder('/about')
+                            ->helperText('Kosongkan untuk mengarah ke halaman About.')
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('content.about_2_button_text')
+                            ->label('Teks tombol - "Solusi yang Dibangun untuk Bertumbuh"')
+                            ->placeholder('Selengkapnya')
+                            ->maxLength(100),
+                        Forms\Components\TextInput::make('content.about_2_button_url')
+                            ->label('URL tombol - "Solusi yang Dibangun untuk Bertumbuh"')
+                            ->placeholder('/about')
+                            ->helperText('Kosongkan untuk mengarah ke halaman About.')
+                            ->maxLength(255),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 

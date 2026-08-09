@@ -1,0 +1,10 @@
+/*
+ * Service detail page (/services/{slug}) - only fix needed so far: the
+ * 4 feature badges reserve 2 lines of title height always, so a longer
+ * title wrapping to 2 lines doesn't make that one card taller than its
+ * siblings. Verified via grep that .feature-item/.service-details-box
+ * are exclusive to services/show.blade.php.
+ */
+.service-details-box .feature-item .feature-title {
+	min-height: 52px;
+}

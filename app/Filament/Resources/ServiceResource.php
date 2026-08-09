@@ -45,10 +45,18 @@ class ServiceResource extends Resource
                 Forms\Components\TextInput::make('short_description')
                     ->maxLength(500)
                     ->default(null),
+                Forms\Components\TextInput::make('cta_text')
+                    ->label('Teks Tombol "Selengkapnya" (opsional)')
+                    ->maxLength(100)
+                    ->placeholder('Selengkapnya'),
                 Forms\Components\TextInput::make('cta_url')
                     ->label('URL Tombol "Selengkapnya" (opsional)')
                     ->maxLength(255)
                     ->helperText('Kosongkan untuk mengarah otomatis ke halaman detail service ini. Isi untuk arahkan ke tujuan lain (bisa path relatif seperti /contact, atau URL lengkap seperti https://wa.me/...).'),
+                Forms\Components\Toggle::make('cta_visible')
+                    ->label('Tampilkan Tombol "Selengkapnya"')
+                    ->helperText('Nonaktifkan untuk menyembunyikan tombol ini di card layanan pada halaman Layanan Kami.')
+                    ->default(true),
                 Forms\Components\RichEditor::make('content')
                     ->fileAttachmentsDisk('media')
                     ->fileAttachmentsDirectory('media/uploads')
@@ -119,6 +127,10 @@ class ServiceResource extends Resource
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
+                Tables\Columns\IconColumn::make('cta_visible')
+                    ->label('Tombol Selengkapnya')
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('meta_title')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('meta_description')

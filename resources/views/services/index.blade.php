@@ -25,7 +25,9 @@
 								<div class="item-content">
 									<h3 class="item-title"><a href="{{ route('services.show', $service->slug) }}">{{ $service->title }}</a></h3>
 									<p>{{ $service->short_description }}</p>
-									<a href="{{ $service->cta_url ?: route('services.show', $service->slug) }}" class="btn-fill btn-gradient">{{ $page?->field('services_card_cta_text', 'Selengkapnya') }}<i class="flaticon-next"></i></a>
+									@if($service->cta_visible)
+										<a href="{{ $service->cta_url ?: route('services.show', $service->slug) }}" class="btn-fill btn-gradient">{{ $service->cta_text ?: 'Selengkapnya' }}<i class="flaticon-next"></i></a>
+									@endif
 								</div>
 							</div>
 						</div>
