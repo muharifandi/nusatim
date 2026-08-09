@@ -108,30 +108,30 @@ class DatabaseSeeder extends Seeder
         $menu = Menu::updateOrCreate(['slug' => 'header'], ['name' => 'Header Menu']);
         $menu->allItems()->delete();
 
-        $home = $menu->allItems()->create(['label' => 'Home', 'url' => route('home'), 'type' => 'link', 'order' => 1]);
-        $about = $menu->allItems()->create(['label' => 'About', 'url' => route('about'), 'type' => 'link', 'order' => 2]);
+        $home = $menu->allItems()->create(['label' => 'Home', 'url' => route('home', [], false), 'type' => 'link', 'order' => 1]);
+        $about = $menu->allItems()->create(['label' => 'About', 'url' => route('about', [], false), 'type' => 'link', 'order' => 2]);
 
-        $servicesItem = $menu->allItems()->create(['label' => 'Services', 'url' => route('services.index'), 'type' => 'mega_menu', 'order' => 3]);
+        $servicesItem = $menu->allItems()->create(['label' => 'Services', 'url' => route('services.index', [], false), 'type' => 'mega_menu', 'order' => 3]);
         foreach ($services as $i => $service) {
             $menu->allItems()->create([
                 'parent_id' => $servicesItem->id,
                 'label' => $service->title,
-                'url' => route('services.show', $service->slug),
+                'url' => route('services.show', $service->slug, false),
                 'image' => $service->image,
                 'type' => 'link',
                 'order' => $i,
             ]);
         }
 
-        $portfolio = $menu->allItems()->create(['label' => 'Portfolio', 'url' => route('portfolio'), 'type' => 'link', 'order' => 4]);
+        $portfolio = $menu->allItems()->create(['label' => 'Portfolio', 'url' => route('portfolio', [], false), 'type' => 'link', 'order' => 4]);
 
         $pages = $menu->allItems()->create(['label' => 'Pages', 'type' => 'dropdown', 'order' => 5]);
-        $menu->allItems()->create(['parent_id' => $pages->id, 'label' => 'Pricing', 'url' => route('pricing'), 'type' => 'link', 'order' => 1]);
-        $menu->allItems()->create(['parent_id' => $pages->id, 'label' => 'Team', 'url' => route('team'), 'type' => 'link', 'order' => 2]);
-        $menu->allItems()->create(['parent_id' => $pages->id, 'label' => 'FAQ', 'url' => route('faq'), 'type' => 'link', 'order' => 3]);
+        $menu->allItems()->create(['parent_id' => $pages->id, 'label' => 'Pricing', 'url' => route('pricing', [], false), 'type' => 'link', 'order' => 1]);
+        $menu->allItems()->create(['parent_id' => $pages->id, 'label' => 'Team', 'url' => route('team', [], false), 'type' => 'link', 'order' => 2]);
+        $menu->allItems()->create(['parent_id' => $pages->id, 'label' => 'FAQ', 'url' => route('faq', [], false), 'type' => 'link', 'order' => 3]);
 
-        $blog = $menu->allItems()->create(['label' => 'Blog', 'url' => route('blog.index'), 'type' => 'link', 'order' => 6]);
-        $contact = $menu->allItems()->create(['label' => 'Contact', 'url' => route('contact'), 'type' => 'link', 'order' => 7]);
+        $blog = $menu->allItems()->create(['label' => 'Blog', 'url' => route('blog.index', [], false), 'type' => 'link', 'order' => 6]);
+        $contact = $menu->allItems()->create(['label' => 'Contact', 'url' => route('contact', [], false), 'type' => 'link', 'order' => 7]);
     }
 
     private function seedFooterMenu($services): void
@@ -140,17 +140,17 @@ class DatabaseSeeder extends Seeder
         $menu->allItems()->delete();
 
         $links = $menu->allItems()->create(['label' => 'Important Link', 'type' => 'dropdown', 'order' => 1]);
-        $menu->allItems()->create(['parent_id' => $links->id, 'label' => 'About Us', 'url' => route('about'), 'type' => 'link', 'order' => 1]);
-        $menu->allItems()->create(['parent_id' => $links->id, 'label' => 'Portfolio', 'url' => route('portfolio'), 'type' => 'link', 'order' => 2]);
-        $menu->allItems()->create(['parent_id' => $links->id, 'label' => 'Contact Us', 'url' => route('contact'), 'type' => 'link', 'order' => 3]);
-        $menu->allItems()->create(['parent_id' => $links->id, 'label' => 'FAQ', 'url' => route('faq'), 'type' => 'link', 'order' => 4]);
+        $menu->allItems()->create(['parent_id' => $links->id, 'label' => 'About Us', 'url' => route('about', [], false), 'type' => 'link', 'order' => 1]);
+        $menu->allItems()->create(['parent_id' => $links->id, 'label' => 'Portfolio', 'url' => route('portfolio', [], false), 'type' => 'link', 'order' => 2]);
+        $menu->allItems()->create(['parent_id' => $links->id, 'label' => 'Contact Us', 'url' => route('contact', [], false), 'type' => 'link', 'order' => 3]);
+        $menu->allItems()->create(['parent_id' => $links->id, 'label' => 'FAQ', 'url' => route('faq', [], false), 'type' => 'link', 'order' => 4]);
 
         $servicesColumn = $menu->allItems()->create(['label' => 'Our Services', 'type' => 'dropdown', 'order' => 2]);
         foreach ($services->take(5) as $i => $service) {
             $menu->allItems()->create([
                 'parent_id' => $servicesColumn->id,
                 'label' => $service->title,
-                'url' => route('services.show', $service->slug),
+                'url' => route('services.show', $service->slug, false),
                 'type' => 'link',
                 'order' => $i,
             ]);
@@ -624,7 +624,7 @@ class DatabaseSeeder extends Seeder
             ['title' => 'Promo Peluncuran Nusatim'],
             [
                 'image' => 'media/banner/banner1.jpg',
-                'link_url' => route('contact'),
+                'link_url' => route('contact', [], false),
                 'is_active' => true,
             ]
         );
