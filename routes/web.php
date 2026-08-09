@@ -5,6 +5,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeadDocumentController;
+use App\Http\Controllers\LegalPageController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PartnerDocumentController;
@@ -35,6 +36,10 @@ Route::get('/blog', [PostController::class, 'index'])->name('blog.index');
 Route::get('/blog/{post:slug}', [PostController::class, 'show'])->name('blog.show');
 
 Route::get('/faq', [FaqController::class, 'index'])->name('faq');
+
+Route::get('/legal', [LegalPageController::class, 'index'])->name('legal.index');
+Route::get('/legal/{legalPage:slug}', [LegalPageController::class, 'show'])->name('legal.show');
+Route::get('/legal/{legalPage:slug}/pdf', [LegalPageController::class, 'pdf'])->name('legal.pdf');
 
 Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');

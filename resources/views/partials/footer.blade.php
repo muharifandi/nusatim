@@ -50,6 +50,13 @@
 		<div class="container">
 			<div class="copy-right-wrap">
 				<p class="copy-right-text">&copy; {{ now()->year }} {{ $siteSettings->company_name }}. All Rights Reserved</p>
+				@if(($footerLegalPages ?? collect())->isNotEmpty())
+					<ul class="footer-legal-links">
+						@foreach($footerLegalPages as $legalPage)
+							<li><a href="{{ route('legal.show', $legalPage) }}">{{ $legalPage->title }}</a></li>
+						@endforeach
+					</ul>
+				@endif
 			</div>
 		</div>
 	</div>
@@ -57,3 +64,11 @@
 <!--=====================================-->
 <!--=      Footer Section Area End      =-->
 <!--=====================================-->
+@if(($footerLegalPages ?? collect())->isNotEmpty())
+	<style>
+		.footer-bottom-layout1 .copy-right-wrap { flex-wrap: wrap; gap: 4px 16px; }
+		.footer-legal-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px; list-style: none; margin: 0; padding: 0; }
+		.footer-legal-links a { color: #646464; font-size: 14px; text-decoration: none; transition: color 0.3s ease-in-out; }
+		.footer-legal-links a:hover { color: #5a49f8; }
+	</style>
+@endif
