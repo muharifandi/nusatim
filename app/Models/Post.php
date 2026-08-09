@@ -3,12 +3,34 @@
 namespace App\Models;
 
 use App\Models\Concerns\DeletesOldFiles;
+use App\Services\IndexNowService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model
 {
     use DeletesOldFiles;
+
+    protected static function booted(): void
+    {
+        // Fires on every save (create or edit) while the post is actually
+        // live - not just the first publish, since a later content edit is
+        // also a legitimate "please re-crawl this" signal. isLive() already
+        // excludes future-scheduled posts, so nothing fires until the post
+        // is genuinely publicly visible.
+        //
+        // Skipped outright during automated tests - not just because a real
+        // network call would be slow/flaky (a sandboxed/offline environment
+        // can hang on it entirely), but because this fires on EVERY Post
+        // save across the whole suite, not just tests about this feature.
+        // IndexNowService itself stays fully testable via Http::fake() in
+        // a test that calls it directly.
+        static::saved(function (Post $post) {
+            if ($post->isLive() && ! app()->runningUnitTests()) {
+                app(IndexNowService::class)->submit(route('blog.show', $post->slug));
+            }
+        });
+    }
 
     protected $fillable = [
         'title',

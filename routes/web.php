@@ -4,6 +4,7 @@ use App\Http\Controllers\ComingSoonController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IndexNowController;
 use App\Http\Controllers\LeadDocumentController;
 use App\Http\Controllers\LegalPageController;
 use App\Http\Controllers\NewsletterController;
@@ -45,6 +46,13 @@ Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
+// IndexNow ownership-verification file, must live at exactly /{key}.txt.
+// {key} is constrained to the one configured value so this doesn't swallow
+// unrelated *.txt requests.
+Route::get('/{key}.txt', [IndexNowController::class, 'key'])
+    ->where('key', preg_quote(config('services.indexnow.key'), '#'))
+    ->name('indexnow.key');
 
 Route::get('/coming-soon', [ComingSoonController::class, 'index'])->name('coming-soon');
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])->name('newsletter.subscribe');

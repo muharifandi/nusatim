@@ -43,4 +43,15 @@ return [
         'key' => env('GOOGLE_MAPS_API_KEY', 'AIzaSyB13ZAvCezMx5TETYIiGlzVIq65Mc2FG5g'),
     ],
 
+    'indexnow' => [
+        // Auto-pings Bing/Yandex/Naver/Seznam whenever a blog post is
+        // published/updated (App\Services\IndexNowService) - Google does not
+        // participate in IndexNow, this covers other engines only. Key must
+        // match routes/web.php's {key}.txt verification route and be 8-128
+        // hex chars per the IndexNow spec. Generated once for this install;
+        // safe to regenerate (php -r "echo bin2hex(random_bytes(16));"),
+        // just keep .env and the route in sync.
+        'key' => env('INDEXNOW_KEY', '453505b5c8a68deb4904b180d789060a'),
+    ],
+
 ];

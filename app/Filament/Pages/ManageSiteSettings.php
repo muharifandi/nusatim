@@ -189,6 +189,11 @@ class ManageSiteSettings extends Page implements HasActions, HasForms
                             ->label('Google Analytics Measurement ID')
                             ->placeholder('G-XXXXXXXXXX')
                             ->maxLength(50),
+                        TextInput::make('search_console_resource_id')
+                            ->label('Google Search Console Property')
+                            ->placeholder('sc-domain:nusatim.com atau https://nusatim.com/')
+                            ->helperText('Dari Search Console: pilih property Anda, lihat di URL address bar setelah "resource_id=". Dipakai untuk tombol "Cek di Search Console" di halaman edit artikel Blog.')
+                            ->maxLength(255),
                     ]),
 
                 Section::make('Performa & Tampilan')

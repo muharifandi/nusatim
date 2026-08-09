@@ -46,6 +46,7 @@ class SiteSetting extends Model
         'mail_password',
         'mail_from_address',
         'mail_from_name',
+        'search_console_resource_id',
     ];
 
     protected $casts = [
