@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\LegalPage;
 use App\Models\Menu;
 use App\Models\Promotion;
 use App\Models\SiteSetting;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -24,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
 
     private ?Promotion $activePromotion = null;
 
+    private ?Collection $footerLegalPages = null;
+
     /**
      * Register any application services.
      */
@@ -42,6 +46,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->applyDynamicMailConfig();
+
         View::composer('*', function ($view) {
             // Guard against running before migrations exist (e.g. fresh install).
             // Memoized too - Schema::hasTable() hits information_schema, and
@@ -66,6 +72,12 @@ class AppServiceProvider extends ServiceProvider
                 $this->headerMenu = Menu::query()->where('slug', 'header')->with('items.children.children')->first();
                 $this->footerMenu = Menu::query()->where('slug', 'footer')->with('items.children')->first();
                 $this->activePromotion = Promotion::current();
+                // legal_pages is a newer table than site_settings - guard
+                // separately so a deploy that hasn't migrated yet doesn't
+                // break the footer (and therefore every page) site-wide.
+                $this->footerLegalPages = Schema::hasTable('legal_pages')
+                    ? LegalPage::active()->get()
+                    : collect();
                 $this->globalsResolved = true;
             }
 
@@ -73,6 +85,23 @@ class AppServiceProvider extends ServiceProvider
             $view->with('headerMenu', $this->headerMenu);
             $view->with('footerMenu', $this->footerMenu);
             $view->with('activePromotion', $this->activePromotion);
+            $view->with('footerLegalPages', $this->footerLegalPages);
         });
+    }
+
+    /**
+     * Lets an admin manage SMTP credentials from the Site Settings panel
+     * instead of needing file/SSH access to .env - runs unconditionally
+     * (not deferred like the View::composer globals above) so it also
+     * applies in console/queue contexts, where mail is often actually sent
+     * from (queued notifications, scheduled reminders).
+     */
+    private function applyDynamicMailConfig(): void
+    {
+        if (! Schema::hasTable('site_settings')) {
+            return;
+        }
+
+        SiteSetting::current()->applyMailConfig();
     }
 }

@@ -10,12 +10,14 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\Mail;
 
 class ManageSiteSettings extends Page implements HasActions, HasForms
 {
@@ -36,12 +38,61 @@ class ManageSiteSettings extends Page implements HasActions, HasForms
 
     public function mount(): void
     {
-        $this->form->fill(SiteSetting::current()->toArray());
+        $data = SiteSetting::current()->toArray();
+
+        // Never send the decrypted SMTP password to the browser - it would
+        // sit in the Livewire component's public state (visible in the page
+        // source/network tab) even though the input itself renders masked.
+        // Leaving it blank means "no change" on save (see the password
+        // field's dehydrated() below).
+        unset($data['mail_password']);
+
+        $this->form->fill($data);
     }
 
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('testEmail')
+                ->label('Test Kirim Email')
+                ->icon('heroicon-o-paper-airplane')
+                ->color('gray')
+                // Tests against the SAVED settings in the database, not
+                // whatever's currently typed in the unsaved form - keeps the
+                // action simple and avoids sending mail using a half-edited,
+                // not-yet-persisted password. Save first, then test.
+                ->modalDescription('Mengirim email test memakai pengaturan SMTP yang TERSIMPAN saat ini. Simpan perubahan dulu sebelum test kalau baru saja mengubah pengaturan di bawah.')
+                ->form([
+                    TextInput::make('test_recipient')
+                        ->label('Kirim ke email')
+                        ->email()
+                        ->required()
+                        ->default(fn () => SiteSetting::current()->email),
+                ])
+                ->action(function (array $data): void {
+                    $settings = SiteSetting::current();
+                    $settings->applyMailConfig();
+
+                    try {
+                        Mail::raw(
+                            'Ini email test dari pengaturan SMTP di Site Settings. Jika Anda menerima email ini, konfigurasi SMTP sudah benar.',
+                            fn ($message) => $message->to($data['test_recipient'])->subject('Test Email - Pengaturan SMTP')
+                        );
+
+                        Notification::make()
+                            ->title('Email test berhasil dikirim')
+                            ->body("Terkirim ke {$data['test_recipient']}. Cek inbox (dan folder Spam).")
+                            ->success()
+                            ->send();
+                    } catch (\Throwable $e) {
+                        Notification::make()
+                            ->title('Gagal mengirim email test')
+                            ->body($e->getMessage())
+                            ->danger()
+                            ->persistent()
+                            ->send();
+                    }
+                }),
             Action::make('previewComingSoon')
                 ->label('Preview Coming Soon')
                 ->icon('heroicon-o-eye')
@@ -147,6 +198,59 @@ class ManageSiteSettings extends Page implements HasActions, HasForms
                             ->helperText('Tampilkan animasi shimmer/skeleton pada gambar selagi belum selesai dimuat (dimatikan berarti gambar tampil polos seperti biasa).')
                             ->default(true),
                     ]),
+
+                Section::make('Pengaturan Email (SMTP)')
+                    ->description('Kelola kredensial SMTP dari sini, tanpa perlu akses file/SSH ke server. Kalau dimatikan, aplikasi memakai pengaturan mail bawaan dari file .env di server.')
+                    ->schema([
+                        Toggle::make('mail_use_custom_smtp')
+                            ->label('Gunakan SMTP Kustom')
+                            ->helperText('Aktifkan untuk menimpa pengaturan .env dengan kredensial di bawah ini.')
+                            ->live()
+                            ->default(false),
+                        TextInput::make('mail_host')
+                            ->label('SMTP Host')
+                            ->placeholder('mail.nusatim.com')
+                            ->visible(fn ($get) => $get('mail_use_custom_smtp'))
+                            ->requiredIf('mail_use_custom_smtp', true),
+                        TextInput::make('mail_port')
+                            ->label('SMTP Port')
+                            ->numeric()
+                            ->placeholder('465')
+                            ->visible(fn ($get) => $get('mail_use_custom_smtp'))
+                            ->requiredIf('mail_use_custom_smtp', true),
+                        Select::make('mail_encryption')
+                            ->label('Enkripsi')
+                            ->options([
+                                '' => 'Tidak Ada',
+                                'smtps' => 'SSL/TLS (biasanya port 465)',
+                                'smtp' => 'STARTTLS (biasanya port 587)',
+                            ])
+                            ->default('smtps')
+                            ->visible(fn ($get) => $get('mail_use_custom_smtp')),
+                        TextInput::make('mail_username')
+                            ->label('SMTP Username')
+                            ->placeholder('info@nusatim.com')
+                            ->visible(fn ($get) => $get('mail_use_custom_smtp'))
+                            ->requiredIf('mail_use_custom_smtp', true),
+                        TextInput::make('mail_password')
+                            ->label('SMTP Password')
+                            ->password()
+                            ->revealable()
+                            ->placeholder('Kosongkan supaya password tersimpan tidak berubah')
+                            ->dehydrated(fn ($state) => filled($state))
+                            ->visible(fn ($get) => $get('mail_use_custom_smtp')),
+                        TextInput::make('mail_from_address')
+                            ->label('Alamat Pengirim (From)')
+                            ->email()
+                            ->placeholder('info@nusatim.com')
+                            ->helperText('Kosongkan untuk memakai SMTP Username di atas.')
+                            ->visible(fn ($get) => $get('mail_use_custom_smtp')),
+                        TextInput::make('mail_from_name')
+                            ->label('Nama Pengirim (From)')
+                            ->placeholder('Nusatim')
+                            ->helperText('Kosongkan untuk memakai Company Name.')
+                            ->visible(fn ($get) => $get('mail_use_custom_smtp')),
+                    ])->columns(2),
 
                 Section::make('Mode Coming Soon')
                     ->description('Saat aktif, seluruh halaman publik akan menampilkan halaman "Coming Soon" (kecuali halaman Contact dan admin panel). Isi/teks halaman ini bisa diedit di menu Pages dengan slug "coming-soon".')
