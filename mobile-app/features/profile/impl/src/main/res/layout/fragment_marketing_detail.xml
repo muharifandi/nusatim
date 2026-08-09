@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/partner_surface">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/partner_surface">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="@android:drawable/ic_menu_revert"
+                app:title="Detail Materi" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/partner_space_l">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    style="@style/PartnerTypography.Headline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Brosur Layanan 2026" />
+
+                <TextView
+                    android:id="@+id/tv_category"
+                    style="@style/PartnerTypography.Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_s"
+                    android:background="@color/partner_primary_container"
+                    android:paddingHorizontal="@dimen/partner_space_s"
+                    android:paddingVertical="2dp"
+                    android:textColor="@color/partner_on_primary_container"
+                    tools:text="Brosur" />
+
+                <TextView
+                    android:id="@+id/tv_description"
+                    style="@style/PartnerTypography.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_m"
+                    android:textColor="@color/partner_on_surface_variant"
+                    tools:text="Deskripsi lengkap mengenai materi marketing ini." />
+
+                <!-- File Preview Container -->
+                <LinearLayout
+                    android:id="@+id/card_preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_l"
+                    android:background="@drawable/bg_card_flat"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_xl"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/iv_file_preview"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            android:src="@android:drawable/ic_menu_agenda"
+                            app:tint="@color/partner_primary" />
+
+                        <TextView
+                            android:id="@+id/tv_file_info"
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/partner_space_m"
+                            tools:text="PDF Document" />
+                </LinearLayout>
+
+                <!-- Text Content Container -->
+                <LinearLayout
+                    android:id="@+id/card_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_l"
+                    android:background="@drawable/bg_card_flat"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/tv_content"
+                        style="@style/PartnerTypography.Body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/partner_space_ml"
+                        android:textIsSelectable="true"
+                        tools:text="Isi konten template pesan di sini..." />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_primary_action"
+                    style="@style/PartnerButton.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="@dimen/partner_space_xl"
+                    android:text="@string/marketing_btn_download" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_share"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="@dimen/partner_space_s"
+                    android:text="@string/marketing_btn_share" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

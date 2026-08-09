@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/partner_space_m">
+
+    <View
+        android:id="@+id/view_line_top"
+        android:layout_width="@dimen/partner_divider_height"
+        android:layout_height="@dimen/partner_space_l"
+        android:background="@color/partner_silver"
+        app:layout_constraintEnd_toEndOf="@id/iv_type_icon"
+        app:layout_constraintStart_toStartOf="@id/iv_type_icon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_type_icon"
+        android:layout_width="@dimen/partner_icon_xl"
+        android:layout_height="@dimen/partner_icon_xl"
+        android:padding="6dp"
+        android:src="@android:drawable/ic_menu_info_details"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_line_top"
+        app:tint="@color/partner_primary" />
+
+    <View
+        android:id="@+id/view_line_bottom"
+        android:layout_width="@dimen/partner_divider_height"
+        android:layout_height="0dp"
+        android:background="@color/partner_silver"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/iv_type_icon"
+        app:layout_constraintStart_toStartOf="@id/iv_type_icon"
+        app:layout_constraintTop_toBottomOf="@id/iv_type_icon" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/partner_space_m"
+        android:layout_marginBottom="@dimen/partner_space_m"
+        android:background="@drawable/bg_card_flat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_type_icon"
+        app:layout_constraintTop_toTopOf="@id/iv_type_icon">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/partner_space_m"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/tv_body"
+                style="@style/PartnerTypography.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/partner_on_surface"
+                tools:text="Status Lead berubah menjadi Qualified." />
+
+            <TextView
+                android:id="@+id/tv_date"
+                style="@style/PartnerTypography.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/partner_space_xs"
+                tools:text="12 Mei 2026, 11:30" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

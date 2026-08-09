@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/partner_surface">
+
+        <include
+            android:id="@+id/layout_toolbar"
+            layout="@layout/layout_partner_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/partner_space_m">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card_flat"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_l">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_status"
+                            style="@style/PartnerBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:enabled="false"
+                            tools:text="Approved" />
+
+                        <TextView
+                            android:id="@+id/tv_amount"
+                            style="@style/PartnerTypography.Display"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/partner_space_m"
+                            android:textColor="@color/partner_primary"
+                            tools:text="Rp1.500.000" />
+
+                        <TextView
+                            android:id="@+id/tv_date"
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/partner_space_xs"
+                            tools:text="Diterima pada 23 Juli 2026" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/card_rejection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_m"
+                    android:background="@drawable/bg_card_flat"
+                    android:backgroundTint="@color/partner_error_container"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_m"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                        <TextView
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/commission_label_rejection"
+                            android:textColor="@color/partner_error" />
+
+                        <TextView
+                            android:id="@+id/tv_rejection_reason"
+                            style="@style/PartnerTypography.Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/partner_space_xs"
+                            tools:text="Dokumen invoice tidak sesuai dengan nominal yang diajukan." />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/PartnerTypography.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_l"
+                    android:text="@string/commission_title_summary" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_s"
+                    android:background="@drawable/bg_card_flat">
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/partner_space_m"
+                        android:stretchColumns="1">
+
+                        <TableRow android:paddingVertical="@dimen/partner_space_s">
+                            <TextView style="@style/PartnerTypography.Label" android:text="@string/commission_label_customer" />
+                            <TextView android:id="@+id/tv_customer_name" style="@style/PartnerTypography.Body" android:gravity="end" tools:text="Budi Santoso" />
+                        </TableRow>
+
+                        <TableRow android:paddingVertical="@dimen/partner_space_s">
+                            <TextView style="@style/PartnerTypography.Label" android:text="@string/commission_label_service" />
+                            <TextView android:id="@+id/tv_service_name" style="@style/PartnerTypography.Body" android:gravity="end" tools:text="Website Company Profile" />
+                        </TableRow>
+
+                        <TableRow android:paddingVertical="@dimen/partner_space_s">
+                            <TextView style="@style/PartnerTypography.Label" android:text="@string/commission_label_project_value" />
+                            <TextView android:id="@+id/tv_project_value" style="@style/PartnerTypography.Body" android:gravity="end" tools:text="Rp15.000.000" />
+                        </TableRow>
+
+                        <TableRow android:paddingVertical="@dimen/partner_space_s">
+                            <TextView style="@style/PartnerTypography.Label" android:text="@string/commission_label_percentage" />
+                            <TextView android:id="@+id/tv_percentage" style="@style/PartnerTypography.Body" android:gravity="end" tools:text="10%" />
+                        </TableRow>
+
+                        <TableRow android:paddingVertical="@dimen/partner_space_s">
+                            <TextView style="@style/PartnerTypography.Label" android:text="@string/commission_label_method" />
+                            <TextView android:id="@+id/tv_type" style="@style/PartnerTypography.Body" android:gravity="end" tools:text="Persentase" />
+                        </TableRow>
+
+                    </TableLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

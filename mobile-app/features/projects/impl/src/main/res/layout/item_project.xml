@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/partner_space_m"
+    android:layout_marginVertical="@dimen/partner_space_s"
+    android:background="@drawable/bg_card_flat">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Left Accent Border -->
+        <View
+            android:id="@+id/view_accent"
+            android:layout_width="@dimen/partner_accent_border_width"
+            android:layout_height="0dp"
+            android:background="@color/partner_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/partner_space_m"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/view_accent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/partner_space_s"
+                android:textColor="@color/partner_black"
+                android:textSize="@dimen/partner_text_title3"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/layout_status"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Landing Page Promo Ramadan" />
+
+            <!-- Status Badge -->
+            <LinearLayout
+                android:id="@+id/layout_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_badge_blue_light"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/partner_space_m"
+                android:paddingVertical="@dimen/partner_space_s"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_status_dot"
+                    android:layout_width="@dimen/partner_space_s"
+                    android:layout_height="@dimen/partner_space_s"
+                    android:src="@drawable/ic_dot_blue" />
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/partner_space_s"
+                    android:textColor="@color/status_info"
+                    android:textSize="@dimen/partner_text_caption1"
+                    android:textStyle="bold"
+                    tools:text="Available" />
+            </LinearLayout>
+
+            <!-- Row Budget -->
+            <LinearLayout
+                android:id="@+id/layout_budget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/partner_space_l"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_name">
+
+                <FrameLayout
+                    android:layout_width="@dimen/partner_icon_l"
+                    android:layout_height="@dimen/partner_icon_l"
+                    android:background="@drawable/bg_circle_orange_light">
+                    <ImageView
+                        android:layout_width="@dimen/partner_icon_xs"
+                        android:layout_height="@dimen/partner_icon_xs"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_wallet_small"
+                        app:tint="@color/status_warning" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_budget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/partner_space_m"
+                    android:textColor="@color/partner_on_surface_variant"
+                    android:textSize="@dimen/partner_text_body2"
+                    tools:text="Budget: Rp8.000.000" />
+            </LinearLayout>
+
+            <!-- Row Commission -->
+            <LinearLayout
+                android:id="@+id/layout_commission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/partner_space_m"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_budget">
+
+                <FrameLayout
+                    android:layout_width="@dimen/partner_icon_l"
+                    android:layout_height="@dimen/partner_icon_l"
+                    android:background="@drawable/bg_circle_green_light">
+                    <ImageView
+                        android:layout_width="@dimen/partner_icon_xs"
+                        android:layout_height="@dimen/partner_icon_xs"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_commission_small"
+                        app:tint="@color/status_success" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tv_commission"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/partner_space_m"
+                    android:textSize="@dimen/partner_text_body2"
+                    tools:text="Komisi: Rp800.000" />
+            </LinearLayout>
+
+            <!-- Claim Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_claim"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/partner_primary"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/projects_btn_claim"
+                android:textAllCaps="false"
+                android:textSize="@dimen/partner_text_body2"
+                app:cornerRadius="@dimen/partner_radius_s"
+                app:icon="@drawable/ic_bag_small"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/partner_space_s"
+                app:layout_constraintBottom_toBottomOf="@id/layout_commission"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/layout_budget" />
+
+            <!-- Divider -->
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/partner_divider_height"
+                android:layout_marginTop="@dimen/partner_space_m"
+                android:background="@drawable/divider_dashed"
+                app:layout_constraintTop_toBottomOf="@id/layout_commission" />
+
+            <!-- Bottom Row -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/partner_space_m"
+                app:layout_constraintTop_toBottomOf="@id/divider">
+
+                <!-- Location -->
+                <LinearLayout
+                    android:id="@+id/layout_location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <FrameLayout
+                        android:layout_width="@dimen/partner_icon_l"
+                        android:layout_height="@dimen/partner_icon_l"
+                        android:background="@drawable/bg_circle_orange_light">
+                        <ImageView
+                            android:layout_width="@dimen/partner_icon_xs"
+                            android:layout_height="@dimen/partner_icon_xs"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_location_small"
+                            app:tint="@color/status_warning" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tv_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/partner_space_m"
+                        android:textColor="@color/partner_on_surface_variant"
+                        android:textSize="@dimen/partner_text_label1"
+                        tools:text="Remote" />
+                </LinearLayout>
+
+                <!-- Date -->
+                <LinearLayout
+                    android:id="@+id/layout_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <FrameLayout
+                        android:layout_width="@dimen/partner_icon_l"
+                        android:layout_height="@dimen/partner_icon_l"
+                        android:background="@drawable/bg_circle_orange_light">
+                        <ImageView
+                            android:layout_width="@dimen/partner_icon_xs"
+                            android:layout_height="@dimen/partner_icon_xs"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_calendar_small"
+                            app:tint="@color/status_warning" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tv_deadline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/partner_space_m"
+                        android:textColor="@color/partner_on_surface_variant"
+                        android:textSize="@dimen/partner_text_label1"
+                        tools:text="2026-08-29" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

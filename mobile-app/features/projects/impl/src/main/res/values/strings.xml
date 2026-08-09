@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="projects_title">Proyek</string>
+    <string name="projects_tab_available">Tersedia</string>
+    <string name="projects_tab_mine">Punya Saya</string>
+    <string name="projects_empty_available">Belum ada proyek tersedia saat ini.</string>
+    <string name="projects_empty_mine">Anda belum memiliki riwayat proyek.</string>
+    <string name="projects_btn_claim">Klaim</string>
+    <string name="projects_btn_cancel_claim">Batalkan Klaim</string>
+
+    <string name="project_detail_title">Detail Proyek</string>
+    <string name="project_label_budget">Budget</string>
+    <string name="project_label_commission">Estimasi Komisi</string>
+    <string name="project_label_location">Lokasi</string>
+    <string name="project_label_deadline">Deadline</string>
+    <string name="project_label_difficulty">Tingkat Kesulitan</string>
+    <string name="project_btn_claim_long">Klaim Proyek Ini</string>
+    <string name="project_btn_view_customer">Lihat Detail Customer</string>
+</resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_welcome">Selamat Datang</string>
+    <string name="login_subtitle">Silakan masuk untuk mengelola bisnis kemitraan Anda.</string>
+    <string name="login_forgot_password">Lupa password?</string>
+    <string name="login_sign_in">Masuk</string>
+    <string name="login_no_account">Belum punya akun? </string>
+    <string name="login_sign_up">Daftar sekarang</string>
+    <string name="login_hint_email">Email</string>
+    <string name="login_hint_password">Password</string>
+    <string name="login_toast_forgot_password">Fitur Lupa Password segera hadir</string>
+
+    <!-- Forgot Password -->
+    <string name="forgot_password_title">Lupa Password</string>
+    <string name="forgot_password_subtitle">Masukkan email Anda untuk menerima kode reset password.</string>
+    <string name="forgot_password_btn_submit">Kirim Kode</string>
+    <string name="reset_password_title">Reset Password</string>
+    <string name="reset_password_subtitle">Masukkan kode yang dikirim ke email Anda dan buat password baru.</string>
+    <string name="reset_password_hint_code">Kode Reset</string>
+    <string name="reset_password_hint_password">Password Baru</string>
+    <string name="reset_password_hint_password_confirmation">Konfirmasi Password Baru</string>
+    <string name="reset_password_btn_submit">Reset Password</string>
+    <string name="reset_password_success">Password berhasil direset, silakan login dengan password baru.</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="intro_title_1">Welcome to Partner</string>
+    <string name="intro_desc_1">Your ultimate companion for managing your professional journey.</string>
+    <string name="intro_title_2">Track Your Progress</string>
+    <string name="intro_desc_2">Keep an eye on your jobs and history with ease.</string>
+    <string name="intro_title_3">Get Started Now</string>
+    <string name="intro_desc_3">Join thousands of professionals today.</string>
+    <string name="intro_title_4">Success Awaits</string>
+    <string name="intro_desc_4">Experience the best way to manage your career.</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_get_started">Get Started</string>
+    <string name="tv_skip">Skip</string>
+</resources>

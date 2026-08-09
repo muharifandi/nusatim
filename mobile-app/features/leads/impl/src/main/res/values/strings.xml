@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="leads_title">Daftar Lead</string>
+    <string name="leads_search_hint">Cari nama atau telepon...</string>
+    <string name="leads_empty">Belum ada lead. Mulai catat calon customer pertama Anda.</string>
+    <string name="leads_btn_add">Tambah Lead</string>
+    <string name="leads_status_all">Semua</string>
+
+    <string name="lead_detail_title">Detail Lead</string>
+    <string name="lead_tab_info">Info</string>
+    <string name="lead_tab_reminder">Reminder</string>
+    <string name="lead_tab_document">Dokumen</string>
+    <string name="lead_tab_timeline">Timeline</string>
+
+    <string name="lead_form_add_title">Tambah Lead Baru</string>
+    <string name="lead_form_edit_title">Edit Data Lead</string>
+    <string name="lead_label_name">Nama Lengkap</string>
+    <string name="lead_label_phone">Nomor Telepon</string>
+    <string name="lead_label_email">Email (Opsional)</string>
+    <string name="lead_label_product">Pilih Produk/Layanan</string>
+    <string name="lead_label_estimation">Nilai Estimasi (Rp)</string>
+    <string name="lead_btn_save">Simpan Lead</string>
+
+    <string name="lead_info_phone">Telepon</string>
+    <string name="lead_info_email">Email</string>
+    <string name="lead_info_product">Produk/Layanan</string>
+    <string name="lead_info_estimation">Estimasi Nilai</string>
+    <string name="lead_btn_change_status">Ubah Status</string>
+    <string name="lead_btn_view_customer">Lihat Detail Customer</string>
+    <string name="customers_empty">Belum ada customer. Customer akan muncul otomatis begitu ada lead yang berhasil closing.</string>
+
+    <string name="customer_label_project_value">Nilai Proyek</string>
+    <string name="customer_label_progress">Progress Proyek</string>
+    <string name="customer_btn_update_progress">Update Progres</string>
+    <string name="customer_label_commission">Estimasi Komisi</string>
+    <string name="customer_btn_view_detail">Lihat Detail</string>
+    <string name="customer_tab_followup">Follow Up &amp; Meeting</string>
+    <string name="customer_tab_proposal">Proposal</string>
+    <string name="lead_tab_reminder_empty">Belum ada jadwal reminder</string>
+    <string name="lead_tab_document_empty">Belum ada dokumen</string>
+    <string name="lead_tab_timeline_empty">Belum ada riwayat aktivitas</string>
+    <string name="customer_label_pic">PIC: %1$s (%2$s)</string>
+    <string name="customer_label_progress_percent">%1$d%% Selesai</string>
+    <string name="customer_dialog_update_progress_title">Update Progress Proyek</string>
+    <string name="customer_status_unpaid">Belum Bayar</string>
+    <string name="customer_status_partial">Sebagian</string>
+    <string name="customer_status_paid">Lunas</string>
+    <string name="customer_label_percent">%1$d%%</string>
+</resources>

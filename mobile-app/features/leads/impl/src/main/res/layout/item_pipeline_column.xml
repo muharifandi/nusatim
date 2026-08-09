@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/card_column_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card_flat"
+        android:backgroundTint="@color/project_orange_light"
+        android:padding="12dp">
+
+            <FrameLayout
+                android:id="@+id/card_status_icon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/partner_button_primary_bg"
+                android:backgroundTint="#26A6541A"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_status_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/btn_star_big_on"
+                    app:tint="@color/partner_primary"
+                    android:contentDescription="@null" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_column_title"
+                style="@style/PartnerTypography.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:textSize="@dimen/partner_text_body2"
+                app:layout_constraintBottom_toBottomOf="@id/card_status_icon"
+                app:layout_constraintEnd_toStartOf="@id/tv_column_count"
+                app:layout_constraintStart_toEndOf="@id/card_status_icon"
+                app:layout_constraintTop_toTopOf="@id/card_status_icon"
+                tools:text="New" />
+
+            <TextView
+                android:id="@+id/tv_column_count"
+                style="@style/PartnerTypography.Label"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="@drawable/bg_badge_blue_light"
+                android:gravity="center"
+                android:textColor="@color/status_info"
+                android:textSize="@dimen/partner_text_caption1"
+                android:fontFamily="sans-serif-medium"
+                app:layout_constraintBottom_toBottomOf="@id/tv_column_title"
+                app:layout_constraintEnd_toStartOf="@id/iv_expand"
+                app:layout_constraintTop_toTopOf="@id/tv_column_title"
+                android:layout_marginEnd="8dp"
+                tools:text="1" />
+
+            <ImageView
+                android:id="@+id/iv_expand"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_chevron_right"
+                app:layout_constraintBottom_toBottomOf="@id/tv_column_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_column_title"
+                app:tint="@color/partner_on_surface_variant"
+                android:contentDescription="@null" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Accent Line -->
+    <View
+        android:id="@+id/view_column_accent"
+        android:layout_width="40dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/partner_primary" />
+
+    <!-- Leads List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_leads"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_pipeline_card"
+        tools:itemCount="1" />
+
+</LinearLayout>

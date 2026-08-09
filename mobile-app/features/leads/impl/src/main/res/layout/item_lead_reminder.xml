@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/partner_space_m"
+    android:layout_marginVertical="@dimen/partner_space_s"
+    android:background="@drawable/bg_card_flat"
+    android:padding="@dimen/partner_space_m">
+
+        <ImageView
+            android:id="@+id/iv_type_icon"
+            android:layout_width="@dimen/partner_icon_m"
+            android:layout_height="@dimen/partner_icon_m"
+            android:src="@android:drawable/ic_menu_call"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/partner_primary" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            style="@style/PartnerTypography.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/partner_space_m"
+            app:layout_constraintEnd_toStartOf="@id/cb_completed"
+            app:layout_constraintStart_toEndOf="@id/iv_type_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12 Mei 2026, 10:00" />
+
+        <TextView
+            android:id="@+id/tv_note"
+            style="@style/PartnerTypography.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/partner_space_xs"
+            app:layout_constraintEnd_toEndOf="@id/tv_date"
+            app:layout_constraintStart_toStartOf="@id/tv_date"
+            app:layout_constraintTop_toBottomOf="@id/tv_date"
+            tools:text="Follow up penawaran sistem panel surya 5kWp." />
+
+        <CheckBox
+            android:id="@+id/cb_completed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

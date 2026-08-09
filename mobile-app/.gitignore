@@ -1,0 +1,51 @@
+# Build outputs
+build/
+bin/
+gen/
+out/
+app/release/
+*.aab
+*.apk
+
+# Gradle
+.gradle/
+
+# Kotlin
+.kotlin/
+
+# Android Studio / IntelliJ
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+*.iml
+*.ipr
+*.iws
+
+# Device-specific files
+/captures/
+.externalNativeBuild/
+.cxx/
+
+# Local configuration
+local.properties
+
+# Secrets and Environment
+.env
+config.env
+*.jks
+*.keystore
+google-services.json
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Baseline Profile
+/baselineprofile/build/
+.idea/planningMode.xml

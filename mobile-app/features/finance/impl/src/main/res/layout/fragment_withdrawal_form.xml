@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/partner_surface">
+
+        <include
+            android:id="@+id/layout_toolbar"
+            layout="@layout/layout_partner_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/layout_footer"
+            app:layout_constraintTop_toBottomOf="@id/layout_toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/partner_space_ml">
+
+                <!-- Balance Card -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card_flat"
+                    android:backgroundTint="@color/partner_primary_container"
+                    android:padding="@dimen/partner_space_l">
+
+                        <TextView
+                            android:id="@+id/tv_label_balance"
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/withdrawal_label_balance"
+                            android:textColor="@color/partner_on_surface_variant"
+                            android:textSize="@dimen/partner_text_body2"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_available_balance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/partner_space_xs"
+                            android:textColor="@color/partner_black"
+                            android:textSize="@dimen/partner_text_display"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_label_balance"
+                            tools:text="Rp3.000.000" />
+
+                        <FrameLayout
+                            android:layout_width="@dimen/partner_icon_xxl"
+                            android:layout_height="@dimen/partner_icon_xxl"
+                            android:background="@drawable/bg_wallet_icon"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="@dimen/partner_icon_xl"
+                                android:layout_height="@dimen/partner_icon_xl"
+                                android:layout_gravity="center"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_wallet_rounded" />
+                        </FrameLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Nominal Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_ml"
+                    android:background="@drawable/bg_card_flat"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/partner_space_ml">
+
+                        <TextView
+                            android:id="@+id/tv_rp"
+                            style="@style/PartnerTypography.Title"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:gravity="center"
+                            android:text="Rp"
+                            android:textColor="@color/partner_primary"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/partner_space_m"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/PartnerTypography.Label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/withdrawal_label_amount"
+                                android:textColor="@color/partner_black"
+                                android:textStyle="bold" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/til_amount"
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/partner_space_xs"
+                                app:boxStrokeColor="@color/partner_silver"
+                                app:hintEnabled="false">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/et_amount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/withdrawal_hint_amount"
+                                    android:inputType="number"
+                                    android:padding="@dimen/partner_space_m"
+                                    android:textColorHint="@color/partner_grey" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+                </LinearLayout>
+
+                <!-- KTP Card -->
+                <LinearLayout
+                    android:id="@+id/card_ktp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_ml"
+                    android:background="@drawable/bg_card_flat"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_ml">
+
+                        <TextView
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/withdrawal_label_ktp"
+                            android:textColor="@color/partner_black"
+                            android:textStyle="bold" />
+
+                        <FrameLayout
+                            android:id="@+id/btn_upload_ktp"
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:layout_marginTop="@dimen/partner_space_m"
+                            android:background="@drawable/bg_ktp_placeholder">
+
+                            <LinearLayout
+                                android:id="@+id/layout_ktp_placeholder"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="@dimen/partner_icon_container_m"
+                                    android:layout_height="@dimen/partner_icon_container_m"
+                                    android:contentDescription="@null"
+                                    android:src="@drawable/ic_ktp_upload" />
+
+                                <TextView
+                                    style="@style/PartnerTypography.Label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/partner_space_s"
+                                    android:text="@string/withdrawal_hint_ktp"
+                                    android:textColor="@color/partner_on_surface_variant" />
+                            </LinearLayout>
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/iv_ktp_preview"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:visibility="gone"
+                                app:shapeAppearanceOverlay="@style/PartnerCardFlat" />
+
+                            <!-- Verified Overlay -->
+                            <LinearLayout
+                                android:id="@+id/layout_ktp_verified"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@color/project_blue_light"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+                                <ImageView
+                                    android:layout_width="@dimen/partner_icon_container_m"
+                                    android:layout_height="@dimen/partner_icon_container_m"
+                                    android:contentDescription="@null"
+                                    android:src="@drawable/ic_check_circle"
+                                    app:tint="@color/status_success" />
+                                <TextView
+                                    style="@style/PartnerTypography.Label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/partner_space_s"
+                                    android:text="KTP Sudah Terverifikasi"
+                                    android:textColor="@color/status_success"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </FrameLayout>
+                </LinearLayout>
+
+                <!-- Note Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_ml"
+                    android:background="@drawable/bg_card_flat"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_ml">
+
+                        <TextView
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/withdrawal_label_note"
+                            android:textColor="@color/partner_black"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/partner_space_m"
+                            app:boxStrokeColor="@color/partner_silver"
+                            app:hintEnabled="false">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_note"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="top"
+                                android:hint="@string/withdrawal_hint_note"
+                                android:inputType="textMultiLine"
+                                android:minLines="4"
+                                android:padding="@dimen/partner_space_m"
+                                android:textColorHint="@color/partner_grey" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <!-- Info Box -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_xl"
+                    android:background="@drawable/bg_info_box"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/partner_space_ml">
+
+                    <ImageView
+                        android:layout_width="@dimen/partner_icon_m"
+                        android:layout_height="@dimen/partner_icon_m"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_info_circle" />
+
+                    <TextView
+                        android:id="@+id/tv_bank_info"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/partner_space_m"
+                        android:layout_weight="1"
+                        android:textColor="@color/partner_on_surface_variant"
+                        android:textSize="@dimen/partner_text_body2"
+                        tools:text="Dana akan ditransfer ke rekening terdaftar atas nama Demo Reviewer." />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/partner_space_m" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <FrameLayout
+            android:id="@+id/layout_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/partner_space_m"
+            android:background="@color/partner_white"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_submit"
+                style="@style/PartnerButton.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="@string/withdrawal_btn_submit"
+                android:textAllCaps="false"
+                android:textSize="@dimen/partner_text_body1"
+                android:textStyle="bold"
+                app:cornerRadius="@dimen/partner_radius_xxl"
+                app:icon="@drawable/ic_send_white"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/partner_space_m" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

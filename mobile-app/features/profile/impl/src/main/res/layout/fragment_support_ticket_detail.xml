@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/partner_surface">
+
+        <include
+            android:id="@+id/layout_toolbar"
+            layout="@layout/layout_partner_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/partner_space_ml">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card_flat"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_ml">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_status"
+                            style="@style/PartnerBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:enabled="false"
+                            tools:text="Open" />
+
+                        <TextView
+                            android:id="@+id/tv_subject"
+                            style="@style/PartnerTypography.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/partner_space_s"
+                            tools:text="Tidak bisa upload dokumen KTP" />
+
+                        <TextView
+                            android:id="@+id/tv_date"
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/partner_space_xs"
+                            tools:text="30 Juli 2026, 08:00" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/partner_divider_height"
+                            android:layout_marginVertical="@dimen/partner_space_m"
+                            android:background="@color/partner_silver" />
+
+                        <TextView
+                            android:id="@+id/tv_description"
+                            style="@style/PartnerTypography.Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/partner_on_surface"
+                            tools:text="Setiap saya coba upload foto KTP, selalu muncul error." />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/card_resolution"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_ml"
+                    android:background="@drawable/bg_card_flat"
+                    android:backgroundTint="@color/partner_secondary_container"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_ml"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                        <TextView
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/support_label_resolution"
+                            android:textColor="@color/partner_on_secondary_container"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_resolution_note"
+                            style="@style/PartnerTypography.Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/partner_space_s"
+                            android:textColor="@color/partner_on_secondary_container"
+                            tools:text="Sudah diperbaiki di versi terbaru aplikasi, silakan update dan coba lagi." />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/PartnerTypography.Label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:gravity="center"
+                    android:text="@string/support_info_footer" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

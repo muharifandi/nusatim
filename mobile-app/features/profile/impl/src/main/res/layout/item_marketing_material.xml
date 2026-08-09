@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/partner_space_m"
+    android:layout_marginVertical="@dimen/partner_space_s"
+    android:background="@drawable/bg_card_flat"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="@dimen/partner_space_m">
+
+        <ImageView
+            android:id="@+id/iv_type_icon"
+            android:layout_width="@dimen/partner_icon_container_m"
+            android:layout_height="@dimen/partner_icon_container_m"
+            android:src="@android:drawable/ic_menu_agenda"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/partner_primary" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/PartnerTypography.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/partner_space_m"
+            android:textSize="@dimen/partner_text_body1"
+            app:layout_constraintEnd_toStartOf="@id/iv_action"
+            app:layout_constraintStart_toEndOf="@id/iv_type_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Brosur Layanan 2026" />
+
+        <TextView
+            android:id="@+id/tv_description"
+            style="@style/PartnerTypography.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/partner_space_xs"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textSize="@dimen/partner_text_label1"
+            app:layout_constraintEnd_toEndOf="@id/tv_title"
+            app:layout_constraintStart_toStartOf="@id/tv_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            tools:text="Brosur ringkasan semua layanan kami untuk tahun 2026." />
+
+        <ImageView
+            android:id="@+id/iv_action"
+            android:layout_width="@dimen/partner_icon_xl"
+            android:layout_height="@dimen/partner_icon_xl"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="6dp"
+            android:src="@android:drawable/stat_sys_download"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/partner_primary" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

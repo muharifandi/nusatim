@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="register_title">Daftar Partner</string>
+    <string name="register_welcome">Selamat Bergabung</string>
+    <string name="register_subtitle">Lengkapi data Anda untuk mulai bermitra dengan kami.</string>
+    <string name="register_sign_up">Daftar</string>
+    <string name="register_have_account">Sudah punya akun? </string>
+    <string name="register_sign_in">Masuk</string>
+    <string name="register_btn_next">Lanjut</string>
+    <string name="register_btn_back">Kembali</string>
+    <string name="register_step_1_title">Data Akun</string>
+    <string name="register_hint_name">Nama Lengkap</string>
+    <string name="register_hint_email">Email</string>
+    <string name="register_hint_password">Password</string>
+    <string name="register_hint_password_confirm">Konfirmasi Password</string>
+    <string name="register_step_2_desc">Pilih dokumen KYC Anda (Maks 4MB)</string>
+    <string name="register_hint_bank_name">Nama Bank</string>
+    <string name="register_hint_bank_account_number">Nomor Rekening</string>
+    <string name="register_hint_bank_account_holder">Atas Nama</string>
+    <string name="register_step_4_agreement">Perjanjian Kemitraan Nusatim...\n\n(Teks panjang perjanjian di sini)...</string>
+    <string name="register_step_4_check">Saya sudah membaca dan menyetujui perjanjian kemitraan.</string>
+</resources>

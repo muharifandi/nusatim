@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">ArifNews</string>
+    <string name="retry">Retry</string>
+    <string name="news_app">News App</string>
+    <string name="search_news">Search news...</string>
+    <string name="loading_more">Loading more...</string>
+    <string name="empty_articles">No articles found.</string>
+    <string name="no_internet_connection">No internet connection.</string>
+    <string name="article_detail">Article Detail</string>
+    <string name="back">Back</string>
+    <string name="favorite">Favorite</string>
+    <string name="remove_favorite">Remove Favorite</string>
+    <string name="remove_favorite_desc">Are you sure you want to remove this article from favorites?</string>
+    <string name="remove">Remove</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_url_provided">No URL provided</string>
+    <string name="delete_favorite">Delete Favorite</string>
+    <string name="delete_favorite_desc">Are you sure you want to delete this article from favorites?</string>
+    <string name="delete">Delete</string>
+    <string name="favorites">Favorites</string>
+    <string name="no_favorites_yet">No favorite articles yet</string>
+    <string name="about_developer">About Developer</string>
+    <string name="profile_picture">Profile Picture</string>
+
+    <!-- Shared Placeholders -->
+    <string name="placeholder_email">Email Address</string>
+    <string name="placeholder_password">Password</string>
+    <string name="placeholder_name">Full Name</string>
+    <string name="placeholder_phone_format">(+84)</string>
+    <string name="error_default">Terjadi kesalahan saat memuat data.</string>
+    <string name="error_no_connection">Tidak ada koneksi internet.</string>
+    <string name="error_retry">Coba Lagi</string>
+</resources>

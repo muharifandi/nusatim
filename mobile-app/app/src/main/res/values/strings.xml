@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Nusatim Partner</string>
+    <string name="retry">Retry</string>
+    <string name="news_app">News App</string>
+    <string name="search_news">Search news...</string>
+    <string name="loading_more">Loading more...</string>
+    <string name="empty_articles">No articles found.</string>
+    <string name="no_internet_connection">No internet connection.</string>
+    <string name="article_detail">Article Detail</string>
+    <string name="back">Back</string>
+    <string name="favorite">Favorite</string>
+
+    <!-- Bottom Navigation -->
+    <string name="title_home">Beranda</string>
+    <string name="title_sales">Penjualan</string>
+    <string name="title_projects">Proyek</string>
+    <string name="title_finance">Keuangan</string>
+    <string name="title_profile">Profil</string>
+</resources>

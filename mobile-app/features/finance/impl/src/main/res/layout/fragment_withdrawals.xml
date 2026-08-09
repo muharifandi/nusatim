@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/partner_surface">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/partner_surface"
+                app:elevation="0dp">
+
+                <!-- Balance Card -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/partner_space_m"
+                    android:background="@drawable/bg_card_flat"
+                    android:backgroundTint="@color/partner_primary"
+                    android:padding="@dimen/partner_space_l">
+
+                        <FrameLayout
+                            android:id="@+id/card_wallet_header"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:background="@drawable/partner_button_primary_bg"
+                            android:backgroundTint="#33FFFFFF"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_wallet_small"
+                                app:tint="@color/partner_white" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/label_balance"
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="@string/withdrawal_label_balance"
+                            android:textColor="@color/partner_on_primary"
+                            app:layout_constraintStart_toEndOf="@id/card_wallet_header"
+                            app:layout_constraintTop_toTopOf="@id/card_wallet_header" />
+
+                        <TextView
+                            android:id="@+id/tv_available_balance"
+                            style="@style/PartnerTypography.Display"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textColor="@color/partner_white"
+                            android:textSize="@dimen/partner_text_display"
+                            app:layout_constraintStart_toStartOf="@id/label_balance"
+                            app:layout_constraintTop_toBottomOf="@id/label_balance"
+                            tools:text="Rp3.000.000" />
+
+                        <View
+                            android:id="@+id/divider_card"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="20dp"
+                            android:alpha="0.2"
+                            android:background="@color/partner_white"
+                            app:layout_constraintTop_toBottomOf="@id/tv_available_balance" />
+
+                        <TextView
+                            android:id="@+id/tv_min_withdrawal"
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:alpha="0.9"
+                            android:textColor="@color/partner_on_primary"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/divider_card"
+                            tools:text="Minimum Penarikan: Rp0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- History Title -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingBottom="8dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_status_pending"
+                        app:tint="@color/partner_primary" />
+
+                    <TextView
+                        style="@style/PartnerTypography.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/withdrawals_history"
+                        android:textSize="@dimen/partner_text_body1" />
+                </LinearLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_withdrawals"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingBottom="88dp"
+                    tools:listitem="@layout/item_withdrawal" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/partner_space_xl"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@drawable/ic_illustration_success"
+                    app:tint="@color/partner_silver" />
+
+                <TextView
+                    style="@style/PartnerTypography.Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/withdrawal_empty"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_request"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/partner_space_m"
+                android:src="@android:drawable/ic_input_add"
+                app:backgroundTint="@color/partner_primary"
+                app:tint="@color/partner_white" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
+</layout>

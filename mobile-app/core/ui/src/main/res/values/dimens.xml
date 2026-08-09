@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Spacing -->
+    <dimen name="partner_space_xs">4dp</dimen>
+    <dimen name="partner_space_s">8dp</dimen>
+    <dimen name="partner_space_m">16dp</dimen>
+    <dimen name="partner_space_ml">20dp</dimen>
+    <dimen name="partner_space_l">24dp</dimen>
+    <dimen name="partner_space_xl">32dp</dimen>
+
+    <!-- Radius -->
+    <dimen name="partner_radius_s">8dp</dimen>
+    <dimen name="partner_radius_m">12dp</dimen>
+    <dimen name="partner_radius_l">20dp</dimen>
+    <dimen name="partner_radius_xl">24dp</dimen>
+    <dimen name="partner_radius_xxl">32dp</dimen>
+    <dimen name="partner_radius_pill">100dp</dimen>
+
+    <!-- Typography -->
+    <dimen name="partner_text_display_large">36sp</dimen>
+    <dimen name="partner_text_display">32sp</dimen>
+    <dimen name="partner_text_title1">24sp</dimen>
+    <dimen name="partner_text_title2">20sp</dimen>
+    <dimen name="partner_text_title3">18sp</dimen>
+    <dimen name="partner_text_body1">16sp</dimen>
+    <dimen name="partner_text_body2">14sp</dimen>
+    <dimen name="partner_text_label1">13sp</dimen>
+    <dimen name="partner_text_caption1">12sp</dimen>
+    <dimen name="partner_text_caption2">11sp</dimen>
+    <dimen name="partner_text_small">10sp</dimen>
+
+    <!-- Icon Sizes -->
+    <dimen name="partner_icon_xs">14dp</dimen>
+    <dimen name="partner_icon_body">16dp</dimen>
+    <dimen name="partner_icon_s">18dp</dimen>
+    <dimen name="partner_icon_m">24dp</dimen>
+    <dimen name="partner_icon_l">28dp</dimen>
+    <dimen name="partner_icon_xl">32dp</dimen>
+    <dimen name="partner_icon_xxl">64dp</dimen>
+    <dimen name="partner_profile_image">100dp</dimen>
+    <dimen name="partner_icon_container_m">48dp</dimen>
+
+    <!-- Component Dimensions -->
+    <dimen name="partner_divider_height">1dp</dimen>
+    <dimen name="partner_accent_border_width">4dp</dimen>
+    <dimen name="partner_elevation_s">2dp</dimen>
+    <dimen name="partner_elevation_m">4dp</dimen>
+    <dimen name="partner_elevation_l">8dp</dimen>
+    <dimen name="partner_menu_item_height">72dp</dimen>
+    <dimen name="partner_agreement_height">300dp</dimen>
+</resources>

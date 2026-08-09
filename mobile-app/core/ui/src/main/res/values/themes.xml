@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.PartnerAndroid" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/partner_primary</item>
+        <item name="colorOnPrimary">@color/partner_on_primary</item>
+        <item name="colorPrimaryContainer">@color/partner_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/partner_on_primary_container</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/partner_secondary</item>
+        <item name="colorOnSecondary">@color/partner_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/partner_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/partner_on_secondary_container</item>
+
+        <!-- Neutral & Surface -->
+        <item name="android:windowBackground">@color/partner_surface</item>
+        <item name="colorSurface">@color/partner_surface</item>
+        <item name="colorOnSurface">@color/partner_on_surface</item>
+        <item name="colorSurfaceVariant">@color/partner_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/partner_on_surface_variant</item>
+        <item name="colorOutline">@color/partner_outline</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/partner_surface</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

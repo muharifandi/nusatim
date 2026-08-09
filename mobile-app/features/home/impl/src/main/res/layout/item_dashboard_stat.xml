@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card_flat"
+    android:padding="16dp">
+
+        <FrameLayout
+            android:id="@+id/container_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/partner_button_primary_bg"
+            android:backgroundTint="@color/partner_primary_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_stat_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_agenda"
+                app:tint="@color/partner_primary" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_stat_value"
+            style="@style/PartnerTypography.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textSize="@dimen/partner_text_title2"
+            app:layout_constraintStart_toEndOf="@id/container_icon"
+            app:layout_constraintTop_toTopOf="@id/container_icon"
+            tools:text="5" />
+
+        <TextView
+            android:id="@+id/tv_stat_label"
+            style="@style/PartnerTypography.Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/partner_grey"
+            android:textSize="@dimen/partner_text_caption1"
+            app:layout_constraintStart_toStartOf="@id/tv_stat_value"
+            app:layout_constraintTop_toBottomOf="@id/tv_stat_value"
+            tools:text="Total Lead" />
+
+        <TextView
+            android:id="@+id/tv_stat_trend"
+            style="@style/PartnerTypography.Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/status_success"
+            android:textSize="@dimen/partner_text_small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/container_icon"
+            tools:text="↗ +20% dari bulan lalu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

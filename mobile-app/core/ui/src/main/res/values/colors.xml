@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Seed Color: #a6541a (Terracotta Nusatim) -->
+    <color name="partner_primary">#a6541a</color>
+    <color name="partner_on_primary">#ffffff</color>
+    <color name="partner_primary_container">#ffdcc1</color>
+    <color name="partner_on_primary_container">#391400</color>
+
+    <color name="partner_secondary">#765848</color>
+    <color name="partner_on_secondary">#ffffff</color>
+    <color name="partner_secondary_container">#ffddcc</color>
+    <color name="partner_on_secondary_container">#2c160a</color>
+
+    <color name="partner_tertiary">#666034</color>
+    <color name="partner_on_tertiary">#ffffff</color>
+    <color name="partner_tertiary_container">#eee5ad</color>
+    <color name="partner_on_tertiary_container">#201c00</color>
+
+    <!-- Neutral Colors -->
+    <color name="partner_white">#ffffff</color>
+    <color name="partner_black">#1f1b1a</color>
+    <color name="partner_surface">#fff8f6</color>
+    <color name="partner_on_surface">#1f1b1a</color>
+    <color name="partner_surface_variant">#f4ded4</color>
+    <color name="partner_on_surface_variant">#524437</color>
+    <color name="partner_outline">#847466</color>
+    <color name="partner_grey">#9E9E9E</color>
+    <color name="partner_silver">#E0E0E0</color>
+
+    <!-- Semantic Status Colors (Separate from brand) -->
+    <color name="partner_error">#ba1a1a</color>
+    <color name="partner_on_error">#ffffff</color>
+    <color name="partner_error_container">#ffdad6</color>
+
+    <color name="status_neutral">#787579</color> <!-- Grey: new, pending, open, draft -->
+    <color name="status_warning">#8b5000</color> <!-- Amber/Yellow: in_progress, waiting payment -->
+    <color name="status_info">#0061a4</color>    <!-- Blue: assigned, approved (claims) -->
+    <color name="status_success">#006d39</color> <!-- Green: won, paid, closed, resolved -->
+
+    <!-- Design Specific Colors -->
+    <color name="project_orange_dark">#8B4513</color>
+    <color name="project_orange_medium">#A0522D</color>
+    <color name="project_orange_light">#FFF4E8</color>
+    <color name="project_orange_soft">#FFF3E0</color>
+    <color name="project_orange_subtle">#FFE0B2</color>
+    <color name="project_orange_background">#FEF7F4</color>
+    <color name="project_border_subtle">#EAD7D0</color>
+    <color name="project_green_light">#E8F5E9</color>
+    <color name="project_blue_light">#E3F2FD</color>
+    <color name="project_divider">#E0E0E0</color>
+</resources>

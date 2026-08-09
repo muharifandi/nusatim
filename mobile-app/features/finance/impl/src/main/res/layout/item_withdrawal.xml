@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/partner_space_m"
+    android:layout_marginVertical="@dimen/partner_space_s"
+    android:background="@drawable/bg_card_flat"
+    android:padding="@dimen/partner_space_m">
+
+        <!-- Icon Container -->
+        <FrameLayout
+            android:id="@+id/card_icon"
+            android:layout_width="@dimen/partner_icon_container_m"
+            android:layout_height="@dimen/partner_icon_container_m"
+            android:background="@drawable/bg_card_flat"
+            android:backgroundTint="@color/project_orange_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="@dimen/partner_icon_m"
+                android:layout_height="@dimen/partner_icon_m"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_wallet_small"
+                app:tint="@color/partner_primary" />
+        </FrameLayout>
+
+        <!-- Amount & Date -->
+        <TextView
+            android:id="@+id/tv_amount"
+            style="@style/PartnerTypography.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/partner_space_m"
+            android:layout_marginEnd="@dimen/partner_space_s"
+            android:textColor="@color/partner_primary"
+            android:textSize="@dimen/partner_text_title3"
+            app:layout_constraintEnd_toStartOf="@id/card_status"
+            app:layout_constraintStart_toEndOf="@id/card_icon"
+            app:layout_constraintTop_toTopOf="@id/card_icon"
+            tools:text="Rp500.000" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            style="@style/PartnerTypography.Label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/partner_space_xs"
+            android:alpha="0.6"
+            android:textSize="@dimen/partner_text_caption2"
+            app:layout_constraintEnd_toEndOf="@id/tv_amount"
+            app:layout_constraintStart_toStartOf="@id/tv_amount"
+            app:layout_constraintTop_toBottomOf="@id/tv_amount"
+            tools:text="2026-08-08T05:51:40.000000Z" />
+
+        <!-- Status Badge -->
+        <LinearLayout
+            android:id="@+id/card_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/partner_button_primary_bg"
+            android:backgroundTint="@color/project_blue_light"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/partner_space_ml"
+            android:paddingVertical="@dimen/partner_space_s"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_status_icon"
+                    android:layout_width="@dimen/partner_icon_xs"
+                    android:layout_height="@dimen/partner_icon_xs"
+                    android:layout_marginEnd="@dimen/partner_space_s"
+                    android:src="@drawable/ic_check_circle"
+                    app:tint="@color/status_info" />
+
+                <TextView
+                    android:id="@+id/tv_status_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/status_info"
+                    android:textSize="@dimen/partner_text_caption1"
+                    tools:text="Approved" />
+        </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

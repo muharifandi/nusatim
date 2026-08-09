@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/partner_space_m"
+    android:layout_marginVertical="@dimen/partner_space_s"
+    android:background="@drawable/bg_card_flat"
+    android:padding="@dimen/partner_space_m">
+
+        <!-- Circular Profile Icon -->
+        <FrameLayout
+            android:id="@+id/card_icon"
+            android:layout_width="@dimen/partner_icon_xxl"
+            android:layout_height="@dimen/partner_icon_xxl"
+            android:background="@drawable/bg_circle_orange_light"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="@dimen/partner_icon_l"
+                android:layout_height="@dimen/partner_icon_l"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_myplaces"
+                app:tint="@color/partner_primary"
+                android:contentDescription="@null" />
+        </FrameLayout>
+
+        <!-- Main Information -->
+        <TextView
+            android:id="@+id/tv_name"
+            style="@style/PartnerTypography.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/partner_space_m"
+            android:layout_marginEnd="@dimen/partner_space_s"
+            android:textSize="@dimen/partner_text_title3"
+            android:textColor="@color/partner_black"
+            app:layout_constraintEnd_toStartOf="@id/card_status"
+            app:layout_constraintStart_toEndOf="@id/card_icon"
+            app:layout_constraintTop_toTopOf="@id/card_icon"
+            tools:text="Eka Putri" />
+
+        <TextView
+            android:id="@+id/tv_product"
+            style="@style/PartnerTypography.Label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/partner_space_xs"
+            android:alpha="0.5"
+            android:textSize="@dimen/partner_text_body2"
+            app:layout_constraintEnd_toEndOf="@id/tv_name"
+            app:layout_constraintStart_toStartOf="@id/tv_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            tools:text="Interface Design" />
+
+        <!-- Status Badge -->
+        <LinearLayout
+            android:id="@+id/card_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/partner_button_primary_bg"
+            android:backgroundTint="@color/project_blue_light"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/partner_space_ml"
+            android:paddingVertical="@dimen/partner_space_s"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_name">
+
+                <ImageView
+                    android:id="@+id/iv_status_icon"
+                    android:layout_width="@dimen/partner_icon_body"
+                    android:layout_height="@dimen/partner_icon_body"
+                    android:layout_marginEnd="@dimen/partner_space_s"
+                    android:src="@android:drawable/ic_menu_myplaces"
+                    app:tint="@color/status_info"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:id="@+id/tv_status_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/status_info"
+                    android:textSize="@dimen/partner_text_label1"
+                    tools:text="Sebagian" />
+        </LinearLayout>
+
+        <!-- Horizontal Divider -->
+        <View
+            android:id="@+id/divider_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/partner_divider_height"
+            android:layout_marginTop="@dimen/partner_space_m"
+            android:alpha="0.1"
+            android:background="@color/partner_black"
+            app:layout_constraintTop_toBottomOf="@id/card_icon" />
+
+        <!-- Project Value Section -->
+        <FrameLayout
+            android:id="@+id/card_wallet"
+            android:layout_width="@dimen/partner_icon_container_m"
+            android:layout_height="@dimen/partner_icon_container_m"
+            android:layout_marginTop="@dimen/partner_space_m"
+            android:background="@drawable/partner_button_primary_bg"
+            android:backgroundTint="@color/project_orange_light"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/partner_icon_m"
+                android:layout_height="@dimen/partner_icon_m"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_wallet_small"
+                app:tint="@color/partner_primary"
+                android:contentDescription="@null" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/label_project_value"
+            style="@style/PartnerTypography.Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/partner_space_m"
+            android:alpha="0.6"
+            android:text="@string/customer_label_project_value"
+            android:textSize="@dimen/partner_text_caption1"
+            app:layout_constraintStart_toEndOf="@id/card_wallet"
+            app:layout_constraintTop_toTopOf="@id/card_wallet" />
+
+        <TextView
+            android:id="@+id/tv_project_value"
+            style="@style/PartnerTypography.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/partner_space_xs"
+            android:textColor="@color/partner_primary"
+            android:textSize="@dimen/partner_text_title1"
+            android:fontFamily="sans-serif-black"
+            app:layout_constraintStart_toStartOf="@id/label_project_value"
+            app:layout_constraintTop_toBottomOf="@id/label_project_value"
+            tools:text="Rp30.000.000" />
+
+        <!-- Progress Section -->
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="label_progress,tv_progress_percent,progress_project" />
+
+        <TextView
+            android:id="@+id/label_progress"
+            style="@style/PartnerTypography.Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/partner_space_m"
+            android:alpha="0.6"
+            android:text="@string/customer_label_progress"
+            android:textSize="@dimen/partner_text_caption1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_project_value" />
+
+        <TextView
+            android:id="@+id/tv_progress_percent"
+            style="@style/PartnerTypography.Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="@dimen/partner_text_caption1"
+            app:layout_constraintBottom_toBottomOf="@id/label_progress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/label_progress"
+            tools:text="60%" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_project"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/partner_space_s"
+            app:layout_constraintTop_toBottomOf="@id/label_progress"
+            app:trackCornerRadius="@dimen/partner_space_xs"
+            app:trackThickness="@dimen/partner_space_s"
+            app:trackColor="@color/project_orange_light"
+            app:indicatorColor="@color/partner_primary"
+            tools:progress="60" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_edit">Edit Profil</string>
+    <string name="profile_kyc">Dokumen KYC</string>
+    <string name="profile_change_password">Ganti Password</string>
+    <string name="profile_marketing">Marketing Center</string>
+    <string name="profile_support">Pusat Bantuan</string>
+    <string name="profile_logout">Keluar</string>
+    <string name="profile_status_approved">Disetujui</string>
+    <string name="profile_edit_title">Edit Profil</string>
+    <string name="profile_section_biodata">BIODATA</string>
+    <string name="profile_label_name">Nama Lengkap</string>
+    <string name="profile_label_email">Email</string>
+    <string name="profile_section_bank">REKENING BANK</string>
+    <string name="profile_label_bank_name">Nama Bank</string>
+    <string name="profile_label_bank_account">Nomor Rekening</string>
+    <string name="profile_label_bank_holder">Atas Nama</string>
+    <string name="profile_section_preference">PREFERENSI</string>
+    <string name="profile_label_email_notif">Notifikasi lewat email juga</string>
+    <string name="profile_btn_save">Simpan Perubahan</string>
+    <string name="profile_kyc_title">Dokumen KYC</string>
+    <string name="profile_label_photo">Foto Profil</string>
+    <string name="profile_btn_update_photo">Ganti Foto Profil</string>
+    <string name="profile_label_ktp">Kartu Tanda Penduduk (KTP)</string>
+    <string name="profile_btn_update_ktp">Ganti Foto KTP</string>
+    <string name="profile_label_npwp">NPWP (Opsional)</string>
+    <string name="profile_btn_update_npwp">Ganti Foto NPWP</string>
+    <string name="profile_password_title">Ganti Password</string>
+    <string name="profile_label_current_password">Password Saat Ini</string>
+    <string name="profile_label_new_password">Password Baru</string>
+    <string name="profile_label_confirm_password">Konfirmasi Password Baru</string>
+    <string name="profile_btn_save_password">Simpan Password</string>
+    <string name="marketing_btn_download">Unduh File</string>
+    <string name="marketing_btn_copy">Salin Teks</string>
+    <string name="marketing_btn_share">Bagikan</string>
+    <string name="marketing_empty">Belum ada materi marketing.</string>
+    <string name="support_title">Support Ticket</string>
+    <string name="support_empty">Belum ada tiket bantuan.</string>
+    <string name="support_btn_create">Buat Tiket</string>
+    <string name="support_form_title">Buat Tiket Bantuan</string>
+    <string name="support_label_subject">Subjek</string>
+    <string name="support_label_description">Deskripsi Masalah</string>
+    <string name="support_btn_send">Kirim Tiket</string>
+    <string name="support_detail_title">Detail Tiket</string>
+    <string name="support_label_resolution">Jawaban Admin</string>
+    <string name="support_info_footer">Butuh info tambahan? Buat tiket baru.</string>
+
+    <string name="notifications_title">Notifikasi</string>
+    <string name="notifications_btn_read_all">Tandai semua dibaca</string>
+    <string name="notifications_empty">Belum ada notifikasi.</string>
+    <string name="marketing_toast_copied">Teks disalin ke clipboard</string>
+</resources>

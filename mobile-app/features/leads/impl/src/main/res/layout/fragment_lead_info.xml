@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/partner_surface">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/partner_space_m">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_flat"
+                android:orientation="vertical"
+                android:padding="@dimen/partner_space_l">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_status"
+                        style="@style/PartnerBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:enabled="false"
+                        tools:backgroundTint="@color/status_info"
+                        tools:text="Qualified" />
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        style="@style/PartnerTypography.Headline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/partner_space_s"
+                        tools:text="Zaydan Mubaraq" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/partner_divider_height"
+                        android:layout_marginVertical="@dimen/partner_space_m"
+                        android:background="@color/partner_silver" />
+
+                    <TextView
+                        style="@style/PartnerTypography.Label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lead_info_phone" />
+
+                    <TextView
+                        android:id="@+id/tv_phone"
+                        style="@style/PartnerTypography.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/partner_space_xs"
+                        android:textColor="@color/partner_on_surface"
+                        tools:text="08123456789" />
+
+                    <TextView
+                        style="@style/PartnerTypography.Label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/partner_space_m"
+                        android:text="@string/lead_info_email" />
+
+                    <TextView
+                        android:id="@+id/tv_email"
+                        style="@style/PartnerTypography.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/partner_space_xs"
+                        android:textColor="@color/partner_on_surface"
+                        tools:text="zaydan@example.com" />
+
+                    <TextView
+                        style="@style/PartnerTypography.Label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/partner_space_m"
+                        android:text="@string/lead_info_product" />
+
+                    <TextView
+                        android:id="@+id/tv_product"
+                        style="@style/PartnerTypography.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/partner_space_xs"
+                        android:textColor="@color/partner_on_surface"
+                        tools:text="Sistem Panel Surya" />
+
+                    <TextView
+                        style="@style/PartnerTypography.Label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/partner_space_m"
+                        android:text="@string/lead_info_estimation" />
+
+                    <TextView
+                        android:id="@+id/tv_estimation"
+                        style="@style/PartnerTypography.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/partner_space_xs"
+                        android:textColor="@color/partner_primary"
+                        tools:text="Rp50.000.000" />
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_change_status"
+                style="@style/PartnerButton.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/lead_btn_change_status" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_view_customer"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/lead_btn_view_customer"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

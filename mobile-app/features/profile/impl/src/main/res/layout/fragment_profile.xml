@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.nusatim.partner.features.profile.ui.main.ProfileViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/partner_surface">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/layout_toolbar"
+                layout="@layout/layout_partner_toolbar" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/partner_space_m">
+
+                <!-- Header Profile Card -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_flat"
+                android:padding="0dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_profile_header"
+                    android:padding="@dimen/partner_space_l"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <FrameLayout
+                        android:id="@+id/layout_profile_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_profile_photo"
+                            android:layout_width="@dimen/partner_profile_image"
+                            android:layout_height="@dimen/partner_profile_image"
+                            android:padding="@dimen/partner_space_xs"
+                            android:background="@color/partner_white"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                            app:strokeColor="@color/partner_white"
+                            app:strokeWidth="@dimen/partner_space_xs"
+                            tools:src="@tools:sample/avatars" />
+
+                        <ImageView
+                            android:id="@+id/iv_badge"
+                            android:layout_width="@dimen/partner_icon_l"
+                            android:layout_height="@dimen/partner_icon_l"
+                            android:layout_gravity="bottom|end"
+                            android:layout_margin="@dimen/partner_space_xs"
+                            android:src="@drawable/ic_verified_badge"
+                            android:contentDescription="@null" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        style="@style/PartnerTypography.Title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/partner_space_m"
+                        android:textSize="@dimen/partner_text_title1"
+                        android:textColor="@color/partner_black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/layout_profile_image"
+                        app:layout_constraintTop_toTopOf="@id/layout_profile_image"
+                        app:layout_constraintBottom_toTopOf="@id/tv_email"
+                        app:layout_constraintVertical_chainStyle="packed"
+                        tools:text="Demo Reviewer" />
+
+                    <TextView
+                        android:id="@+id/tv_email"
+                        style="@style/PartnerTypography.Label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/partner_space_xs"
+                        android:textColor="@color/partner_on_surface_variant"
+                        app:layout_constraintBottom_toTopOf="@id/card_status_badge"
+                        app:layout_constraintEnd_toEndOf="@id/tv_name"
+                        app:layout_constraintStart_toStartOf="@id/tv_name"
+                        app:layout_constraintTop_toBottomOf="@id/tv_name"
+                        tools:text="demo.partner@nusatim.id" />
+
+                    <LinearLayout
+                        android:id="@+id/card_status_badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/partner_space_m"
+                        android:background="@drawable/partner_button_primary_bg"
+                        android:backgroundTint="@color/project_green_light"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="@dimen/partner_space_m"
+                        android:paddingVertical="@dimen/partner_space_xs"
+                        app:layout_constraintBottom_toBottomOf="@id/layout_profile_image"
+                        app:layout_constraintStart_toStartOf="@id/tv_name"
+                        app:layout_constraintTop_toBottomOf="@id/tv_email">
+
+                            <ImageView
+                                android:layout_width="@dimen/partner_icon_body"
+                                android:layout_height="@dimen/partner_icon_body"
+                                android:src="@drawable/ic_check_circle"
+                                app:tint="@color/status_success"
+                                android:contentDescription="@null" />
+
+                            <TextView
+                                android:id="@+id/tv_status_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/partner_space_s"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="@string/profile_status_approved"
+                                android:textColor="@color/status_success"
+                                android:textSize="@dimen/partner_text_label1"
+                                android:textStyle="bold" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Menu Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/partner_space_l"
+                android:layout_marginBottom="@dimen/partner_space_l"
+                android:background="@drawable/bg_card_flat"
+                android:orientation="vertical"
+                android:paddingVertical="@dimen/partner_space_s">
+
+                    <!-- Edit Profile -->
+                    <include
+                        android:id="@+id/menu_edit_profile"
+                        layout="@layout/item_profile_menu"
+                        app:icon="@{@android:drawable/ic_menu_edit}"
+                        app:title="@{@string/profile_edit}" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/partner_divider_height"
+                        android:layout_marginHorizontal="@dimen/partner_space_ml"
+                        android:background="@color/partner_silver" />
+
+                    <!-- KYC -->
+                    <include
+                        android:id="@+id/menu_kyc"
+                        layout="@layout/item_profile_menu"
+                        app:icon="@{@android:drawable/ic_menu_agenda}"
+                        app:title="@{@string/profile_kyc}" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/partner_divider_height"
+                        android:layout_marginHorizontal="@dimen/partner_space_ml"
+                        android:background="@color/partner_silver" />
+
+                    <!-- Change Password -->
+                    <include
+                        android:id="@+id/menu_change_password"
+                        layout="@layout/item_profile_menu"
+                        app:icon="@{@android:drawable/ic_lock_lock}"
+                        app:title="@{@string/profile_change_password}" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/partner_divider_height"
+                        android:layout_marginHorizontal="@dimen/partner_space_ml"
+                        android:background="@color/partner_silver" />
+
+                    <!-- Marketing -->
+                    <include
+                        android:id="@+id/menu_marketing"
+                        layout="@layout/item_profile_menu"
+                        app:icon="@{@android:drawable/ic_menu_camera}"
+                        app:title="@{@string/profile_marketing}" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/partner_divider_height"
+                        android:layout_marginHorizontal="@dimen/partner_space_ml"
+                        android:background="@color/partner_silver" />
+
+                    <!-- Support -->
+                    <include
+                        android:id="@+id/menu_support"
+                        layout="@layout/item_profile_menu"
+                        app:icon="@{@android:drawable/ic_menu_help}"
+                        app:title="@{@string/profile_support}" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/partner_divider_height"
+                        android:layout_marginHorizontal="@dimen/partner_space_ml"
+                        android:background="@color/partner_silver" />
+
+                    <!-- Logout -->
+                    <include
+                        android:id="@+id/menu_logout"
+                        layout="@layout/item_profile_menu"
+                        app:icon="@{@android:drawable/ic_lock_power_off}"
+                        app:isDestructive="@{true}"
+                        app:title="@{@string/profile_logout}" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

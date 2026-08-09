@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/PartnerTypography.Label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_step_2_desc" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/partner_space_m"
+            android:orientation="horizontal">
+
+            <include
+                android:id="@+id/card_photo_profile"
+                layout="@layout/layout_photo_picker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <include
+                android:id="@+id/card_photo_ktp"
+                layout="@layout/layout_photo_picker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/partner_space_m"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <include
+            android:id="@+id/card_photo_npwp"
+            layout="@layout/layout_photo_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/partner_space_m" />
+
+    </LinearLayout>
+</layout>

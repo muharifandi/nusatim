@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/partner_space_m"
+    android:layout_marginVertical="@dimen/partner_space_s"
+    android:background="@drawable/bg_card_flat"
+    android:paddingBottom="@dimen/partner_space_m">
+
+        <!-- Left Accent Bar -->
+        <View
+            android:id="@+id/view_accent"
+            android:layout_width="@dimen/partner_accent_border_width"
+            android:layout_height="0dp"
+            android:background="@color/partner_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Header Icon (Person/Project) -->
+        <FrameLayout
+            android:id="@+id/card_type_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/partner_button_primary_bg"
+            android:backgroundTint="@color/project_orange_light"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_type_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_myplaces"
+                app:tint="@color/partner_primary" />
+        </FrameLayout>
+
+        <!-- Title & Subtitle -->
+        <TextView
+            android:id="@+id/tv_customer_name"
+            style="@style/PartnerTypography.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/card_status"
+            app:layout_constraintStart_toEndOf="@id/card_type_icon"
+            app:layout_constraintTop_toTopOf="@id/card_type_icon"
+            tools:text="Eka Putri" />
+
+        <TextView
+            android:id="@+id/tv_service_name"
+            style="@style/PartnerTypography.Label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:alpha="0.7"
+            app:layout_constraintEnd_toEndOf="@id/tv_customer_name"
+            app:layout_constraintStart_toStartOf="@id/tv_customer_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_customer_name"
+            tools:text="Interface Design" />
+
+        <!-- Status Badge -->
+        <LinearLayout
+            android:id="@+id/card_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/partner_button_primary_bg"
+            android:backgroundTint="@color/project_blue_light"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_customer_name">
+
+            <ImageView
+                android:id="@+id/iv_status_icon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/ic_check_circle"
+                app:tint="@color/status_info" />
+
+            <TextView
+                android:id="@+id/tv_status_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/status_info"
+                android:textSize="12sp"
+                tools:text="Approved" />
+        </LinearLayout>
+
+        <!-- Divider Horizontal -->
+        <View
+            android:id="@+id/divider_horizontal"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:alpha="0.1"
+            android:background="@color/partner_on_surface"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/card_type_icon"
+            app:layout_constraintTop_toBottomOf="@id/tv_service_name" />
+
+        <!-- Amount Section -->
+        <FrameLayout
+            android:id="@+id/card_wallet_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/partner_button_primary_bg"
+            android:backgroundTint="@color/project_orange_light"
+            app:layout_constraintStart_toStartOf="@id/card_type_icon"
+            app:layout_constraintTop_toBottomOf="@id/divider_horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_wallet_small"
+                app:tint="@color/partner_primary" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_amount"
+            style="@style/PartnerTypography.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/partner_primary"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/card_wallet_icon"
+            app:layout_constraintStart_toEndOf="@id/card_wallet_icon"
+            app:layout_constraintTop_toTopOf="@id/card_wallet_icon"
+            tools:text="Rp3.000.000" />
+
+        <ImageView
+            android:id="@+id/iv_bonus"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:src="@android:drawable/btn_star_big_on"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/tv_amount"
+            app:layout_constraintStart_toEndOf="@id/tv_amount"
+            app:layout_constraintTop_toTopOf="@id/tv_amount"
+            app:tint="@color/status_warning"
+            tools:visibility="visible" />
+
+        <!-- Vertical Divider -->
+        <View
+            android:id="@+id/divider_vertical"
+            android:layout_width="1dp"
+            android:layout_height="32dp"
+            android:background="@color/project_divider"
+            app:layout_constraintBottom_toBottomOf="@id/card_wallet_icon"
+            app:layout_constraintEnd_toStartOf="@id/layout_calendar"
+            app:layout_constraintStart_toEndOf="@id/tv_amount"
+            app:layout_constraintTop_toTopOf="@id/card_wallet_icon"
+            app:layout_constraintHorizontal_bias="0.8" />
+
+        <!-- Date Section -->
+        <LinearLayout
+            android:id="@+id/layout_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/card_wallet_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/card_wallet_icon">
+
+            <FrameLayout
+                android:id="@+id/card_calendar_icon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/partner_button_primary_bg"
+                android:backgroundTint="@color/partner_surface_variant">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_calendar_small"
+                    app:tint="@color/partner_on_surface_variant" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_date"
+                style="@style/PartnerTypography.Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.8"
+                android:textSize="11sp"
+                tools:text="2026-08-08\n05:51:40.000000Z" />
+        </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

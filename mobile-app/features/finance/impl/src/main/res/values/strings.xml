@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="commissions_title">Komisi</string>
+    <string name="commissions_empty">Belum ada komisi.</string>
+    <string name="commission_status_all">Semua</string>
+    <string name="commission_status_pending">Pending</string>
+    <string name="commission_status_approved">Disetujui</string>
+    <string name="commission_status_paid">Dibayar</string>
+    <string name="commission_status_rejected">Ditolak</string>
+
+    <string name="commission_title_detail">Detail Komisi</string>
+    <string name="commission_label_created_at">Dibuat pada %1$s</string>
+    <string name="commission_label_rejection">Alasan Penolakan:</string>
+    <string name="commission_title_summary">Rincian Komisi</string>
+    <string name="commission_label_customer">Customer</string>
+    <string name="commission_label_service">Layanan</string>
+    <string name="commission_label_project_value">Nilai Proyek</string>
+    <string name="commission_label_percentage">Persentase</string>
+    <string name="commission_label_method">Metode</string>
+    <string name="commission_label_percent">%1$d%%</string>
+
+    <string name="withdrawals_title">Penarikan Saldo</string>
+    <string name="withdrawals_history">Riwayat Penarikan</string>
+    <string name="withdrawal_label_balance">Saldo Tersedia</string>
+    <string name="withdrawal_label_min">Minimum Penarikan: %1$s</string>
+    <string name="withdrawal_empty">Belum ada riwayat penarikan.</string>
+    <string name="withdrawal_btn_request">Ajukan Penarikan</string>
+
+    <string name="withdrawal_form_title">Ajukan Penarikan</string>
+    <string name="withdrawal_label_amount">Nominal Penarikan</string>
+    <string name="withdrawal_hint_amount">Masukkan nominal penarikan</string>
+    <string name="withdrawal_label_ktp">Foto KTP (Wajib)</string>
+    <string name="withdrawal_hint_ktp">Unggah foto KTP Anda</string>
+    <string name="withdrawal_label_note">Catatan (Opsional)</string>
+    <string name="withdrawal_hint_note">Tulis catatan jika diperlukan</string>
+    <string name="withdrawal_info_bank">Dana akan ditransfer ke: %1$s - %2$s a.n. %3$s</string>
+    <string name="withdrawal_info_bank_default">Dana akan ditransfer ke rekening terdaftar atas nama %1$s.</string>
+    <string name="withdrawal_btn_submit">Ajukan Sekarang</string>
+
+    <string name="withdrawal_detail_title">Detail Penarikan</string>
+    <string name="withdrawal_label_requested_at">Diajukan pada %1$s</string>
+    <string name="withdrawal_title_bank">Detail Rekening Tujuan</string>
+    <string name="withdrawal_label_bank">Bank</string>
+    <string name="withdrawal_label_acc_number">Nomor Rekening</string>
+    <string name="withdrawal_label_acc_holder">Atas Nama</string>
+    <string name="withdrawal_title_docs">Dokumen</string>
+    <string name="withdrawal_label_proof">Bukti Transfer</string>
+    <string name="withdrawal_empty_proof">Belum ada bukti transfer</string>
+</resources>

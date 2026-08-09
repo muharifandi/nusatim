@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="status_btn_refresh">Perbarui Status</string>
+    <string name="status_btn_refreshing">Memperbarui...</string>
+    <string name="status_title_rejected">Pendaftaran Ditolak</string>
+    <string name="status_desc_rejected">Maaf, pendaftaran Anda belum bisa kami setujui saat ini.</string>
+    <string name="status_title_suspended">Akun Ditangguhkan</string>
+    <string name="status_desc_suspended">Akun Anda sedang ditangguhkan. Silakan hubungi admin untuk informasi lebih lanjut.</string>
+    <string name="status_title_pending">Menunggu Persetujuan</string>
+    <string name="status_desc_pending">Pendaftaran Anda sedang ditinjau admin. Anda akan bisa mengakses seluruh fitur setelah disetujui.</string>
+</resources>

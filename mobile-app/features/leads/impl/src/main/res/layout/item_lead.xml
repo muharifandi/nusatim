@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/partner_space_m"
+    android:layout_marginVertical="@dimen/partner_space_s"
+    android:background="@drawable/bg_card_flat"
+    android:padding="@dimen/partner_space_m">
+
+        <!-- Circular Profile Icon -->
+        <FrameLayout
+            android:id="@+id/card_icon"
+            android:layout_width="@dimen/partner_icon_xxl"
+            android:layout_height="@dimen/partner_icon_xxl"
+            android:background="@drawable/bg_circle_orange_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="@dimen/partner_icon_l"
+                android:layout_height="@dimen/partner_icon_l"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_myplaces"
+                app:tint="@color/partner_primary"
+                android:contentDescription="@null" />
+        </FrameLayout>
+
+        <!-- Main Information -->
+        <TextView
+            android:id="@+id/tv_name"
+            style="@style/PartnerTypography.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/partner_space_m"
+            android:layout_marginEnd="@dimen/partner_space_s"
+            android:textSize="@dimen/partner_text_title3"
+            android:textColor="@color/partner_black"
+            app:layout_constraintEnd_toStartOf="@id/divider_vertical"
+            app:layout_constraintStart_toEndOf="@id/card_icon"
+            app:layout_constraintTop_toTopOf="@id/card_icon"
+            tools:text="Budi Santoso" />
+
+        <TextView
+            android:id="@+id/tv_phone"
+            style="@style/PartnerTypography.Label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/partner_space_xs"
+            android:alpha="0.5"
+            android:textSize="@dimen/partner_text_label1"
+            app:layout_constraintEnd_toEndOf="@id/tv_name"
+            app:layout_constraintStart_toStartOf="@id/tv_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            tools:text="081234567001" />
+
+        <!-- Product Tag -->
+        <LinearLayout
+            android:id="@+id/layout_product"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/partner_space_s"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@id/tv_name"
+            app:layout_constraintStart_toStartOf="@id/tv_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_phone">
+
+            <ImageView
+                android:id="@+id/iv_tag"
+                android:layout_width="@dimen/partner_icon_xs"
+                android:layout_height="@dimen/partner_icon_xs"
+                android:src="@android:drawable/ic_menu_agenda"
+                app:tint="@color/partner_primary"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:id="@+id/tv_product"
+                style="@style/PartnerTypography.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:textColor="@color/partner_primary"
+                android:textSize="@dimen/partner_text_label1"
+                android:fontFamily="sans-serif-medium"
+                tools:text="Sistem Panel Surya" />
+        </LinearLayout>
+
+        <!-- Vertical Divider -->
+        <View
+            android:id="@+id/divider_vertical"
+            android:layout_width="@dimen/partner_divider_height"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/partner_space_m"
+            android:alpha="0.05"
+            android:background="@color/partner_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_estimation"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Status Chip -->
+        <LinearLayout
+            android:id="@+id/card_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/partner_button_primary_bg"
+            android:backgroundTint="@color/partner_surface_variant"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_name">
+
+            <ImageView
+                android:id="@+id/iv_status_dot"
+                android:layout_width="@dimen/partner_space_s"
+                android:layout_height="@dimen/partner_space_s"
+                android:layout_marginEnd="@dimen/partner_space_s"
+                android:src="@drawable/dot_active"
+                app:tint="@color/status_neutral"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:id="@+id/tv_status_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/status_neutral"
+                android:textSize="@dimen/partner_text_label1"
+                tools:text="New" />
+        </LinearLayout>
+
+        <!-- Estimation Value -->
+        <TextView
+            android:id="@+id/tv_estimation"
+            style="@style/PartnerTypography.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/partner_space_m"
+            android:textColor="@color/partner_black"
+            android:textSize="@dimen/partner_text_title2"
+            android:fontFamily="sans-serif-black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_status"
+            tools:text="Rp12.000.000" />
+</androidx.constraintlayout.widget.ConstraintLayout>

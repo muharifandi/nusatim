@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dashboard_title">Beranda</string>
+    <string name="notifications_title">Notifikasi</string>
+    <string name="label_notifications">Notifikasi</string>
+    <string name="notifications_btn_read_all">Tandai semua dibaca</string>
+    <string name="notifications_empty">Belum ada notifikasi.</string>
+    <string name="home_greeting">Halo, %1$s</string>
+    <string name="home_stat_leads">Total Lead</string>
+    <string name="home_stat_opportunity">Total Opportunity</string>
+    <string name="home_stat_customers">Customer</string>
+    <string name="home_stat_projects">Proyek</string>
+    <string name="home_stat_trend">↗ %1$s dari bulan lalu</string>
+    <string name="home_sales_target_label">%1$s dari %2$s (%3$d%%)</string>
+    <string name="home_chart_pipeline_center">Total\n%1$d\nPipeline</string>
+</resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="icon"
+            type="android.graphics.drawable.Drawable" />
+        <variable
+            name="title"
+            type="String" />
+        <variable
+            name="isDestructive"
+            type="boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/partner_menu_item_height"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingHorizontal="@dimen/partner_space_l">
+
+        <FrameLayout
+            android:id="@+id/card_menu_icon"
+            android:layout_width="@dimen/partner_icon_container_m"
+            android:layout_height="@dimen/partner_icon_container_m"
+            android:background="@drawable/partner_button_primary_bg"
+            android:backgroundTint="@{isDestructive ? @color/partner_error_container : @color/partner_primary_container}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="@dimen/partner_icon_m"
+                android:layout_height="@dimen/partner_icon_m"
+                android:layout_gravity="center"
+                android:src="@{icon}"
+                android:tint="@{isDestructive ? @color/partner_error : @color/partner_primary}" />
+        </FrameLayout>
+
+        <TextView
+            style="@style/PartnerTypography.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/partner_space_m"
+            android:text="@{title}"
+            android:textColor="@{isDestructive ? @color/partner_error : @color/partner_black}"
+            android:textSize="@dimen/partner_text_body1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_chevron"
+            app:layout_constraintStart_toEndOf="@id/card_menu_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_chevron"
+            android:layout_width="@dimen/partner_radius_l"
+            android:layout_height="@dimen/partner_radius_l"
+            android:alpha="0.3"
+            android:src="@drawable/ic_chevron_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/partner_black" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

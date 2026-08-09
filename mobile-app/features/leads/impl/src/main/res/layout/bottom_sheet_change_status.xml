@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            style="@style/PartnerTypography.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ubah Status Lead" />
+
+        <RadioGroup
+            android:id="@+id/rg_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <RadioButton
+                android:id="@+id/rb_new"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New" />
+
+            <RadioButton
+                android:id="@+id/rb_contacted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contacted" />
+
+            <RadioButton
+                android:id="@+id/rb_qualified"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Qualified" />
+
+            <RadioButton
+                android:id="@+id/rb_opportunity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Opportunity" />
+
+            <RadioButton
+                android:id="@+id/rb_proposal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Proposal" />
+
+            <RadioButton
+                android:id="@+id/rb_negotiation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Negotiation" />
+
+            <RadioButton
+                android:id="@+id/rb_won"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Won" />
+
+            <RadioButton
+                android:id="@+id/rb_lost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lost" />
+        </RadioGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_confirm"
+            style="@style/PartnerButton.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:text="Konfirmasi Perubahan" />
+    </LinearLayout>
+</layout>

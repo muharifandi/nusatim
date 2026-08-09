@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.nusatim.partner.features.home.ui.dashboard.DashboardViewModel" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/partner_surface">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/partner_space_l">
+
+                <!-- Header Section -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/partner_space_ml"
+                    android:paddingTop="@dimen/partner_space_ml"
+                    android:paddingBottom="@dimen/partner_space_s">
+
+                    <TextView
+                        android:id="@+id/tv_greeting_name"
+                        style="@style/PartnerTypography.Headline"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Halo, Demo Reviewer"
+                        android:textColor="@color/partner_black"
+                        android:textSize="@dimen/partner_text_title1"
+                        app:layout_constraintEnd_toStartOf="@id/layout_notifications"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_greeting_sub"
+                        style="@style/PartnerTypography.Body"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/partner_space_xs"
+                        android:text="Selamat datang kembali 👋"
+                        android:textColor="@color/partner_grey"
+                        app:layout_constraintEnd_toEndOf="@id/tv_greeting_name"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_greeting_name" />
+
+                    <FrameLayout
+                        android:id="@+id/layout_notifications"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/partner_space_s"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_profile_circle"
+                        app:layout_constraintEnd_toStartOf="@id/iv_profile_circle"
+                        app:layout_constraintTop_toTopOf="@id/iv_profile_circle">
+
+                        <ImageView
+                            android:id="@+id/iv_notifications"
+                            android:layout_width="@dimen/partner_icon_xl"
+                            android:layout_height="@dimen/partner_icon_xl"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/label_notifications"
+                            android:padding="@dimen/partner_space_xs"
+                            android:src="@android:drawable/ic_popup_reminder"
+                            app:tint="@color/partner_primary" />
+
+                        <TextView
+                            android:id="@+id/tv_notification_badge"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_gravity="top|end"
+                            android:background="@drawable/bg_stat_icon_leads"
+                            android:backgroundTint="@color/partner_error"
+                            android:gravity="center"
+                            android:text="0"
+                            android:textColor="@color/partner_white"
+                            android:textSize="@dimen/partner_text_small"
+                            android:textStyle="bold"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+                    </FrameLayout>
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/iv_profile_circle"
+                        android:layout_width="@dimen/partner_icon_container_m"
+                        android:layout_height="@dimen/partner_icon_container_m"
+                        android:background="@color/partner_surface_variant"
+                        android:scaleType="centerCrop"
+                        android:padding="2dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Partner.Pill"
+                        tools:src="@tools:sample/avatars" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Financial Card -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/partner_space_m"
+                    android:background="@drawable/bg_dashboard_balance"
+                    android:padding="@dimen/partner_space_ml">
+
+                        <TextView
+                            android:id="@+id/label_balance"
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Saldo Tersedia"
+                            android:textColor="#E0E0E0"
+                            android:textSize="@dimen/partner_text_caption1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_balance"
+                            style="@style/PartnerTypography.Display"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/partner_space_xs"
+                            android:textColor="@color/partner_white"
+                            android:textSize="@dimen/partner_text_display_large"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/label_balance"
+                            tools:text="Rp3.000.000" />
+
+                        <LinearLayout
+                            android:id="@+id/btn_view_detail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/partner_space_m"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_balance">
+
+                            <ImageView
+                                android:layout_width="@dimen/partner_icon_body"
+                                android:layout_height="@dimen/partner_icon_body"
+                                android:src="@drawable/ic_check_circle"
+                                app:tint="@color/partner_white" />
+
+                            <TextView
+                                style="@style/PartnerTypography.Label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/partner_space_s"
+                                android:text="Lihat Detail"
+                                android:textColor="@color/partner_white" />
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:id="@+id/btn_withdraw"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/partner_button_primary_bg"
+                            android:backgroundTint="#20FFFFFF"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingHorizontal="@dimen/partner_space_m"
+                                android:paddingVertical="@dimen/partner_space_s">
+
+                                <ImageView
+                                    android:layout_width="@dimen/partner_icon_l"
+                                    android:layout_height="@dimen/partner_icon_l"
+                                    android:src="@drawable/ic_wallet_small"
+                                    app:tint="@color/partner_white" />
+
+                                <TextView
+                                    style="@style/PartnerTypography.Label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/partner_space_xs"
+                                    android:text="Tarik Saldo"
+                                    android:textColor="@color/partner_white"
+                                    android:textSize="@dimen/partner_text_small" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Activity Statistics Grid -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/partner_space_s"
+                    android:layout_marginTop="@dimen/partner_space_m"
+                    android:baselineAligned="false"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <include
+                            android:id="@+id/stat_total_leads"
+                            layout="@layout/item_dashboard_stat"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <include
+                            android:id="@+id/stat_total_opp"
+                            layout="@layout/item_dashboard_stat"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <include
+                            android:id="@+id/stat_total_cust"
+                            layout="@layout/item_dashboard_stat"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <include
+                            android:id="@+id/stat_total_proj"
+                            layout="@layout/item_dashboard_stat"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Sales Target Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/partner_space_m"
+                    android:layout_marginTop="@dimen/partner_space_m"
+                    android:background="@drawable/bg_card_flat"
+                    android:backgroundTint="#FFF8F1"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_ml">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/PartnerTypography.Title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Target Penjualan Bulan Ini"
+                                android:textSize="@dimen/partner_text_body1"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                style="@style/PartnerBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_stat_icon_leads"
+                                android:backgroundTint="#FDF2E9"
+                                android:paddingHorizontal="@dimen/partner_space_m"
+                                android:paddingVertical="@dimen/partner_space_xs"
+                                android:text="100% Tercapai ✨"
+                                android:textColor="@color/partner_primary"
+                                android:textSize="@dimen/partner_text_small"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                            android:id="@+id/progress_sales_target"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/partner_space_m"
+                            android:progress="100"
+                            app:indicatorColor="@color/partner_primary"
+                            app:trackColor="@color/partner_silver"
+                            app:trackCornerRadius="@dimen/partner_radius_s"
+                            app:trackThickness="@dimen/partner_space_s" />
+
+                        <TextView
+                            android:id="@+id/tv_sales_target_label"
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/partner_space_s"
+                            android:text="Rp30.000.000 dari Rp30.000.000 (100%)"
+                            android:textColor="@color/partner_grey"
+                            android:textSize="@dimen/partner_text_caption1" />
+                </LinearLayout>
+
+                <!-- Pipeline Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/partner_space_m"
+                    android:layout_marginTop="@dimen/partner_space_l"
+                    android:background="@drawable/bg_card_flat"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_ml">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/PartnerTypography.Title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pipeline Penjualan"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.button.MaterialButton
+                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minHeight="0dp"
+                                android:paddingVertical="@dimen/partner_space_xs"
+                                android:text="Bulan Ini"
+                                android:textColor="@color/partner_black"
+                                android:textSize="@dimen/partner_text_caption1"
+                                app:icon="@android:drawable/arrow_down_float"
+                                app:iconGravity="end"
+                                app:iconSize="@dimen/partner_icon_xs"
+                                app:iconTint="@color/partner_black"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:strokeColor="@color/partner_silver" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/chart_pipeline"
+                            android:layout_width="match_parent"
+                            android:layout_height="320dp"
+                            android:layout_marginTop="@dimen/partner_space_m" />
+                </LinearLayout>
+
+                <!-- Closing Trend Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/partner_space_m"
+                    android:layout_marginTop="@dimen/partner_space_m"
+                    android:background="@drawable/bg_card_flat"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_ml">
+
+                        <TextView
+                            style="@style/PartnerTypography.Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Trend Closing" />
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/chart_closing"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:layout_marginTop="@dimen/partner_space_m" />
+                </LinearLayout>
+
+                <!-- Commission Trend Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/partner_space_m"
+                    android:layout_marginTop="@dimen/partner_space_m"
+                    android:background="@drawable/bg_card_flat"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_ml">
+
+                        <TextView
+                            style="@style/PartnerTypography.Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Trend Komisi" />
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/chart_commission"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:layout_marginTop="@dimen/partner_space_m" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <include
+            android:id="@+id/layout_error"
+            layout="@layout/layout_error_state"
+            android:visibility="gone" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

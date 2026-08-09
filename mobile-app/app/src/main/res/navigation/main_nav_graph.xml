@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/splash_fragment">
+
+    <!-- SPLASH -->
+    <fragment
+        android:id="@+id/splash_fragment"
+        android:name="com.nusatim.partner.features.splash.ui.SplashFragment"
+        android:label="SplashFragment" />
+
+    <!-- INTRO / ONBOARDING -->
+    <fragment
+        android:id="@+id/intro_fragment"
+        android:name="com.nusatim.partner.features.intro.ui.IntroFragment"
+        android:label="IntroFragment">
+        <deepLink app:uri="partner://intro" />
+    </fragment>
+
+    <!-- AUTH FLOW -->
+    <fragment
+        android:id="@+id/login_fragment"
+        android:name="com.nusatim.partner.features.login.ui.LoginFragment"
+        android:label="LoginFragment">
+        <deepLink app:uri="partner://login" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/forgot_password_fragment"
+        android:name="com.nusatim.partner.features.login.ui.forgot.ForgotPasswordFragment"
+        android:label="ForgotPasswordFragment">
+        <deepLink app:uri="partner://forgot-password" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reset_password_fragment"
+        android:name="com.nusatim.partner.features.login.ui.forgot.ResetPasswordFragment"
+        android:label="ResetPasswordFragment">
+        <deepLink app:uri="partner://reset-password?email={email}" />
+        <argument
+            android:name="email"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/register_fragment"
+        android:name="com.nusatim.partner.features.register.ui.RegisterFragment"
+        android:label="RegisterFragment">
+        <deepLink app:uri="partner://register" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/approval_status_fragment"
+        android:name="com.nusatim.partner.features.auth.status.ui.ApprovalStatusFragment"
+        android:label="ApprovalStatusFragment">
+        <deepLink app:uri="partner://approval-status" />
+    </fragment>
+
+    <!-- MAIN FLOW (Bottom Nav / Drawer) -->
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.nusatim.partner.features.home.ui.dashboard.HomeFragment"
+        android:label="Home">
+        <deepLink app:uri="partner://home" />
+    </fragment>
+
+    <!-- LEADS / SALES FLOW -->
+    <fragment
+        android:id="@+id/navigation_leads"
+        android:name="com.nusatim.partner.features.leads.ui.shared.SalesFragment"
+        android:label="Penjualan">
+        <deepLink app:uri="partner://leads" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/lead_form_fragment"
+        android:name="com.nusatim.partner.features.leads.ui.leads.form.LeadFormFragment"
+        android:label="Lead Form">
+        <deepLink app:uri="partner://leads/add" />
+        <deepLink app:uri="partner://leads/edit?id={id}" />
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/lead_detail_fragment"
+        android:name="com.nusatim.partner.features.leads.ui.leads.detail.LeadDetailFragment"
+        android:label="Lead Detail">
+        <deepLink app:uri="partner://leads/detail?id={id}" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/customer_detail_fragment"
+        android:name="com.nusatim.partner.features.leads.ui.customers.detail.CustomerDetailFragment"
+        android:label="Customer Detail">
+        <deepLink app:uri="partner://customers/detail?id={id}" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_projects"
+        android:name="com.nusatim.partner.features.projects.ui.board.ProjectsFragment"
+        android:label="Projects">
+        <deepLink app:uri="partner://projects" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/project_detail_fragment"
+        android:name="com.nusatim.partner.features.projects.ui.detail.ProjectDetailFragment"
+        android:label="Project Detail">
+        <deepLink app:uri="partner://projects/detail?id={id}" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_finance"
+        android:name="com.nusatim.partner.features.finance.ui.commissions.FinanceFragment"
+        android:label="Finance">
+        <deepLink app:uri="partner://finance" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/commission_detail_fragment"
+        android:name="com.nusatim.partner.features.finance.ui.commissions.detail.CommissionDetailFragment"
+        android:label="Commission Detail">
+        <deepLink app:uri="partner://commissions/detail?id={id}" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/withdrawal_form_fragment"
+        android:name="com.nusatim.partner.features.finance.ui.withdrawals.form.WithdrawalFormFragment"
+        android:label="Request Withdrawal">
+        <deepLink app:uri="partner://withdrawals/add" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/withdrawal_detail_fragment"
+        android:name="com.nusatim.partner.features.finance.ui.withdrawals.detail.WithdrawalDetailFragment"
+        android:label="Withdrawal Detail">
+        <deepLink app:uri="partner://withdrawals/detail?id={id}" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.nusatim.partner.features.profile.ui.main.ProfileFragment"
+        android:label="Profile">
+        <deepLink app:uri="partner://profile" />
+        <action
+            android:id="@+id/action_profile_to_edit_profile"
+            app:destination="@id/edit_profile_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/notifications_fragment"
+        android:name="com.nusatim.partner.features.home.ui.notifications.NotificationsFragment"
+        android:label="Notifications">
+        <deepLink app:uri="partner://notifications" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/edit_profile_fragment"
+        android:name="com.nusatim.partner.features.profile.ui.edit.EditProfileFragment"
+        android:label="Edit Profile">
+        <deepLink app:uri="partner://profile/edit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/kyc_documents_fragment"
+        android:name="com.nusatim.partner.features.profile.ui.kyc.KycDocumentsFragment"
+        android:label="KYC Documents">
+        <deepLink app:uri="partner://profile/kyc" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/change_password_fragment"
+        android:name="com.nusatim.partner.features.profile.ui.password.ChangePasswordFragment"
+        android:label="Change Password">
+        <deepLink app:uri="partner://profile/password" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/marketing_materials_fragment"
+        android:name="com.nusatim.partner.features.profile.ui.marketing.MarketingMaterialsFragment"
+        android:label="Marketing Center">
+        <deepLink app:uri="partner://marketing" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/marketing_detail_fragment"
+        android:name="com.nusatim.partner.features.profile.ui.marketing.detail.MarketingMaterialDetailFragment"
+        android:label="Marketing Detail">
+        <deepLink app:uri="partner://marketing/detail?id={id}" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/support_tickets_fragment"
+        android:name="com.nusatim.partner.features.profile.ui.support.SupportTicketsFragment"
+        android:label="Support Ticket">
+        <deepLink app:uri="partner://support" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/support_ticket_form_fragment"
+        android:name="com.nusatim.partner.features.profile.ui.support.form.SupportTicketFormFragment"
+        android:label="Create Support Ticket">
+        <deepLink app:uri="partner://support/add" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/support_ticket_detail_fragment"
+        android:name="com.nusatim.partner.features.profile.ui.support.detail.SupportTicketDetailFragment"
+        android:label="Support Ticket Detail">
+        <deepLink app:uri="partner://support/detail?id={id}" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+
+    <!-- OTHERS -->
+    <fragment
+        android:id="@+id/navigation_network"
+        android:name="com.nusatim.partner.features.network.ui.NetworkFragment"
+        android:label="Network" />
+
+</navigation>

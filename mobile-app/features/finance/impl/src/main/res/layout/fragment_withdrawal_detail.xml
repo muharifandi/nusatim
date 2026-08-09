@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/partner_surface">
+
+        <include
+            android:id="@+id/layout_toolbar"
+            layout="@layout/layout_partner_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/partner_space_m">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card_flat"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_l">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_status"
+                            style="@style/PartnerBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:enabled="false"
+                            tools:text="Pending" />
+
+                        <TextView
+                            android:id="@+id/tv_amount"
+                            style="@style/PartnerTypography.Display"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/partner_space_m"
+                            android:textColor="@color/partner_primary"
+                            tools:text="Rp1.500.000" />
+
+                        <TextView
+                            android:id="@+id/tv_date"
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/partner_space_xs"
+                            tools:text="Diajukan pada 25 Juli 2026" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/card_rejection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_m"
+                    android:background="@drawable/bg_card_flat"
+                    android:backgroundTint="@color/partner_error_container"
+                    android:orientation="vertical"
+                    android:padding="@dimen/partner_space_m"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                        <TextView
+                            style="@style/PartnerTypography.Label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/commission_label_rejection"
+                            android:textColor="@color/partner_error" />
+
+                        <TextView
+                            android:id="@+id/tv_rejection_reason"
+                            style="@style/PartnerTypography.Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/partner_space_xs"
+                            tools:text="Foto KTP tidak jelas." />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/PartnerTypography.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_l"
+                    android:text="@string/withdrawal_title_bank" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_s"
+                    android:background="@drawable/bg_card_flat">
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/partner_space_m"
+                        android:stretchColumns="1">
+
+                        <TableRow android:paddingVertical="@dimen/partner_space_s">
+                            <TextView style="@style/PartnerTypography.Label" android:text="@string/withdrawal_label_bank" />
+                            <TextView android:id="@+id/tv_bank_name" style="@style/PartnerTypography.Body" android:gravity="end" tools:text="BCA" />
+                        </TableRow>
+
+                        <TableRow android:paddingVertical="@dimen/partner_space_s">
+                            <TextView style="@style/PartnerTypography.Label" android:text="@string/withdrawal_label_acc_number" />
+                            <TextView android:id="@+id/tv_bank_account_number" style="@style/PartnerTypography.Body" android:gravity="end" tools:text="1234567890" />
+                        </TableRow>
+
+                        <TableRow android:paddingVertical="@dimen/partner_space_s">
+                            <TextView style="@style/PartnerTypography.Label" android:text="@string/withdrawal_label_acc_holder" />
+                            <TextView android:id="@+id/tv_bank_account_holder" style="@style/PartnerTypography.Body" android:gravity="end" tools:text="Budi Santoso" />
+                        </TableRow>
+                    </TableLayout>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/PartnerTypography.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_l"
+                    android:text="@string/withdrawal_title_docs" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/partner_space_s"
+                    android:background="@drawable/bg_card_flat">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/partner_space_m">
+
+                        <TextView style="@style/PartnerTypography.Label" android:text="@string/withdrawal_label_ktp" />
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_ktp"
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:layout_marginTop="@dimen/partner_space_s"
+                            android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/PartnerCardFlat" />
+
+                        <TextView style="@style/PartnerTypography.Label" android:text="@string/withdrawal_label_proof" android:layout_marginTop="@dimen/partner_space_m" />
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_proof"
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:layout_marginTop="@dimen/partner_space_s"
+                            android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/PartnerCardFlat" />
+
+                        <TextView
+                            android:id="@+id/tv_proof_placeholder"
+                            style="@style/PartnerTypography.Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/partner_radius_pill"
+                            android:layout_marginTop="@dimen/partner_space_s"
+                            android:gravity="center"
+                            android:background="@color/partner_surface_variant"
+                            android:text="@string/withdrawal_empty_proof"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
