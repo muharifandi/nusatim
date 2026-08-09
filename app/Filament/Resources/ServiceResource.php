@@ -45,6 +45,10 @@ class ServiceResource extends Resource
                 Forms\Components\TextInput::make('short_description')
                     ->maxLength(500)
                     ->default(null),
+                Forms\Components\TextInput::make('cta_url')
+                    ->label('URL Tombol "Selengkapnya" (opsional)')
+                    ->maxLength(255)
+                    ->helperText('Kosongkan untuk mengarah otomatis ke halaman detail service ini. Isi untuk arahkan ke tujuan lain (bisa path relatif seperti /contact, atau URL lengkap seperti https://wa.me/...).'),
                 Forms\Components\RichEditor::make('content')
                     ->fileAttachmentsDisk('media')
                     ->fileAttachmentsDirectory('media/uploads')

@@ -52,12 +52,26 @@ class PageResource extends Resource
                     ->disk('media')
                     ->directory('media/uploads')
                     ->image(),
+                Forms\Components\FileUpload::make('about_1_image')
+                    ->label('Gambar "Kolaborasi Erat dengan Tim Anda"')
+                    ->disk('media')
+                    ->directory('media/uploads')
+                    ->image()
+                    ->visible(fn (?Page $record) => $record?->slug === 'services')
+                    ->helperText('Khusus halaman Layanan - section about pertama. Kosongkan untuk pakai gambar bawaan.'),
+                Forms\Components\FileUpload::make('about_2_image')
+                    ->label('Gambar "Solusi yang Dibangun untuk Bertumbuh"')
+                    ->disk('media')
+                    ->directory('media/uploads')
+                    ->image()
+                    ->visible(fn (?Page $record) => $record?->slug === 'services')
+                    ->helperText('Khusus halaman Layanan - section about kedua. Kosongkan untuk pakai gambar bawaan.'),
                 Forms\Components\KeyValue::make('content')
                     ->keyLabel('Field')
                     ->valueLabel('Text')
                     ->reorderable()
                     ->columnSpanFull()
-                    ->helperText('Semua judul/label/teks section untuk halaman ini. Contoh key untuk Home: hero_title, hero_subtitle, hero_text, about_preview_title, dst.'),
+                    ->helperText('Semua judul/label/teks section untuk halaman ini. Contoh key untuk Home: hero_title, hero_subtitle, hero_text, about_preview_title, dst. Untuk halaman Layanan, gambar about_1_image/about_2_image diatur lewat uploader di atas, bukan di sini.'),
             ]);
     }
 

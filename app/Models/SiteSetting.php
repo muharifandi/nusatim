@@ -47,11 +47,13 @@ class SiteSetting extends Model
         'mail_from_address',
         'mail_from_name',
         'search_console_resource_id',
+        'show_language_switcher',
     ];
 
     protected $casts = [
         'enable_image_skeleton' => 'boolean',
         'coming_soon_enabled' => 'boolean',
+        'show_language_switcher' => 'boolean',
         'mail_use_custom_smtp' => 'boolean',
         // Laravel's built-in encrypt/decrypt-on-access cast (keyed off APP_KEY) -
         // this SMTP password sits in the database rather than a gitignored .env,

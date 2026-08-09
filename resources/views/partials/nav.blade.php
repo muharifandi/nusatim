@@ -30,20 +30,22 @@
 					</div>
 					<div class="col-lg-3 d-flex justify-content-end">
 						<ul class="header-action-items">
-							<li class="single-item">
-								<div class="lang-switcher" id="langSwitcher">
-									<button type="button" class="lang-switcher-btn" id="langSwitcherBtn" aria-haspopup="true" aria-expanded="false" title="Pilih Bahasa">
-										<span class="lang-flag">🇮🇩</span><span class="lang-code">ID</span>
-										<i class="fas fa-chevron-down lang-caret"></i>
-									</button>
-									<ul class="lang-switcher-menu" id="langSwitcherMenu">
-										<li class="active"><a href="#"><span class="lang-flag">🇮🇩</span> Indonesia</a></li>
-										<li class="disabled"><span><span class="lang-flag">🇬🇧</span> English <em>Segera Hadir</em></span></li>
-									</ul>
-								</div>
-							</li>
+							@if($siteSettings->show_language_switcher)
+								<li class="single-item">
+									<div class="lang-switcher" id="langSwitcher">
+										<button type="button" class="lang-switcher-btn" id="langSwitcherBtn" aria-haspopup="true" aria-expanded="false" title="Pilih Bahasa">
+											<span class="lang-flag">🇮🇩</span><span class="lang-code">ID</span>
+											<i class="fas fa-chevron-down lang-caret"></i>
+										</button>
+										<ul class="lang-switcher-menu" id="langSwitcherMenu">
+											<li class="active"><a href="#"><span class="lang-flag">🇮🇩</span> Indonesia</a></li>
+											<li class="disabled"><span><span class="lang-flag">🇬🇧</span> English <em>Segera Hadir</em></span></li>
+										</ul>
+									</div>
+								</li>
+							@endif
 							<li class="single-item mr-2">
-								<a href="{{ route('contact') }}" class="item-btn btn-ghost btn-light">{{ $siteSettings->nav_cta_text ?: 'Get a Quote' }}</a>
+								<a href="{{ route('contact') }}" class="item-btn btn-ghost btn-light">{{ $siteSettings->nav_cta_text ?: 'Hubungi Kami' }}</a>
 							</li>
 							<li class="single-item">
 								<button type="button" class="offcanvas-menu-btn menu-status-open">

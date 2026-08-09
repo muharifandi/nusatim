@@ -17,6 +17,8 @@ class Page extends Model
         'meta_description',
         'meta_keywords',
         'og_image',
+        'about_1_image',
+        'about_2_image',
         'content',
     ];
 
@@ -51,6 +53,6 @@ class Page extends Model
 
     protected function fileFields(): array
     {
-        return ['og_image'];
+        return ['og_image', 'about_1_image', 'about_2_image'];
     }
 }

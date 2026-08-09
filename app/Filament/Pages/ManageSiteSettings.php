@@ -151,6 +151,10 @@ class ManageSiteSettings extends Page implements HasActions, HasForms
                             ->label('Teks Tombol CTA (Menu Navigasi)')
                             ->placeholder('Get a Quote')
                             ->maxLength(50),
+                        Toggle::make('show_language_switcher')
+                            ->label('Tampilkan Tombol Bahasa')
+                            ->helperText('Tombol pilihan bahasa (ID/EN) di menu navigasi. Nonaktifkan kalau versi bahasa Inggris situs belum tersedia - saat ini opsi English masih ditandai "Segera Hadir" dan tidak berfungsi.')
+                            ->default(false),
                     ]),
 
                 Section::make('Halaman Layanan (Services)')

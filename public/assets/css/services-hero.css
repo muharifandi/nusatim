@@ -1,0 +1,961 @@
+/*
+ * Services page hero - replaces the old generic page-banner (animated
+ * gradient blobs) with a proper content hero: eyebrow, heading, copy,
+ * 3 feature highlights, and a hand-built CSS/HTML "dashboard mockup"
+ * illustration on the right (no image asset - stays crisp at any size,
+ * no extra HTTP request, easy to recolor if the brand accent changes).
+ * Scoped under its own class rather than reusing .modern-home so it
+ * doesn't depend on modern-home.css being loaded on this page.
+ */
+
+/* ---------- Header override (unscoped: header lives outside .services-hero) ----------
+   Same fix as modern-home.css on the home page: the theme's header is
+   transparent-with-white-text by default and only turns solid/dark-text once
+   `.sticky` is added on scroll, assuming a dark/colored hero sits behind it.
+   This hero is a light background, so that default state is invisible until
+   the user scrolls. This file only loads on the services page, so it's safe
+   to force the "solid" look unconditionally here. */
+header .navbar-layout1 {
+	background-color: #ffffff;
+	box-shadow: 0 0 35px 0 rgba(20, 20, 43, 0.08);
+}
+
+header .navbar-layout1 .temp-logo .default-logo {
+	opacity: 0;
+	visibility: hidden;
+}
+
+header .navbar-layout1 .temp-logo .sticky-logo {
+	opacity: 1;
+	visibility: visible;
+}
+
+header .navbar-layout1 nav.template-main-menu > ul > li > a {
+	color: #14142b;
+}
+
+header .navbar-layout1 .item-btn.btn-ghost.btn-light {
+	border-color: #5a49f8;
+	color: #5a49f8;
+	background-color: transparent;
+}
+
+header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
+	background-color: #5a49f8;
+	color: #ffffff;
+}
+
+.services-hero {
+	--brand: #5a49f8;
+	--brand-dark: #4433d8;
+	--brand-light: #eeebff;
+	--ink: #14142b;
+	--muted: #6e7191;
+	--border: #ecebfa;
+	padding: 190px 0 64px;
+	background: #fff;
+	font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.services-hero-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 64px;
+	align-items: center;
+}
+
+.services-hero-badge {
+	display: inline-block;
+	background: var(--brand-light);
+	color: var(--brand);
+	font-size: 13px;
+	font-weight: 700;
+	padding: 8px 16px;
+	border-radius: 999px;
+	margin-bottom: 20px;
+}
+
+.services-hero-heading {
+	font-size: 42px;
+	font-weight: 800;
+	line-height: 1.2;
+	color: var(--ink);
+	margin: 0 0 20px;
+	text-wrap: balance;
+}
+
+.services-hero-text {
+	font-size: 17px;
+	line-height: 1.7;
+	color: var(--muted);
+	margin: 0 0 36px;
+	max-width: 46ch;
+}
+
+.services-hero-features {
+	display: flex;
+	flex-wrap: nowrap;
+	gap: 16px;
+}
+
+.services-hero-feature {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+.services-hero-feature-icon {
+	flex-shrink: 0;
+	width: 40px;
+	height: 40px;
+	border-radius: 12px;
+	background: var(--brand-light);
+	color: var(--brand);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 18px;
+}
+
+.services-hero-feature-title {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--ink);
+	line-height: 1.4;
+	overflow-wrap: break-word;
+	word-break: break-word;
+}
+
+/* ---------- Dashboard mockup illustration ---------- */
+
+.services-hero-visual {
+	position: relative;
+}
+
+.dm-window {
+	display: grid;
+	grid-template-columns: 76px 1fr;
+	background: #fff;
+	border-radius: 28px;
+	box-shadow: 0 40px 80px -30px rgba(20, 20, 43, 0.28);
+	overflow: hidden;
+}
+
+.dm-sidebar {
+	background: linear-gradient(180deg, var(--brand) 0%, var(--brand-dark) 100%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 24px 0;
+	gap: 28px;
+}
+
+.dm-sidebar-logo {
+	width: 34px;
+	height: 34px;
+	border-radius: 10px;
+	background: #fff;
+	color: var(--brand);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 800;
+	font-size: 15px;
+}
+
+.dm-sidebar-icons {
+	display: flex;
+	flex-direction: column;
+	gap: 22px;
+}
+
+.dm-sidebar-icon {
+	width: 20px;
+	height: 20px;
+	border-radius: 6px;
+	background: rgba(255, 255, 255, 0.28);
+}
+
+.dm-sidebar-icon.active {
+	background: #fff;
+	box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+}
+
+.dm-main {
+	padding: 24px 28px 28px;
+}
+
+.dm-topbar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 24px;
+}
+
+.dm-dots {
+	display: flex;
+	gap: 6px;
+}
+
+.dm-dots span {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+}
+
+.dm-dots span:nth-child(1) {
+	background: #ff6b6b;
+}
+
+.dm-dots span:nth-child(2) {
+	background: #ffd166;
+}
+
+.dm-dots span:nth-child(3) {
+	background: #4ecb71;
+}
+
+.dm-topbar-title {
+	font-size: 15px;
+	font-weight: 700;
+	color: var(--ink);
+}
+
+.dm-topbar-actions {
+	margin-left: auto;
+	display: flex;
+	gap: 8px;
+}
+
+.dm-round-btn {
+	width: 30px;
+	height: 30px;
+	border-radius: 10px;
+	background: var(--bg-soft, #f4f4fb);
+	border: 1px solid var(--border);
+}
+
+.dm-round-btn-primary {
+	background: var(--brand);
+	border-color: var(--brand);
+}
+
+.dm-content-grid {
+	display: grid;
+	grid-template-columns: 1.6fr 1fr;
+	gap: 16px;
+}
+
+.dm-stat-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+	margin-bottom: 16px;
+}
+
+.dm-stat-card,
+.dm-satisfaction-card {
+	background: #fff;
+	border: 1px solid var(--border);
+	border-radius: 16px;
+	padding: 16px;
+}
+
+.dm-stat-label {
+	font-size: 12px;
+	color: var(--muted);
+	margin-bottom: 6px;
+}
+
+.dm-stat-value {
+	font-size: 22px;
+	font-weight: 800;
+	color: var(--ink);
+	line-height: 1;
+	margin-bottom: 10px;
+}
+
+.dm-stat-value.dm-positive,
+.dm-stat-label.dm-positive {
+	color: #16a34a;
+}
+
+.dm-stat-sub {
+	font-size: 11px;
+	color: var(--muted);
+}
+
+.dm-mini-bar {
+	height: 5px;
+	border-radius: 999px;
+	background: var(--border);
+	overflow: hidden;
+}
+
+.dm-mini-bar span {
+	display: block;
+	height: 100%;
+	background: var(--brand);
+	border-radius: 999px;
+}
+
+.dm-stat-card-tall {
+	display: flex;
+	flex-direction: column;
+}
+
+.dm-bars {
+	margin-top: auto;
+	display: flex;
+	align-items: flex-end;
+	gap: 4px;
+	height: 40px;
+}
+
+.dm-bars span {
+	flex: 1;
+	background: var(--brand-light);
+	border-radius: 3px 3px 0 0;
+}
+
+.dm-bars span:last-child {
+	background: var(--brand);
+}
+
+.dm-chart-card {
+	background: #fff;
+	border: 1px solid var(--border);
+	border-radius: 16px;
+	padding: 16px;
+}
+
+.dm-chart-svg {
+	width: 100%;
+	height: 90px;
+	display: block;
+}
+
+.dm-chart-svg polyline {
+	fill: none;
+	stroke: var(--brand);
+	stroke-width: 3;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.dm-chart-labels {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 8px;
+	font-size: 10px;
+	color: var(--muted);
+}
+
+.dm-satisfaction-card {
+	margin-top: 16px;
+}
+
+.dm-emoji {
+	font-size: 13px;
+}
+
+@media (max-width: 991px) {
+	.services-hero {
+		padding: 150px 0 60px;
+	}
+
+	.services-hero-grid {
+		grid-template-columns: 1fr;
+		gap: 48px;
+	}
+
+	.services-hero-heading {
+		font-size: 32px;
+	}
+
+	.dm-window {
+		max-width: 480px;
+		margin: 0 auto;
+	}
+}
+
+@media (max-width: 575px) {
+	.services-hero {
+		padding: 130px 0 48px;
+	}
+
+	.services-hero-heading {
+		font-size: 26px;
+	}
+
+	/* The dashboard mockup is purely decorative and, fully stacked, runs
+	   taller than the actual hero copy on a phone screen - dropped here so
+	   mobile visitors reach the heading/CTA/features without extra scroll. */
+	.services-hero-visual {
+		display: none;
+	}
+
+	/* The 3 feature items stay in one row at every width instead of
+	   wrapping - icon and text shrink together so they always fit. */
+	.services-hero-features {
+		gap: 8px;
+	}
+
+	.services-hero-feature {
+		gap: 6px;
+	}
+
+	.services-hero-feature-icon {
+		width: 30px;
+		height: 30px;
+		border-radius: 9px;
+		font-size: 13px;
+	}
+
+	.services-hero-feature-title {
+		font-size: 11px;
+		line-height: 1.3;
+	}
+}
+
+/* =========================================================
+   Process steps + closing CTA
+   Same visual language as the hero above (brand purple,
+   Plus Jakarta Sans) reusing the CTA banner concept already
+   shipped on the home page, restyled with its own scoped
+   classes so this stylesheet stays independent of
+   modern-home.css (which is only loaded on the home page).
+   ========================================================= */
+
+.services-process {
+	--brand: #5a49f8;
+	--brand-dark: #4433d8;
+	--brand-light: #eeebff;
+	--ink: #14142b;
+	--muted: #6e7191;
+	--border: #ecebfa;
+	padding: 40px 0 64px;
+	background: #fff;
+	font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.services-process-head {
+	text-align: center;
+	max-width: 640px;
+	margin: 0 auto 64px;
+}
+
+.services-process-heading {
+	font-size: 34px;
+	font-weight: 800;
+	color: var(--ink);
+	margin: 0 0 14px;
+	text-wrap: balance;
+}
+
+.services-process-text {
+	font-size: 16px;
+	line-height: 1.7;
+	color: var(--muted);
+	margin: 0;
+}
+
+.services-process-steps {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 24px;
+}
+
+.services-process-step {
+	position: relative;
+	text-align: center;
+	padding: 0 12px;
+	/* Grid items default to min-width:auto, which refuses to shrink a
+	   column below its content's longest unbreakable word ("Pengembangan",
+	   "Perencanaan") - on narrow real devices that forced the 1fr tracks
+	   wider than the viewport and pushed the last icon off-screen. */
+	min-width: 0;
+	overflow-wrap: break-word;
+	word-break: break-word;
+}
+
+.services-process-step:not(:last-child)::after {
+	content: "";
+	position: absolute;
+	top: 44px;
+	left: 50%;
+	width: 100%;
+	height: 0;
+	border-top: 2px dotted rgba(90, 73, 248, 0.35);
+	z-index: 0;
+}
+
+.services-process-icon {
+	position: relative;
+	z-index: 1;
+	width: 88px;
+	height: 88px;
+	margin: 0 auto 20px;
+	border-radius: 50%;
+	background: var(--brand-light);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--brand);
+}
+
+.services-process-icon svg {
+	width: 32px;
+	height: 32px;
+}
+
+.services-process-number {
+	font-size: 15px;
+	font-weight: 800;
+	color: var(--brand);
+	margin-bottom: 6px;
+}
+
+.services-process-step-title {
+	font-size: 18px;
+	font-weight: 700;
+	color: var(--ink);
+	margin: 0 0 8px;
+}
+
+.services-process-step-text {
+	font-size: 14px;
+	line-height: 1.6;
+	color: var(--muted);
+	margin: 0;
+}
+
+/* ---------- CTA band ---------- */
+
+.services-cta-section {
+	padding: 0 0 72px;
+	background: #fff;
+}
+
+@media (max-width: 767px) {
+	.services-cta-section {
+		padding: 0 0 56px;
+	}
+}
+
+.services-cta {
+	position: relative;
+	background: linear-gradient(135deg, #14142b 0%, #241f4d 100%);
+	border-radius: 32px;
+	padding: 56px 48px;
+	overflow: hidden;
+}
+
+.services-cta::before {
+	content: "";
+	position: absolute;
+	width: 420px;
+	height: 420px;
+	background: radial-gradient(circle, rgba(90, 73, 248, 0.35), transparent 70%);
+	top: 50%;
+	left: -120px;
+	transform: translateY(-50%);
+}
+
+.services-cta-inner {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 32px;
+	flex-wrap: wrap;
+}
+
+.services-cta-copy h2 {
+	color: #fff;
+	font-size: 28px;
+	font-weight: 800;
+	margin: 0 0 10px;
+}
+
+.services-cta-copy p {
+	color: rgba(255, 255, 255, 0.72);
+	font-size: 15px;
+	margin: 0;
+}
+
+.services-cta-btn {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	background: #fff;
+	color: var(--brand);
+	font-weight: 700;
+	font-size: 15px;
+	padding: 16px 28px;
+	border-radius: 12px;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.services-cta-btn:hover {
+	color: var(--brand-dark);
+	text-decoration: none;
+	transform: translateY(-2px);
+	box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.35);
+}
+
+/* Kept as a fixed 5-across single row at every width (same treatment as
+   the stats band above) instead of wrapping to multiple rows. Below
+   tablet width there isn't room to shrink the description paragraph and
+   keep it legible, so it's dropped entirely rather than rendered at an
+   uncomfortably tiny size - icon/number/title stay large enough to read
+   comfortably on their own. */
+
+@media (max-width: 991px) and (min-width: 768px) {
+	.services-process-heading {
+		font-size: 28px;
+	}
+
+	.services-process-steps {
+		gap: 12px;
+	}
+
+	.services-process-step {
+		padding: 0 2px;
+	}
+
+	.services-process-step:not(:last-child)::after {
+		top: 30px;
+	}
+
+	.services-process-icon {
+		width: 60px;
+		height: 60px;
+		margin: 0 auto 12px;
+	}
+
+	.services-process-icon svg {
+		width: 22px;
+		height: 22px;
+	}
+
+	.services-process-number {
+		font-size: 12px;
+		margin-bottom: 4px;
+	}
+
+	.services-process-step-title {
+		font-size: 13px;
+		margin: 0;
+	}
+
+	.services-process-step-text {
+		font-size: 11px;
+		line-height: 1.4;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+}
+
+@media (max-width: 767px) {
+	.services-process {
+		padding: 24px 0 56px;
+	}
+
+	.services-process-head {
+		margin-bottom: 32px;
+	}
+
+	.services-process-heading {
+		font-size: 24px;
+	}
+
+	.services-process-steps {
+		gap: 8px;
+	}
+
+	.services-process-step {
+		padding: 0 2px;
+	}
+
+	.services-process-step:not(:last-child)::after {
+		top: 26px;
+	}
+
+	.services-process-icon {
+		width: 52px;
+		height: 52px;
+		margin: 0 auto 10px;
+	}
+
+	.services-process-icon svg {
+		width: 20px;
+		height: 20px;
+	}
+
+	.services-process-number {
+		font-size: 11px;
+		margin-bottom: 4px;
+	}
+
+	.services-process-step-title {
+		font-size: 12px;
+		font-weight: 700;
+		margin: 0;
+		line-height: 1.3;
+	}
+
+	/* Description dropped below tablet width - not enough room to keep
+	   it readable at this many columns, so only icon/number/title show. */
+	.services-process-step-text {
+		display: none;
+	}
+
+	.services-cta {
+		padding: 40px 24px;
+		border-radius: 24px;
+	}
+
+	.services-cta-inner {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.services-cta-btn {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+/* =========================================================
+   Stats band (16 / 480 / 165 / 98%)
+   Only markup on the services page using .progress-wrap-layout1 /
+   .progress-box-layout1 (verified via grep), so these overrides are
+   safe unscoped - same precedent as the header override above.
+   Kept as a fixed 4-across row at every width instead of the theme's
+   default col-xl-3/col-sm-6/col-12 stack, with sizing scaled down on
+   narrow screens so it never wraps or overflows.
+   ========================================================= */
+
+.services-stat-col {
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.progress-box-layout1 .counting-text.is-percent::after {
+	content: "%";
+}
+
+@media (max-width: 767px) {
+	.services-stat-col {
+		padding-left: 6px;
+		padding-right: 6px;
+	}
+
+	.progress-box-layout1 {
+		margin-bottom: 0;
+	}
+
+	.progress-box-layout1 .counting-text {
+		font-size: 22px;
+		line-height: 1.2;
+	}
+
+	.progress-box-layout1 .item-label {
+		font-size: 13px !important;
+		line-height: 1.3;
+	}
+}
+
+@media (max-width: 575px) {
+	.services-stat-col {
+		padding-left: 4px;
+		padding-right: 4px;
+	}
+
+	.progress-box-layout1 .counting-text {
+		font-size: 18px;
+	}
+
+	.progress-box-layout1 .item-label {
+		font-size: 11px !important;
+	}
+}
+
+@media (max-width: 400px) {
+	.progress-box-layout1 .counting-text {
+		font-size: 15px;
+	}
+
+	.progress-box-layout1 .item-label {
+		font-size: 10px !important;
+	}
+}
+
+/* Stats band was carrying the theme's default 105px/75px inner padding
+   for what's just a single row of numbers - cut down to a height that
+   matches the content instead of towering over it. */
+.progress-wrap-layout1 .progress-inner-wrap {
+	padding: 60px 0;
+}
+
+@media (max-width: 1199px) {
+	.progress-wrap-layout1 .progress-inner-wrap {
+		padding: 52px 0;
+	}
+}
+
+@media (max-width: 991px) {
+	.progress-wrap-layout1 .progress-inner-wrap {
+		padding: 46px 0;
+	}
+}
+
+@media (max-width: 767px) {
+	.progress-wrap-layout1 .progress-inner-wrap {
+		padding: 40px 0;
+	}
+}
+
+@media (max-width: 575px) {
+	.progress-wrap-layout1 .progress-inner-wrap {
+		padding: 34px 0;
+	}
+}
+
+/* =========================================================
+   Section rhythm
+   The theme's .section-padding-md / .section-padding-md-equal utility
+   classes default to 90-120px top/bottom, meant for pages with fewer,
+   more spread-out sections. This page stacks 6 sections back to back
+   (hero, grid, stats, about, process, CTA), so those defaults compound
+   into a lot of dead air between them. Both selectors below combine
+   with wrapper classes that only exist on this page (verified via
+   grep), so overriding them here is safe and won't affect other pages
+   that reuse the plain utility class.
+   ========================================================= */
+
+.service-wrap-layout6.section-padding-md {
+	padding-top: 64px;
+	padding-bottom: 64px;
+}
+
+.about-wrap-layout6.section-padding-md-equal {
+	padding-top: 72px;
+	padding-bottom: 72px;
+}
+
+@media (max-width: 991px) {
+	.service-wrap-layout6.section-padding-md {
+		padding-top: 56px;
+		padding-bottom: 56px;
+	}
+
+	.about-wrap-layout6.section-padding-md-equal {
+		padding-top: 60px;
+		padding-bottom: 60px;
+	}
+}
+
+@media (max-width: 767px) {
+	.service-wrap-layout6.section-padding-md {
+		padding-top: 48px;
+		padding-bottom: 48px;
+	}
+
+	.about-wrap-layout6.section-padding-md-equal {
+		padding-top: 48px;
+		padding-bottom: 48px;
+	}
+}
+
+@media (max-width: 575px) {
+	.service-wrap-layout6.section-padding-md {
+		padding-top: 40px;
+		padding-bottom: 40px;
+	}
+
+	.about-wrap-layout6.section-padding-md-equal {
+		padding-top: 40px;
+		padding-bottom: 40px;
+	}
+}
+
+/* =========================================================
+   Service cards (.service-box-layout3) - equal height + 3-line
+   description clamp. Bootstrap's .row is a flex container that already
+   stretches columns to the row's tallest natural height, but none of
+   the elements nested inside that column (the scroll-animation wrapper
+   div, the card, .item-content) inherit that height on their own -
+   this chain of display:flex/flex:1 passes it all the way down to
+   .item-content, and margin-top:auto pins "Selengkapnya" to the
+   bottom regardless of how much description text precedes it. Same
+   approach already used for .m-service-card on the home page.
+   ========================================================= */
+
+.service-wrap-layout6 .row > [class*="col-"] {
+	display: flex;
+}
+
+.service-wrap-layout6 .row > [class*="col-"] > div {
+	display: flex;
+	flex: 1;
+}
+
+.service-wrap-layout6 .service-box-layout3 {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	/* The button itself already carries 10px of vertical padding (from
+	   .btn-fill), so a flat 40px all round left the bottom looking
+	   heavier than the top - trimmed to 30px here so the two balance
+	   out to roughly the same effective breathing room. */
+	padding: 40px 28px 30px;
+}
+
+.service-wrap-layout6 .item-icon {
+	margin-bottom: 14px;
+}
+
+/* Reserves space for 2 lines always (h3 line-height is 36px) so a card
+   with a one-line title doesn't end up shorter than a two-line one -
+   without this the tallest card (2-line title) forced the others to
+   stretch, leaving a big empty gap above the button. */
+.service-wrap-layout6 .item-title {
+	min-height: 72px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.service-wrap-layout6 .item-content {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+.service-wrap-layout6 .item-content p {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	margin-bottom: 20px;
+}
+
+/* "Selengkapnya" uses the same .btn-fill.btn-gradient button as the
+   "Kolaborasi Erat dengan Tim Anda" about section, pinned to the
+   card's bottom-right corner instead of sitting inline under the
+   description. */
+.service-wrap-layout6 .item-content .btn-fill {
+	margin-top: auto;
+	align-self: flex-end;
+}
+

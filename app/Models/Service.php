@@ -15,6 +15,7 @@ class Service extends Model
         'icon',
         'image',
         'short_description',
+        'cta_url',
         'content',
         'features',
         'order',
@@ -41,10 +42,10 @@ class Service extends Model
     public static function defaultFeatures(): array
     {
         return [
-            ['color' => 'dodger-blue', 'icon' => 'flaticon-responsive', 'title' => 'Fully Responsive'],
-            ['color' => 'sunset-orange', 'icon' => 'flaticon-hand', 'title' => 'Device Testing'],
-            ['color' => 'royal-blue', 'icon' => 'flaticon-canvas', 'title' => 'Clean & Modern'],
-            ['color' => 'california', 'icon' => 'flaticon-goal', 'title' => 'Great Experience'],
+            ['color' => 'dodger-blue', 'icon' => 'flaticon-responsive', 'title' => 'Desain Responsif'],
+            ['color' => 'sunset-orange', 'icon' => 'flaticon-hand', 'title' => 'Teruji di Berbagai Perangkat'],
+            ['color' => 'royal-blue', 'icon' => 'flaticon-canvas', 'title' => 'Tampilan Modern'],
+            ['color' => 'california', 'icon' => 'flaticon-goal', 'title' => 'Pengalaman Terbaik'],
         ];
     }
 

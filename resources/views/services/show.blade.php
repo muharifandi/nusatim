@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-	@include('partials.page-banner', ['title' => $service->title, 'breadcrumbParent' => 'Service'])
+	@include('partials.page-banner', ['title' => $service->title, 'breadcrumbParent' => 'Layanan'])
 
 	<section class="service-details-wrap section-padding-md-equal bg-color-accent2">
 		<div class="container">
@@ -60,7 +60,7 @@
 						<div class="service-details-box">
 							<div class="content-holder">
 								<div class="translate-bottom-75 opacity-animation transition-150 transition-delay-100">
-									<h2 class="item-title">{{ $siteSettings->services_explore_heading ?: 'Explore Our Other Services' }}</h2>
+									<h2 class="item-title">{{ $siteSettings->services_explore_heading ?: 'Jelajahi Layanan Kami Lainnya' }}</h2>
 								</div>
 								<div class="translate-bottom-75 opacity-animation transition-150 transition-delay-200">
 									<ul class="list-item">
@@ -76,7 +76,7 @@
 						<div class="service-details-box">
 							<div class="item-figure">
 								<div class="translate-left-75 opacity-animation transition-150 transition-delay-100">
-									<img src="{{ $siteSettings->services_explore_image ? asset($siteSettings->services_explore_image) : asset('media/illustration/illustration20.png') }}" alt="Service">
+									<img src="{{ $siteSettings->services_explore_image ? asset($siteSettings->services_explore_image) : asset('media/illustration/illustration20.png') }}" alt="Layanan">
 								</div>
 							</div>
 						</div>

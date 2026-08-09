@@ -581,6 +581,12 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
   border-radius: 20px;
   padding: 32px;
   transition: all 0.25s ease;
+  /* Grid row items already stretch to equal height by default - flex
+     column + margin-top:auto on the link (below) is what keeps "Pelajari
+     lebih lanjut" pinned to the same spot across cards regardless of how
+     many lines the title/description above it take up. */
+  display: flex;
+  flex-direction: column;
 }
 
 .modern-home .m-service-card:hover {
@@ -600,6 +606,13 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
   color: var(--muted);
   line-height: 1.65;
   margin: 0 0 16px;
+  /* Cap long short_description values at 3 lines with an ellipsis, so one
+     unusually long service description can't stretch its whole card row
+     taller than the others. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .modern-home .m-service-link {
@@ -610,6 +623,8 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  margin-top: auto;
+  padding-top: 4px;
 }
 
 .modern-home .m-service-link:hover {
