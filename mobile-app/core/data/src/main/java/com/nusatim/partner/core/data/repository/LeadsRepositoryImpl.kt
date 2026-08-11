@@ -4,7 +4,12 @@ import com.nusatim.partner.core.domain.repository.LeadsRepository
 import com.nusatim.partner.core.data.repository.BaseRepository
 import com.nusatim.partner.core.model.ResultState
 import com.nusatim.partner.core.network.LeadsApiService
-import com.nusatim.partner.core.model.dto.*
+import com.nusatim.partner.core.model.dto.LeadActivityResponse
+import com.nusatim.partner.core.model.dto.LeadDocumentResponse
+import com.nusatim.partner.core.model.dto.LeadReminderResponse
+import com.nusatim.partner.core.model.dto.LeadResponse
+import com.nusatim.partner.core.model.dto.PagedBaseResponse
+import com.nusatim.partner.core.model.dto.PipelineResponse
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import javax.inject.Inject

@@ -1,19 +1,27 @@
 package com.nusatim.partner.core.data.repository
 
+import com.google.gson.Gson
 import com.nusatim.partner.core.domain.repository.AuthRepository
 import com.nusatim.partner.core.data.repository.BaseRepository
+import com.nusatim.partner.core.data.source.local.dao.DashboardDao
+import com.nusatim.partner.core.data.source.local.entity.DashboardEntity
 import com.nusatim.partner.core.model.ResultState
 import com.nusatim.partner.core.network.AuthApiService
 import com.nusatim.partner.core.model.dto.DashboardResponse
 import com.nusatim.partner.core.model.dto.LoginResponse
 import com.nusatim.partner.core.model.dto.PartnerResponse
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val apiService: AuthApiService
+    private val apiService: AuthApiService,
+    private val dashboardDao: DashboardDao,
+    private val gson: Gson
 ) : BaseRepository(), AuthRepository {
 
     override fun register(
@@ -57,7 +65,23 @@ class AuthRepositoryImpl @Inject constructor(
         apiService.getCurrentUser().data
     }
 
-    override fun getDashboard(): Flow<ResultState<DashboardResponse>> = safeNetworkCall {
-        apiService.getDashboard()
+    override fun getDashboard(): Flow<ResultState<DashboardResponse>> = flow {
+        // Emit cached data first if available
+        val cachedData = dashboardDao.getDashboard().first()
+        if (cachedData != null) {
+            try {
+                val dashboard = gson.fromJson(cachedData.data, DashboardResponse::class.java)
+                emit(ResultState.Success(dashboard))
+            } catch (e: Exception) {
+                // Ignore
+            }
+        }
+
+        // Always fetch from network and update cache
+        emitAll(safeNetworkCall {
+            val response = apiService.getDashboard()
+            dashboardDao.insertDashboard(DashboardEntity(data = gson.toJson(response)))
+            response
+        })
     }
 }

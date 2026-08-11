@@ -1,5 +1,6 @@
 package com.nusatim.partner.core.network.util
 
+import com.nusatim.partner.core.model.ErrorType
 import com.nusatim.partner.core.model.ResultState
 import com.google.gson.Gson
 import com.nusatim.partner.core.model.dto.ErrorResponse
@@ -21,32 +22,35 @@ class SafeApiCall @Inject constructor() {
             if (response != null) {
                 emit(ResultState.Success(response))
             } else {
-                emit(ResultState.Error("Terjadi kesalahan: Data tidak ditemukan."))
+                emit(ResultState.Error("Data not found", ErrorType.NOT_FOUND))
             }
         } catch (throwable: Throwable) {
-            val message = when (throwable) {
-                is UnknownHostException -> "Tidak ada koneksi internet. Silakan periksa jaringan Anda."
-                is SocketTimeoutException -> "Koneksi ke server terputus (timeout). Silakan coba lagi."
-                is IOException -> "Terjadi kesalahan jaringan saat mengambil data."
+            val type = when (throwable) {
+                is UnknownHostException -> ErrorType.NETWORK
+                is SocketTimeoutException -> ErrorType.TIMEOUT
+                is IOException -> ErrorType.IO
                 is HttpException -> {
-                    val errorBody = throwable.response()?.errorBody()?.string()
-                    val errorResponse = try {
-                        Gson().fromJson(errorBody, ErrorResponse::class.java)
-                    } catch (e: Exception) {
-                        null
-                    }
-
                     when (throwable.code()) {
-                        401 -> "Sesi Anda telah berakhir. Silakan login kembali."
-                        403 -> "Anda tidak memiliki akses untuk melakukan tindakan ini."
-                        422 -> errorResponse?.message ?: "Data yang Anda masukkan tidak valid."
-                        500 -> "Server sedang mengalami gangguan. Silakan coba beberapa saat lagi."
-                        else -> errorResponse?.message ?: "Terjadi kesalahan sistem (${throwable.code()})"
+                        401 -> ErrorType.UNAUTHORIZED
+                        403 -> ErrorType.FORBIDDEN
+                        422 -> ErrorType.INVALID_INPUT
+                        500 -> ErrorType.SERVER
+                        404 -> ErrorType.NOT_FOUND
+                        else -> ErrorType.UNKNOWN
                     }
                 }
-                else -> throwable.message ?: "Terjadi kesalahan yang tidak terduga"
+                else -> ErrorType.UNKNOWN
             }
-            emit(ResultState.Error(message))
+
+            val errorBody = (throwable as? HttpException)?.response()?.errorBody()?.string()
+            val errorResponse = try {
+                Gson().fromJson(errorBody, ErrorResponse::class.java)
+            } catch (e: Exception) {
+                null
+            }
+
+            val message = errorResponse?.message ?: throwable.message ?: "Unknown Error"
+            emit(ResultState.Error(message, type))
         }
     }
 }

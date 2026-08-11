@@ -3,9 +3,14 @@ package com.nusatim.partner.features.finance.ui.withdrawals
 import androidx.lifecycle.viewModelScope
 import com.nusatim.partner.core.architecture.mvi.BaseViewModel
 import com.nusatim.partner.core.model.ResultState
-import com.nusatim.partner.features.finance.domain.usecase.*
+import com.nusatim.partner.features.finance.domain.usecase.GetWithdrawalBalanceUseCase
+import com.nusatim.partner.features.finance.domain.usecase.GetWithdrawalDetailUseCase
+import com.nusatim.partner.features.finance.domain.usecase.GetWithdrawalsUseCase
+import com.nusatim.partner.features.finance.domain.usecase.RequestWithdrawalUseCase
 import com.nusatim.partner.features.profile.domain.usecase.GetProfileUseCase
-import com.nusatim.partner.features.finance.ui.withdrawals.state.*
+import com.nusatim.partner.features.finance.ui.withdrawals.state.WithdrawalsEffect
+import com.nusatim.partner.features.finance.ui.withdrawals.state.WithdrawalsIntent
+import com.nusatim.partner.features.finance.ui.withdrawals.state.WithdrawalsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -36,8 +41,8 @@ class WithdrawalsViewModel @Inject constructor(
             getProfileUseCase().collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, partnerProfile = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, partnerProfile = result.data, error = null)
                     }
                     is ResultState.Error -> {
                         setState { copy(isLoading = false, error = result.message) }
@@ -61,8 +66,8 @@ class WithdrawalsViewModel @Inject constructor(
             getWithdrawalsUseCase(page = page).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, withdrawalsResponse = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, withdrawalsResponse = result.data, error = null)
                     }
                     is ResultState.Error -> {
                         setState { copy(isLoading = false, error = result.message) }
@@ -78,8 +83,8 @@ class WithdrawalsViewModel @Inject constructor(
             getWithdrawalBalanceUseCase().collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, balance = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, balance = result.data, error = null)
                     }
                     is ResultState.Error -> {
                         setState { copy(isLoading = false, error = result.message) }
@@ -94,8 +99,8 @@ class WithdrawalsViewModel @Inject constructor(
             getWithdrawalDetailUseCase(id).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, selectedDetail = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, selectedDetail = result.data, error = null)
                     }
                     is ResultState.Error -> {
                         setState { copy(isLoading = false, error = result.message) }

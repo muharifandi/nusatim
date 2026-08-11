@@ -36,4 +36,8 @@ class ProfileRepositoryImpl @Inject constructor(
     override fun updatePassword(request: Map<String, String>): Flow<ResultState<String>> = safeNetworkCall {
         apiService.updatePassword(request)["message"] ?: "Success"
     }
+
+    override fun deleteAccount(): Flow<ResultState<String>> = safeNetworkCall {
+        apiService.deleteAccount()["message"] ?: "Success"
+    }
 }

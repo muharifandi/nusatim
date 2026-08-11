@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.nusatim.partner.core.architecture.base.BaseFragment
+import com.nusatim.partner.core.common.util.Constants
 import com.nusatim.partner.core.model.dto.CustomerResponse
 import com.nusatim.partner.features.leads.databinding.FragmentCustomerInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +26,7 @@ class CustomerInfoFragment : BaseFragment<FragmentCustomerInfoBinding>() {
             val currentProgress = customer.project?.progress ?: 0
             showProgressDialog(customer.id, currentProgress)
         }
-        
+
         binding.btnViewCommission.setOnClickListener {
             val customer = viewModel.state.value.customer ?: return@setOnClickListener
             customer.commission?.let {
@@ -72,15 +73,16 @@ class CustomerInfoFragment : BaseFragment<FragmentCustomerInfoBinding>() {
         binding.tvProduct.text = customer.serviceName ?: "-"
         binding.tvProjectValue.text = formatRupiah(customer.projectValue)
 
-        binding.btnPaymentStatus.text = customer.paymentStatus?.replaceFirstChar { it.uppercase() } ?: "-"
-        val statusColor = when (customer.paymentStatus?.lowercase()) {
-            "unpaid" -> com.nusatim.partner.core.ui.R.color.status_warning
-            "partial" -> com.nusatim.partner.core.ui.R.color.status_info
-            "paid" -> com.nusatim.partner.core.ui.R.color.status_success
-            else -> com.nusatim.partner.core.ui.R.color.status_neutral
+        val statusPair = when (customer.paymentStatus?.lowercase()) {
+            Constants.PaymentStatus.UNPAID -> com.nusatim.partner.core.ui.R.string.status_unpaid to com.nusatim.partner.core.ui.R.color.status_warning
+            Constants.PaymentStatus.PARTIAL -> com.nusatim.partner.core.ui.R.string.status_partial to com.nusatim.partner.core.ui.R.color.status_info
+            Constants.PaymentStatus.PAID -> com.nusatim.partner.core.ui.R.string.status_paid to com.nusatim.partner.core.ui.R.color.status_success
+            else -> com.nusatim.partner.core.ui.R.string.status_pending to com.nusatim.partner.core.ui.R.color.status_neutral
         }
+
+        binding.btnPaymentStatus.text = getString(statusPair.first)
         binding.btnPaymentStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
-            androidx.core.content.ContextCompat.getColor(requireContext(), statusColor)
+            androidx.core.content.ContextCompat.getColor(requireContext(), statusPair.second)
         ))
 
         customer.project?.let { project ->

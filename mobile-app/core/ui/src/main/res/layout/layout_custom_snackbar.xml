@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_snackbar"
-    android:padding="12dp">
+    android:padding="@dimen/partner_radius_m">
 
     <View
         android:id="@+id/view_accent"
-        android:layout_width="4dp"
+        android:layout_width="@dimen/partner_space_xs"
         android:layout_height="0dp"
         android:background="@color/status_info"
         app:layout_constraintBottom_toBottomOf="@id/iv_icon"
@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/iv_icon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="@dimen/partner_icon_xl"
+        android:layout_height="@dimen/partner_icon_xl"
         android:background="@drawable/bg_circle_orange_light"
         android:padding="6dp"
         android:src="@android:drawable/ic_dialog_info"
@@ -34,8 +34,8 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/partner_radius_m"
+        android:layout_marginEnd="@dimen/partner_space_s"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/partner_black"
-            android:textSize="14sp"
+            android:textSize="@dimen/partner_text_body2"
             android:textStyle="bold"
             tools:text="Berhasil" />
 
@@ -58,7 +58,7 @@
             android:ellipsize="end"
             android:maxLines="3"
             android:textColor="@color/partner_on_surface_variant"
-            android:textSize="13sp"
+            android:textSize="@dimen/partner_text_label1"
             tools:text="Pesan snackbar disini dengan detail yang lebih lengkap." />
     </LinearLayout>
 

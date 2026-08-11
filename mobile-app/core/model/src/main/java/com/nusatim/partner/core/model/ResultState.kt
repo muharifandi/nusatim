@@ -14,5 +14,12 @@ package com.nusatim.partner.core.model
 sealed interface ResultState<out T> {
     data object Loading : ResultState<Nothing>
     data class Success<out T>(val data: T) : ResultState<T>
-    data class Error(val message: String) : ResultState<Nothing>
+    data class Error(
+        val message: String,
+        val cause: ErrorType = ErrorType.UNKNOWN
+    ) : ResultState<Nothing>
+}
+
+enum class ErrorType {
+    NETWORK, TIMEOUT, IO, UNAUTHORIZED, FORBIDDEN, INVALID_INPUT, SERVER, NOT_FOUND, UNKNOWN
 }

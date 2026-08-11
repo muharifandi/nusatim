@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">ArifNews</string>
-    <string name="retry">Retry</string>
-    <string name="news_app">News App</string>
-    <string name="search_news">Search news...</string>
+    <string name="app_name">Partnert</string>
+    <string name="retry">Coba Lagi</string>
+    <string name="news_app">Partnert</string>
+    <string name="search_news">Cari...</string>
     <string name="loading_more">Loading more...</string>
     <string name="empty_articles">No articles found.</string>
     <string name="no_internet_connection">No internet connection.</string>
@@ -28,6 +28,47 @@
     <string name="placeholder_name">Full Name</string>
     <string name="placeholder_phone_format">(+84)</string>
     <string name="error_default">Terjadi kesalahan saat memuat data.</string>
-    <string name="error_no_connection">Tidak ada koneksi internet.</string>
+    <string name="error_no_connection">Tidak ada koneksi internet. Silakan periksa jaringan Anda.</string>
+    <string name="error_timeout">Koneksi ke server terputus (timeout). Silakan coba lagi.</string>
+    <string name="error_io">Terjadi kesalahan jaringan saat mengambil data.</string>
+    <string name="error_unauthorized">Sesi Anda telah berakhir. Silakan login kembali.</string>
+    <string name="error_forbidden">Anda tidak memiliki akses untuk melakukan tindakan ini.</string>
+    <string name="error_invalid_input">Data yang Anda masukkan tidak valid.</string>
+    <string name="error_server">Server sedang mengalami gangguan. Silakan coba beberapa saat lagi.</string>
+    <string name="error_system">Terjadi kesalahan sistem (%1$s)</string>
+    <string name="error_unexpected">Terjadi kesalahan yang tidak terduga</string>
+    <string name="error_not_found">Terjadi kesalahan: Data tidak ditemukan.</string>
     <string name="error_retry">Coba Lagi</string>
+
+    <!-- Snackbar Titles -->
+    <string name="snackbar_success">Berhasil</string>
+    <string name="snackbar_error">Gagal</string>
+    <string name="snackbar_warning">Peringatan</string>
+    <string name="snackbar_info">Informasi</string>
+
+    <!-- Shared Status Labels -->
+    <string name="status_new">Baru</string>
+    <string name="status_pending">Menunggu</string>
+    <string name="status_open">Terbuka</string>
+    <string name="status_draft">Draf</string>
+    <string name="status_contacted">Dihubungi</string>
+    <string name="status_qualified">Memenuhi Syarat</string>
+    <string name="status_opportunity">Peluang</string>
+    <string name="status_proposal">Proposal</string>
+    <string name="status_negotiation">Negosiasi</string>
+    <string name="status_won">Menang</string>
+    <string name="status_lost">Gagal</string>
+    <string name="status_assigned">Ditugaskan</string>
+    <string name="status_in_progress">Dalam Proses</string>
+    <string name="status_closed">Selesai</string>
+    <string name="status_cancelled">Dibatalkan</string>
+    <string name="status_approved">Disetujui</string>
+    <string name="status_rejected">Ditolak</string>
+    <string name="status_paid">Dibayar</string>
+    <string name="status_resolved">Diselesaikan</string>
+    <string name="status_pending_approval">Menunggu Persetujuan</string>
+    <string name="status_waiting_payment">Menunggu Pembayaran</string>
+    <string name="status_suspended">Ditangguhkan</string>
+    <string name="status_unpaid">Belum Bayar</string>
+    <string name="status_partial">Sebagian</string>
 </resources>

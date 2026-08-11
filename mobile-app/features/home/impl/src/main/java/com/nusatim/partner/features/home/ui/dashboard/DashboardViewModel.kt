@@ -4,7 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.nusatim.partner.core.architecture.mvi.BaseViewModel
 import com.nusatim.partner.core.model.ResultState
 import com.nusatim.partner.features.home.domain.usecase.GetDashboardUseCase
-import com.nusatim.partner.features.home.ui.dashboard.state.*
+import com.nusatim.partner.features.home.ui.dashboard.state.DashboardEffect
+import com.nusatim.partner.features.home.ui.dashboard.state.DashboardIntent
+import com.nusatim.partner.features.home.ui.dashboard.state.DashboardState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -31,11 +33,11 @@ class DashboardViewModel @Inject constructor(
             getDashboardUseCase().collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, dashboard = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, dashboard = result.data, error = null)
                     }
-                    is ResultState.Error -> setState { 
-                        copy(isLoading = false, error = result.message) 
+                    is ResultState.Error -> setState {
+                        copy(isLoading = false, error = result.message)
                     }
                 }
             }

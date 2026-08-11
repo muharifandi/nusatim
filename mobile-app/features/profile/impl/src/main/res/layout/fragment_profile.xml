@@ -221,6 +221,20 @@
                         app:isDestructive="@{true}"
                         app:title="@{@string/profile_logout}" />
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/partner_divider_height"
+                        android:layout_marginHorizontal="@dimen/partner_space_ml"
+                        android:background="@color/partner_silver" />
+
+                    <!-- Delete Account -->
+                    <include
+                        android:id="@+id/menu_delete_account"
+                        layout="@layout/item_profile_menu"
+                        app:icon="@{@android:drawable/ic_menu_delete}"
+                        app:isDestructive="@{true}"
+                        app:title="@{@string/profile_delete_account}" />
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

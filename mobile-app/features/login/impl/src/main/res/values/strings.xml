@@ -4,11 +4,14 @@
     <string name="login_subtitle">Silakan masuk untuk mengelola bisnis kemitraan Anda.</string>
     <string name="login_forgot_password">Lupa password?</string>
     <string name="login_sign_in">Masuk</string>
+    <string name="login_btn_loading">Memproses&#8230;</string>
     <string name="login_no_account">Belum punya akun? </string>
     <string name="login_sign_up">Daftar sekarang</string>
     <string name="login_hint_email">Email</string>
     <string name="login_hint_password">Password</string>
     <string name="login_toast_forgot_password">Fitur Lupa Password segera hadir</string>
+    <string name="login_error_invalid_email">Format email tidak valid. Gunakan contoh: nama@email.com</string>
+    <string name="login_error_empty_password">Password tidak boleh kosong.</string>
 
     <!-- Forgot Password -->
     <string name="forgot_password_title">Lupa Password</string>

@@ -12,4 +12,5 @@ interface ProfileRepository {
     fun updateKtp(ktp: MultipartBody.Part): Flow<ResultState<PartnerResponse>>
     fun updateNpwp(npwp: MultipartBody.Part): Flow<ResultState<PartnerResponse>>
     fun updatePassword(request: Map<String, String>): Flow<ResultState<String>>
+    fun deleteAccount(): Flow<ResultState<String>>
 }

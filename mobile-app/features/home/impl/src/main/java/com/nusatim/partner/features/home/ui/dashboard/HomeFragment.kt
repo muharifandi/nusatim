@@ -1,6 +1,7 @@
 package com.nusatim.partner.features.home.ui.dashboard
 
 import android.graphics.Color
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -62,7 +63,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
 
         setupCharts()
-        
+
         // Initial load for notifications
         notificationsViewModel.processIntent(NotificationsIntent.LoadUnreadCount)
     }
@@ -74,11 +75,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     viewModel.state.collect { state ->
                         showLoading(state.isLoading)
                         binding.swipeRefresh.isRefreshing = false // Use global loading instead
-                        state.dashboard?.let { 
+                        state.dashboard?.let {
                             renderDashboard(it)
                             binding.layoutError.root.visibility = android.view.View.GONE
                         }
-                        
+
                         if (state.error != null) {
                             if (state.dashboard == null) {
                                 binding.layoutError.root.visibility = android.view.View.VISIBLE
@@ -111,7 +112,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             com.nusatim.partner.features.home.R.string.home_greeting,
             sessionManager.getPartnerName() ?: "Partner"
         )
-        
+
         // Profile Photo
         sessionManager.getPartnerPhoto()?.let { url ->
             binding.ivProfileCircle.load(url) {
@@ -165,8 +166,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
         // Charts
         updatePipelineChart(data.pipeline)
-        updateTrendChart(binding.chartClosing, data.closingTrend, "Closing", Color.parseColor("#a6541a"))
-        updateTrendChart(binding.chartCommission, data.commissionTrend, "Komisi", Color.parseColor("#4CAF50"))
+        updateTrendChart(binding.chartClosing, data.closingTrend, getString(com.nusatim.partner.features.home.R.string.home_chart_closing_label), ContextCompat.getColor(requireContext(), com.nusatim.partner.core.ui.R.color.partner_primary))
+        updateTrendChart(binding.chartCommission, data.commissionTrend, getString(com.nusatim.partner.features.home.R.string.home_chart_commission_label), ContextCompat.getColor(requireContext(), com.nusatim.partner.core.ui.R.color.status_success))
     }
 
     private fun updateTrendChart(
@@ -205,7 +206,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             legend.horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.CENTER
             legend.orientation = com.github.mikephil.charting.components.Legend.LegendOrientation.HORIZONTAL
             legend.setDrawInside(false)
-            
+
             setUsePercentValues(true)
             holeRadius = 58f
             setHoleColor(Color.TRANSPARENT)
@@ -214,7 +215,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             setCenterTextSize(14f)
             animateY(1400, Easing.EaseInOutQuad)
         }
-        
+
         listOf(binding.chartClosing, binding.chartCommission).forEach { chart ->
             chart.apply {
                 description.isEnabled = false
@@ -227,28 +228,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     private fun updatePipelineChart(pipeline: com.nusatim.partner.core.model.dto.PipelineSummary) {
-        val total = pipeline.new + pipeline.contacted + pipeline.qualified + pipeline.opportunity + 
+        val total = pipeline.new + pipeline.contacted + pipeline.qualified + pipeline.opportunity +
                     pipeline.proposal + pipeline.negotiation + pipeline.won + pipeline.lost
-        
+
         binding.chartPipeline.centerText = getString(com.nusatim.partner.features.home.R.string.home_chart_pipeline_center, total)
 
         val entries = listOf(
-            PieEntry(pipeline.new.toFloat(), "New"),
-            PieEntry(pipeline.won.toFloat(), "Won"),
-            PieEntry(pipeline.lost.toFloat(), "Lost")
+            PieEntry(pipeline.new.toFloat(), getString(com.nusatim.partner.features.home.R.string.home_pipeline_new)),
+            PieEntry(pipeline.won.toFloat(), getString(com.nusatim.partner.features.home.R.string.home_pipeline_won)),
+            PieEntry(pipeline.lost.toFloat(), getString(com.nusatim.partner.features.home.R.string.home_pipeline_lost))
         ).filter { it.value > 0 }
 
         val dataSet = PieDataSet(entries, "")
         dataSet.colors = listOf(
-            Color.parseColor("#9E9E9E"), // Grey for New
-            Color.parseColor("#4CAF50"), // Green for Won
-            Color.parseColor("#F44336")  // Red for Lost
+            ContextCompat.getColor(requireContext(), com.nusatim.partner.core.ui.R.color.status_neutral),
+            ContextCompat.getColor(requireContext(), com.nusatim.partner.core.ui.R.color.status_success),
+            ContextCompat.getColor(requireContext(), com.nusatim.partner.core.ui.R.color.partner_error)
         )
         dataSet.sliceSpace = 3f
         dataSet.setDrawValues(true)
         dataSet.valueTextColor = Color.WHITE
         dataSet.valueTextSize = 12f
-        
+
         binding.chartPipeline.data = PieData(dataSet)
         binding.chartPipeline.invalidate()
     }

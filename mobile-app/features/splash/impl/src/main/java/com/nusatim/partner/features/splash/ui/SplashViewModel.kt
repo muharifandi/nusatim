@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.nusatim.partner.core.architecture.mvi.BaseViewModel
 import com.nusatim.partner.core.domain.repository.AuthRepository
 import com.nusatim.partner.core.common.security.SessionManager
+import com.nusatim.partner.core.common.util.Constants
 import com.nusatim.partner.core.model.ResultState
 import com.nusatim.partner.features.splash.ui.state.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,14 +51,14 @@ class SplashViewModel @Inject constructor(
                     is ResultState.Success -> {
                         val status = result.data.status
                         sessionManager.savePartnerStatus(status)
-                        if (status == "approved") {
+                        if (status == Constants.Status.APPROVED) {
                             sendEffect { SplashEffect.NavigateToHome }
                         } else {
                             sendEffect { SplashEffect.NavigateToApprovalStatus }
                         }
                     }
                     is ResultState.Error -> {
-                        if (result.message.contains("401", ignoreCase = true) || 
+                        if (result.message.contains("401", ignoreCase = true) ||
                             result.message.contains("login", ignoreCase = true)) {
                             sessionManager.clearSession()
                             sendEffect { SplashEffect.NavigateToLogin }

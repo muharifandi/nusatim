@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nusatim.partner.core.model.dto.LeadResponse
+import com.nusatim.partner.core.ui.util.StatusUiMapper
 import com.nusatim.partner.features.leads.databinding.ItemLeadBinding
 import java.text.NumberFormat
 import java.util.*
@@ -38,60 +39,27 @@ class LeadsAdapter(
             binding.tvPhone.text = item.phone ?: "-"
             binding.tvProduct.text = item.serviceName
             binding.tvEstimation.text = formatRupiah(item.estimatedValue ?: 0)
-            
-            // Status Mapping
-            binding.tvStatusText.text = item.status?.replaceFirstChar { it.uppercase() } ?: "-"
-            
-            val (statusColor, statusBg, iconBg) = when (item.status?.lowercase()) {
-                "new", "pending", "open", "draft" -> Triple(
-                    com.nusatim.partner.core.ui.R.color.status_neutral,
-                    com.nusatim.partner.core.ui.R.color.partner_surface_variant,
-                    com.nusatim.partner.core.ui.R.color.project_orange_light
-                )
-                "contacted" -> Triple(
-                    com.nusatim.partner.core.ui.R.color.status_info,
-                    com.nusatim.partner.core.ui.R.color.project_blue_light,
-                    com.nusatim.partner.core.ui.R.color.project_blue_light
-                )
-                "negotiation", "proposal" -> Triple(
-                    com.nusatim.partner.core.ui.R.color.status_info,
-                    com.nusatim.partner.core.ui.R.color.partner_surface_variant,
-                    com.nusatim.partner.core.ui.R.color.partner_surface_variant
-                )
-                "lost", "rejected" -> Triple(
-                    com.nusatim.partner.core.ui.R.color.partner_error,
-                    com.nusatim.partner.core.ui.R.color.partner_surface_variant,
-                    com.nusatim.partner.core.ui.R.color.project_orange_light
-                )
-                "won", "closed" -> Triple(
-                    com.nusatim.partner.core.ui.R.color.status_success,
-                    com.nusatim.partner.core.ui.R.color.project_green_light,
-                    com.nusatim.partner.core.ui.R.color.project_green_light
-                )
-                else -> Triple(
-                    com.nusatim.partner.core.ui.R.color.status_info,
-                    com.nusatim.partner.core.ui.R.color.project_blue_light,
-                    com.nusatim.partner.core.ui.R.color.project_blue_light
-                )
-            }
-            
+
+            // Centralized Status Mapping
             val context = binding.root.context
-            val color = androidx.core.content.ContextCompat.getColor(context, statusColor)
-            
+            val statusUi = StatusUiMapper.mapStatus(item.status)
+            val color = androidx.core.content.ContextCompat.getColor(context, statusUi.colorRes)
+
+            binding.tvStatusText.text = context.getString(statusUi.labelRes)
             binding.ivStatusDot.imageTintList = android.content.res.ColorStateList.valueOf(color)
             binding.tvStatusText.setTextColor(color)
             binding.cardStatus.backgroundTintList = android.content.res.ColorStateList.valueOf(
-                androidx.core.content.ContextCompat.getColor(context, statusBg)
+                androidx.core.content.ContextCompat.getColor(context, statusUi.backgroundRes)
             )
-            
+
             // Icon Styling
             binding.cardIcon.backgroundTintList = android.content.res.ColorStateList.valueOf(
-                androidx.core.content.ContextCompat.getColor(context, iconBg)
+                androidx.core.content.ContextCompat.getColor(context, com.nusatim.partner.core.ui.R.color.project_orange_light)
             )
             binding.ivIcon.imageTintList = android.content.res.ColorStateList.valueOf(
                 androidx.core.content.ContextCompat.getColor(context, com.nusatim.partner.core.ui.R.color.partner_primary)
             )
-            
+
             // Product Styling
             binding.ivTag.imageTintList = android.content.res.ColorStateList.valueOf(
                 androidx.core.content.ContextCompat.getColor(context, com.nusatim.partner.core.ui.R.color.partner_primary)

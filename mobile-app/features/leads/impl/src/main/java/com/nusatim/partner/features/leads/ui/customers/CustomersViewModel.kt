@@ -4,7 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.nusatim.partner.core.architecture.mvi.BaseViewModel
 import com.nusatim.partner.core.model.ResultState
 import com.nusatim.partner.features.leads.domain.usecase.GetCustomersUseCase
-import com.nusatim.partner.features.leads.ui.customers.state.*
+import com.nusatim.partner.features.leads.ui.customers.state.CustomersEffect
+import com.nusatim.partner.features.leads.ui.customers.state.CustomersIntent
+import com.nusatim.partner.features.leads.ui.customers.state.CustomersState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,8 +32,8 @@ class CustomersViewModel @Inject constructor(
             getCustomersUseCase(page = page).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, customersResponse = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, customersResponse = result.data, error = null)
                     }
                     is ResultState.Error -> {
                         setState { copy(isLoading = false, error = result.message) }

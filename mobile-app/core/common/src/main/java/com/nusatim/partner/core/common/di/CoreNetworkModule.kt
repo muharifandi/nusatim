@@ -16,6 +16,7 @@ import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.util.DebugLogger
 import android.content.Context
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,9 +36,15 @@ object CoreNetworkModule {
 
     @Provides
     @Singleton
+    fun provideGson(): Gson {
+        return Gson()
+    }
+
+    @Provides
+    @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY 
+            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
                     else HttpLoggingInterceptor.Level.NONE
         }
     }

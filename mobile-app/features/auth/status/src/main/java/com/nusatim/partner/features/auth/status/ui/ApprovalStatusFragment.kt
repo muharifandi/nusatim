@@ -8,6 +8,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.nusatim.partner.core.architecture.base.BaseFragment
+import com.nusatim.partner.core.common.util.Constants
+import com.nusatim.partner.core.ui.util.UiErrorHandler
 import com.nusatim.partner.features.auth.status.databinding.FragmentApprovalStatusBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -41,19 +43,20 @@ class ApprovalStatusFragment : BaseFragment<FragmentApprovalStatusBinding>() {
                         } else {
                             getString(com.nusatim.partner.features.auth.status.R.string.status_btn_refresh)
                         }
-                        
+
                         updateUi(state.status, state.rejectionReason)
-                        
+
                         if (state.isApproved) {
                             findNavController().navigate("partner://home".toUri())
                         }
-                        
+
                         if (state.isLoggedOut) {
                             findNavController().navigate("partner://login".toUri())
                         }
 
-                        state.error?.let {
-                            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                        state.errorType?.let { type ->
+                            val message = UiErrorHandler.getErrorMessage(requireContext(), type, state.error)
+                            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                             viewModel.dismissError()
                         }
                     }
@@ -64,12 +67,12 @@ class ApprovalStatusFragment : BaseFragment<FragmentApprovalStatusBinding>() {
 
     private fun updateUi(status: String?, rejectionReason: String?) {
         when (status) {
-            "rejected" -> {
+            Constants.Status.REJECTED -> {
                 binding.ivStatusIcon.setImageResource(com.nusatim.partner.core.ui.R.drawable.ic_status_rejected)
                 binding.tvStatusTitle.text = getString(com.nusatim.partner.features.auth.status.R.string.status_title_rejected)
                 binding.tvStatusDesc.text = rejectionReason ?: getString(com.nusatim.partner.features.auth.status.R.string.status_desc_rejected)
             }
-            "suspended" -> {
+            Constants.Status.SUSPENDED -> {
                 binding.ivStatusIcon.setImageResource(com.nusatim.partner.core.ui.R.drawable.ic_status_suspended)
                 binding.tvStatusTitle.text = getString(com.nusatim.partner.features.auth.status.R.string.status_title_suspended)
                 binding.tvStatusDesc.text = getString(com.nusatim.partner.features.auth.status.R.string.status_desc_suspended)

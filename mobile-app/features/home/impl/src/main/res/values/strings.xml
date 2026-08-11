@@ -13,4 +13,9 @@
     <string name="home_stat_trend">↗ %1$s dari bulan lalu</string>
     <string name="home_sales_target_label">%1$s dari %2$s (%3$d%%)</string>
     <string name="home_chart_pipeline_center">Total\n%1$d\nPipeline</string>
+    <string name="home_chart_closing_label">Closing</string>
+    <string name="home_chart_commission_label">Komisi</string>
+    <string name="home_pipeline_new">Baru</string>
+    <string name="home_pipeline_won">Menang</string>
+    <string name="home_pipeline_lost">Gagal</string>
 </resources>

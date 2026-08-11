@@ -6,6 +6,10 @@
     <string name="profile_marketing">Marketing Center</string>
     <string name="profile_support">Pusat Bantuan</string>
     <string name="profile_logout">Keluar</string>
+    <string name="profile_delete_account">Hapus Akun</string>
+    <string name="profile_delete_account_dialog_title">Hapus Akun Permanen</string>
+    <string name="profile_delete_account_dialog_message">Apakah Anda yakin ingin menghapus akun? Semua data profil, riwayat komisi, dan data bisnis Anda akan dihapus permanen sesuai kebijakan Google. Aksi ini tidak dapat dibatalkan.</string>
+    <string name="profile_delete_account_btn_confirm">Hapus Akun</string>
     <string name="profile_status_approved">Disetujui</string>
     <string name="profile_edit_title">Edit Profil</string>
     <string name="profile_section_biodata">BIODATA</string>

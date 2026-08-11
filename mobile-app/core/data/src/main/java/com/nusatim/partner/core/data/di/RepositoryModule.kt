@@ -1,7 +1,25 @@
 package com.nusatim.partner.core.data.di
 
-import com.nusatim.partner.core.data.repository.*
-import com.nusatim.partner.core.domain.repository.*
+import com.nusatim.partner.core.data.repository.AuthRepositoryImpl
+import com.nusatim.partner.core.data.repository.CommissionsRepositoryImpl
+import com.nusatim.partner.core.data.repository.CustomersRepositoryImpl
+import com.nusatim.partner.core.data.repository.LeadsRepositoryImpl
+import com.nusatim.partner.core.data.repository.MarketingRepositoryImpl
+import com.nusatim.partner.core.data.repository.NotificationsRepositoryImpl
+import com.nusatim.partner.core.data.repository.ProfileRepositoryImpl
+import com.nusatim.partner.core.data.repository.ProjectsRepositoryImpl
+import com.nusatim.partner.core.data.repository.WithdrawalsRepositoryImpl
+import com.nusatim.partner.core.data.repository.SupportRepositoryImpl
+import com.nusatim.partner.core.domain.repository.AuthRepository
+import com.nusatim.partner.core.domain.repository.CommissionsRepository
+import com.nusatim.partner.core.domain.repository.CustomersRepository
+import com.nusatim.partner.core.domain.repository.LeadsRepository
+import com.nusatim.partner.core.domain.repository.MarketingRepository
+import com.nusatim.partner.core.domain.repository.NotificationsRepository
+import com.nusatim.partner.core.domain.repository.ProfileRepository
+import com.nusatim.partner.core.domain.repository.ProjectsRepository
+import com.nusatim.partner.core.domain.repository.SupportRepository
+import com.nusatim.partner.core.domain.repository.WithdrawalsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

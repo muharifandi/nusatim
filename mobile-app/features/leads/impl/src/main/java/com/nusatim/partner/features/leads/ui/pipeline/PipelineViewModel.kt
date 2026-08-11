@@ -5,7 +5,9 @@ import com.nusatim.partner.core.architecture.mvi.BaseViewModel
 import com.nusatim.partner.core.model.ResultState
 import com.nusatim.partner.features.leads.domain.usecase.GetPipelineUseCase
 import com.nusatim.partner.features.leads.domain.usecase.UpdateLeadStatusUseCase
-import com.nusatim.partner.features.leads.ui.pipeline.state.*
+import com.nusatim.partner.features.leads.ui.pipeline.state.PipelineEffect
+import com.nusatim.partner.features.leads.ui.pipeline.state.PipelineIntent
+import com.nusatim.partner.features.leads.ui.pipeline.state.PipelineState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -42,8 +44,8 @@ class PipelineViewModel @Inject constructor(
             ).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, pipeline = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, pipeline = result.data, error = null)
                     }
                     is ResultState.Error -> {
                         setState { copy(isLoading = false, error = result.message) }

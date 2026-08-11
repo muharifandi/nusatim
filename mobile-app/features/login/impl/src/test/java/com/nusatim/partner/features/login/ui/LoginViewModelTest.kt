@@ -53,11 +53,14 @@ class LoginViewModelTest {
     @Test
     fun `when login successful, session should be saved and navigate to home`() = runTest {
         // Arrange
+        viewModel.processIntent(LoginIntent.EmailChanged("test@mail.com"))
+        viewModel.processIntent(LoginIntent.PasswordChanged("password123"))
+
         val partnerResponse = mockk<PartnerResponse>()
         every { partnerResponse.status } returns "approved"
         every { partnerResponse.name } returns "Test User"
         val loginResponse = LoginResponse(token = "token123", partner = partnerResponse)
-        
+
         coEvery { loginUseCase(any()) } returns flowOf(
             ResultState.Loading,
             ResultState.Success(loginResponse)
@@ -66,7 +69,7 @@ class LoginViewModelTest {
         // Act
         viewModel.effect.test {
             viewModel.processIntent(LoginIntent.Submit)
-            
+
             // Assert
             assertEquals(LoginEffect.NavigateToHome, awaitItem())
             assertEquals(false, viewModel.state.value.isLoading)
@@ -77,6 +80,9 @@ class LoginViewModelTest {
     @Test
     fun `when login fails, state should show error`() = runTest {
         // Arrange
+        viewModel.processIntent(LoginIntent.EmailChanged("test@mail.com"))
+        viewModel.processIntent(LoginIntent.PasswordChanged("password123"))
+
         coEvery { loginUseCase(any()) } returns flowOf(
             ResultState.Loading,
             ResultState.Error("Invalid credentials")

@@ -18,17 +18,10 @@ data class RegisterState(
     val isAgreed: Boolean = false,
     val isLoading: Boolean = false,
     val error: String? = null,
+    val errorResId: Int? = null,
     val validationErrors: Map<String, List<String>>? = null,
     val isSuccess: Boolean = false
 ) : UiState {
     val totalSteps = 4
     val progress = (currentStep.toFloat() / totalSteps.toFloat() * 100).toInt()
-    
-    val stepTitle = when (currentStep) {
-        1 -> "Data Akun"
-        2 -> "Dokumen KYC"
-        3 -> "Rekening Bank"
-        4 -> "Persetujuan"
-        else -> ""
-    }
 }

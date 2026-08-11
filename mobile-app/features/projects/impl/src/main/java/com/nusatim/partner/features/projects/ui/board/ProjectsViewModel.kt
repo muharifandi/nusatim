@@ -2,9 +2,17 @@ package com.nusatim.partner.features.projects.ui.board
 
 import androidx.lifecycle.viewModelScope
 import com.nusatim.partner.core.architecture.mvi.BaseViewModel
+import com.nusatim.partner.core.common.util.ResourceProvider
+import com.nusatim.partner.core.model.ErrorType
 import com.nusatim.partner.core.model.ResultState
-import com.nusatim.partner.features.projects.domain.usecase.*
-import com.nusatim.partner.features.projects.ui.board.state.*
+import com.nusatim.partner.features.projects.R
+import com.nusatim.partner.features.projects.domain.usecase.CancelClaimProjectUseCase
+import com.nusatim.partner.features.projects.domain.usecase.ClaimProjectUseCase
+import com.nusatim.partner.features.projects.domain.usecase.GetProjectDetailUseCase
+import com.nusatim.partner.features.projects.domain.usecase.GetProjectsUseCase
+import com.nusatim.partner.features.projects.ui.board.state.ProjectsEffect
+import com.nusatim.partner.features.projects.ui.board.state.ProjectsIntent
+import com.nusatim.partner.features.projects.ui.board.state.ProjectsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -15,7 +23,8 @@ class ProjectsViewModel @Inject constructor(
     private val getProjectsUseCase: GetProjectsUseCase,
     private val getProjectDetailUseCase: GetProjectDetailUseCase,
     private val claimProjectUseCase: ClaimProjectUseCase,
-    private val cancelClaimProjectUseCase: CancelClaimProjectUseCase
+    private val cancelClaimProjectUseCase: CancelClaimProjectUseCase,
+    private val resourceProvider: ResourceProvider
 ) : BaseViewModel<ProjectsState, ProjectsIntent, ProjectsEffect>(ProjectsState()) {
 
     init {
@@ -36,8 +45,8 @@ class ProjectsViewModel @Inject constructor(
             getProjectsUseCase(page = page).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, projectsResponse = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, projectsResponse = result.data, error = null)
                     }
                     is ResultState.Error -> {
                         setState { copy(isLoading = false, error = result.message) }
@@ -53,7 +62,7 @@ class ProjectsViewModel @Inject constructor(
             getProjectDetailUseCase(id).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
+                    is ResultState.Success -> setState {
                         copy(isLoading = false, selectedProject = result.data, error = null)
                     }
                     is ResultState.Error -> {
@@ -72,17 +81,17 @@ class ProjectsViewModel @Inject constructor(
                     is ResultState.Loading -> setState { copy(isLoading = true) }
                     is ResultState.Success -> {
                         loadProjects(1) // Refresh
-                        sendEffect { ProjectsEffect.ShowSuccess("Berhasil diklaim, menunggu persetujuan admin") }
+                        sendEffect { ProjectsEffect.ShowSuccess(resourceProvider.getString(R.string.project_claim_success)) }
                     }
                     is ResultState.Error -> {
                         setState { copy(isLoading = false) }
-                        val errorMessage = if (result.message.contains("404") || result.message.contains("409")) {
-                            "Proyek ini sudah tidak tersedia, mungkin baru saja diklaim partner lain."
+                        val errorMessage = if (result.cause == ErrorType.NOT_FOUND || result.message.contains("409")) {
+                            resourceProvider.getString(R.string.project_error_not_available)
                         } else {
                             result.message
                         }
                         sendEffect { ProjectsEffect.ShowError(errorMessage) }
-                        if (result.message.contains("404") || result.message.contains("409")) {
+                        if (result.cause == ErrorType.NOT_FOUND || result.message.contains("409")) {
                             loadProjects(1) // Auto refresh
                         }
                     }
@@ -98,17 +107,17 @@ class ProjectsViewModel @Inject constructor(
                     is ResultState.Loading -> setState { copy(isLoading = true) }
                     is ResultState.Success -> {
                         loadProjects(1) // Refresh
-                        sendEffect { ProjectsEffect.ShowSuccess("Klaim dibatalkan") }
+                        sendEffect { ProjectsEffect.ShowSuccess(resourceProvider.getString(R.string.project_claim_cancelled)) }
                     }
                     is ResultState.Error -> {
                         setState { copy(isLoading = false) }
-                        val errorMessage = if (result.message.contains("404") || result.message.contains("409")) {
-                            "Proyek ini sudah tidak tersedia, mungkin baru saja diklaim partner lain."
+                        val errorMessage = if (result.cause == ErrorType.NOT_FOUND || result.message.contains("409")) {
+                            resourceProvider.getString(R.string.project_error_not_available)
                         } else {
                             result.message
                         }
                         sendEffect { ProjectsEffect.ShowError(errorMessage) }
-                        if (result.message.contains("404") || result.message.contains("409")) {
+                        if (result.cause == ErrorType.NOT_FOUND || result.message.contains("409")) {
                             loadProjects(1) // Auto refresh
                         }
                     }

@@ -3,7 +3,10 @@ package com.nusatim.partner.core.network
 import com.nusatim.partner.core.model.dto.BaseResponse
 import com.nusatim.partner.core.model.dto.PagedBaseResponse
 import com.nusatim.partner.core.model.dto.ProjectResponse
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ProjectsApiService {
 

@@ -27,16 +27,16 @@ fun Fragment.showSnackbar(
     anchorView: View? = null
 ) {
     val rootView = anchorView ?: view ?: return
-    
+
     // Gunakan durasi sedikit lebih lama agar terbaca (modern style)
     val snackbar = Snackbar.make(rootView, "", 4000)
-    
+
     val snackbarLayout = snackbar.view as ViewGroup
-    
+
     // 1. Bersihkan styling default
     snackbarLayout.setBackgroundColor(Color.TRANSPARENT)
     snackbarLayout.setPadding(0, 0, 0, 0)
-    
+
     // Sembunyikan view bawaan snackbar
     snackbarLayout.findViewById<View>(com.google.android.material.R.id.snackbar_text)?.visibility = View.GONE
     snackbarLayout.findViewById<View>(com.google.android.material.R.id.snackbar_action)?.visibility = View.GONE
@@ -52,54 +52,51 @@ fun Fragment.showSnackbar(
     tvMessage.text = message
 
     // 3. Konfigurasi Visual Modern
-    val (title, iconRes, colorRes, bgIconRes) = when (type) {
+    val (titleRes, iconRes, colorRes, bgIconRes) = when (type) {
         SnackbarType.SUCCESS -> Quad(
-            "Berhasil",
-            android.R.drawable.ic_dialog_info, // Ganti dengan ic_check jika ada
+            R.string.snackbar_success,
+            android.R.drawable.ic_dialog_info,
             R.color.status_success,
             R.drawable.bg_circle_green_light
         )
         SnackbarType.ERROR -> Quad(
-            "Gagal",
+            R.string.snackbar_error,
             android.R.drawable.ic_delete,
             R.color.partner_error,
-            R.drawable.bg_circle_orange_light // Gunakan light red jika ada
+            R.drawable.bg_circle_orange_light
         )
         SnackbarType.WARNING -> Quad(
-            "Peringatan",
+            R.string.snackbar_warning,
             android.R.drawable.ic_dialog_alert,
             R.color.status_warning,
             R.drawable.bg_circle_orange_light
         )
         SnackbarType.INFO -> Quad(
-            "Informasi",
+            R.string.snackbar_info,
             android.R.drawable.ic_dialog_info,
             R.color.status_info,
-            R.drawable.bg_circle_orange_light // Gunakan light blue jika ada
+            R.drawable.bg_circle_orange_light
         )
     }
 
-    tvTitle.text = title
+    tvTitle.text = getString(titleRes)
     tvTitle.setTextColor(ContextCompat.getColor(requireContext(), colorRes))
     ivIcon.setImageResource(iconRes)
     ivIcon.setColorFilter(ContextCompat.getColor(requireContext(), colorRes))
     ivIcon.setBackgroundResource(bgIconRes)
-    
+
     // 4. Pasang ke Snackbar
     snackbarLayout.addView(customView)
 
-    // 5. Perbaikan Posisi & Padding (Menghilangkan "Lari ke Kanan")
+    // 5. Perbaikan Posisi & Padding
     val params = snackbarLayout.layoutParams
     if (params is FrameLayout.LayoutParams) {
-        // Force MATCH_PARENT agar tidak lari ke kanan di screen lebar
         params.width = FrameLayout.LayoutParams.MATCH_PARENT
         params.gravity = Gravity.TOP
-        
-        val density = requireContext().resources.displayMetrics.density
-        val marginHorizontal = (16 * density).toInt()
-        val marginTop = (56 * density).toInt() // Sedikit di bawah status bar
-        
-        // Pastikan margin kiri dan kanan SAMA (simetris)
+
+        val marginHorizontal = requireContext().resources.getDimensionPixelSize(R.dimen.partner_space_m)
+        val marginTop = requireContext().resources.getDimensionPixelSize(R.dimen.partner_space_xl) * 2
+
         params.setMargins(marginHorizontal, marginTop, marginHorizontal, 0)
         snackbarLayout.layoutParams = params
     }

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="4dp"
-    android:layout_marginVertical="4dp"
+    android:layout_marginHorizontal="@dimen/partner_space_xs"
+    android:layout_marginVertical="@dimen/partner_space_xs"
     android:background="@drawable/bg_card_flat"
     android:clickable="true"
     android:focusable="true">
@@ -13,23 +13,23 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="@dimen/partner_space_m"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <!-- Profile Section -->
         <FrameLayout
             android:id="@+id/card_profile"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/partner_icon_profile_m"
+            android:layout_height="@dimen/partner_icon_profile_m"
             android:background="@drawable/bg_circle_orange_light"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/iv_profile"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="@dimen/partner_icon_m"
+                android:layout_height="@dimen/partner_icon_m"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_partner_logo"
                 app:tint="@color/partner_primary"
@@ -41,8 +41,8 @@
             style="@style/PartnerTypography.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textSize="16sp"
+            android:layout_marginStart="@dimen/partner_space_m"
+            android:textSize="@dimen/partner_text_body1"
             android:textColor="@color/partner_black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/card_profile"
@@ -57,7 +57,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:alpha="0.5"
-            android:textSize="13sp"
+            android:textSize="@dimen/partner_text_label1"
             app:layout_constraintBottom_toBottomOf="@id/card_profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_name"
@@ -68,8 +68,8 @@
         <View
             android:id="@+id/divider_dashed"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="@dimen/partner_divider_height"
+            android:layout_marginTop="@dimen/partner_space_m"
             android:background="@drawable/divider_dashed"
             android:alpha="0.2"
             app:layout_constraintTop_toBottomOf="@id/card_profile" />
@@ -77,9 +77,9 @@
         <!-- Amount Section -->
         <LinearLayout
             android:id="@+id/card_wallet"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="@dimen/partner_icon_wallet_m"
+            android:layout_height="@dimen/partner_icon_wallet_m"
+            android:layout_marginTop="@dimen/partner_space_m"
             android:background="@drawable/partner_button_primary_bg"
             android:backgroundTint="@color/project_orange_light"
             android:gravity="center"
@@ -88,8 +88,8 @@
 
             <ImageView
                 android:id="@+id/iv_wallet"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/partner_radius_l"
+                android:layout_height="@dimen/partner_radius_l"
                 android:src="@drawable/ic_wallet_small"
                 app:tint="@color/partner_primary"
                 android:contentDescription="@null" />
@@ -100,9 +100,9 @@
             style="@style/PartnerTypography.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/partner_space_m"
             android:textColor="@color/partner_primary"
-            android:textSize="18sp"
+            android:textSize="@dimen/partner_text_title3"
             android:fontFamily="sans-serif-black"
             app:layout_constraintBottom_toBottomOf="@id/card_wallet"
             app:layout_constraintEnd_toEndOf="parent"

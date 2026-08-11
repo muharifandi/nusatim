@@ -4,8 +4,11 @@ import androidx.lifecycle.viewModelScope
 import com.nusatim.partner.core.architecture.mvi.BaseViewModel
 import com.nusatim.partner.core.common.security.SessionManager
 import com.nusatim.partner.core.model.ResultState
+import com.nusatim.partner.features.login.R
 import com.nusatim.partner.features.login.domain.usecase.LoginUseCase
-import com.nusatim.partner.features.login.ui.state.*
+import com.nusatim.partner.features.login.ui.state.LoginEffect
+import com.nusatim.partner.features.login.ui.state.LoginIntent
+import com.nusatim.partner.features.login.ui.state.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -20,10 +23,10 @@ class LoginViewModel @Inject constructor(
     override fun processIntent(intent: LoginIntent) {
         when (intent) {
             is LoginIntent.EmailChanged -> {
-                setState { copy(email = intent.value, error = null) }
+                setState { copy(email = intent.value, error = null, errorResId = null) }
             }
             is LoginIntent.PasswordChanged -> {
-                setState { copy(password = intent.value, error = null) }
+                setState { copy(password = intent.value, error = null, errorResId = null) }
             }
             is LoginIntent.Submit -> {
                 login()
@@ -35,7 +38,7 @@ class LoginViewModel @Inject constructor(
                 sendEffect { LoginEffect.NavigateToForgotPassword }
             }
             is LoginIntent.DismissError -> {
-                setState { copy(error = null) }
+                setState { copy(error = null, errorResId = null) }
             }
             else -> {}
         }
@@ -45,9 +48,15 @@ class LoginViewModel @Inject constructor(
         val email = state.value.email
         val password = state.value.password
 
-        // Validasi Email Format
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            setState { copy(error = "Format email tidak valid. Gunakan contoh: nama@email.com") }
+        // Validasi Email Format (JVM Compatible Regex)
+        val emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$"
+        if (!email.matches(Regex(emailPattern))) {
+            setState { copy(errorResId = R.string.login_error_invalid_email) }
+            return
+        }
+
+        if (password.isBlank()) {
+            setState { copy(errorResId = R.string.login_error_empty_password) }
             return
         }
 

@@ -4,7 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.nusatim.partner.core.architecture.mvi.BaseViewModel
 import com.nusatim.partner.core.model.ResultState
 import com.nusatim.partner.features.register.domain.usecase.RegisterUseCase
-import com.nusatim.partner.features.register.ui.state.*
+import com.nusatim.partner.features.register.ui.state.RegisterEffect
+import com.nusatim.partner.features.register.ui.state.RegisterIntent
+import com.nusatim.partner.features.register.ui.state.RegisterState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -23,20 +25,20 @@ class RegisterViewModel @Inject constructor(
         when (intent) {
             is RegisterIntent.NextStep -> handleNextStep()
             is RegisterIntent.PreviousStep -> handlePreviousStep()
-            
+
             is RegisterIntent.NameChanged -> setState { copy(name = intent.value) }
             is RegisterIntent.EmailChanged -> setState { copy(email = intent.value) }
             is RegisterIntent.PasswordChanged -> setState { copy(password = intent.value) }
             is RegisterIntent.PasswordConfirmationChanged -> setState { copy(passwordConfirmation = intent.value) }
-            
+
             is RegisterIntent.ProfilePhotoPicked -> setState { copy(profilePhoto = intent.file) }
             is RegisterIntent.KtpPicked -> setState { copy(ktp = intent.file) }
             is RegisterIntent.NpwpPicked -> setState { copy(npwp = intent.file) }
-            
+
             is RegisterIntent.BankNameChanged -> setState { copy(bankName = intent.value) }
             is RegisterIntent.BankAccountNumberChanged -> setState { copy(bankAccountNumber = intent.value) }
             is RegisterIntent.BankAccountHolderChanged -> setState { copy(bankAccountHolder = intent.value) }
-            
+
             is RegisterIntent.AgreementChanged -> setState { copy(isAgreed = intent.value) }
             is RegisterIntent.Submit -> handleRegistration()
         }
@@ -59,7 +61,7 @@ class RegisterViewModel @Inject constructor(
     private fun handleRegistration() {
         viewModelScope.launch {
             val currentState = state.value
-            
+
             val nameBody = currentState.name.toRequestBody("text/plain".toMediaTypeOrNull())
             val emailBody = currentState.email.toRequestBody("text/plain".toMediaTypeOrNull())
             val passwordBody = currentState.password.toRequestBody("text/plain".toMediaTypeOrNull())

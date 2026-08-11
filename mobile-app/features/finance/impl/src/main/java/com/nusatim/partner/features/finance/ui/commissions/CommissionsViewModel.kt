@@ -5,7 +5,9 @@ import com.nusatim.partner.core.architecture.mvi.BaseViewModel
 import com.nusatim.partner.core.model.ResultState
 import com.nusatim.partner.features.finance.domain.usecase.GetCommissionDetailUseCase
 import com.nusatim.partner.features.finance.domain.usecase.GetCommissionsUseCase
-import com.nusatim.partner.features.finance.ui.commissions.state.*
+import com.nusatim.partner.features.finance.ui.commissions.state.CommissionsEffect
+import com.nusatim.partner.features.finance.ui.commissions.state.CommissionsIntent
+import com.nusatim.partner.features.finance.ui.commissions.state.CommissionsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,8 +41,8 @@ class CommissionsViewModel @Inject constructor(
             ).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, commissionsResponse = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, commissionsResponse = result.data, error = null)
                     }
                     is ResultState.Error -> {
                         setState { copy(isLoading = false, error = result.message) }
@@ -56,8 +58,8 @@ class CommissionsViewModel @Inject constructor(
             getCommissionDetailUseCase(id).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, selectedCommission = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, selectedCommission = result.data, error = null)
                     }
                     is ResultState.Error -> {
                         setState { copy(isLoading = false, error = result.message) }

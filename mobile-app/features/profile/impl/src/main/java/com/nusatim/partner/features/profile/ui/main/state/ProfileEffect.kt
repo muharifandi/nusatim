@@ -6,4 +6,5 @@ sealed interface ProfileEffect : UiEffect {
     data class ShowToast(val message: String) : ProfileEffect
     data object SuccessUpdate : ProfileEffect
     data object LogoutSuccess : ProfileEffect
+    data object DeleteAccountSuccess : ProfileEffect
 }

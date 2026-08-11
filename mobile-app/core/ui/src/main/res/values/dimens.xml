@@ -37,6 +37,8 @@
     <dimen name="partner_icon_l">28dp</dimen>
     <dimen name="partner_icon_xl">32dp</dimen>
     <dimen name="partner_icon_xxl">64dp</dimen>
+    <dimen name="partner_icon_profile_m">56dp</dimen>
+    <dimen name="partner_icon_wallet_m">40dp</dimen>
     <dimen name="partner_profile_image">100dp</dimen>
     <dimen name="partner_icon_container_m">48dp</dimen>
 
@@ -48,4 +50,6 @@
     <dimen name="partner_elevation_l">8dp</dimen>
     <dimen name="partner_menu_item_height">72dp</dimen>
     <dimen name="partner_agreement_height">300dp</dimen>
+    <dimen name="partner_chart_pie_height">320dp</dimen>
+    <dimen name="partner_chart_line_height">250dp</dimen>
 </resources>

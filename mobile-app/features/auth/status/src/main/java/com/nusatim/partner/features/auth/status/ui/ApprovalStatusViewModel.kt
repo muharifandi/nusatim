@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nusatim.partner.core.domain.repository.AuthRepository
 import com.nusatim.partner.core.common.security.SessionManager
+import com.nusatim.partner.core.common.util.Constants
+import com.nusatim.partner.core.model.ErrorType
 import com.nusatim.partner.core.model.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +21,7 @@ data class ApprovalStatusState(
     val rejectionReason: String? = null,
     val isLoading: Boolean = false,
     val error: String? = null,
+    val errorType: ErrorType? = null,
     val isApproved: Boolean = false,
     val isLoggedOut: Boolean = false
 )
@@ -40,17 +43,17 @@ class ApprovalStatusViewModel @Inject constructor(
                     is ResultState.Success -> {
                         val status = result.data.status
                         sessionManager.savePartnerStatus(status)
-                        _state.update { 
+                        _state.update {
                             it.copy(
-                                isLoading = false, 
+                                isLoading = false,
                                 status = status,
                                 rejectionReason = result.data.rejectionReason,
-                                isApproved = status == "approved"
-                            ) 
+                                isApproved = status == Constants.Status.APPROVED
+                            )
                         }
                     }
                     is ResultState.Error -> {
-                        _state.update { it.copy(isLoading = false, error = result.message) }
+                        _state.update { it.copy(isLoading = false, error = result.message, errorType = result.cause) }
                     }
                 }
             }

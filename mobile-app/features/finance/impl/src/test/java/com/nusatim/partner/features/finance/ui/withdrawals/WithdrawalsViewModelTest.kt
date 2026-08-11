@@ -5,6 +5,7 @@ import com.nusatim.partner.core.model.dto.PagedBaseResponse
 import com.nusatim.partner.core.model.dto.WithdrawalBalanceResponse
 import com.nusatim.partner.core.model.dto.WithdrawalResponse
 import com.nusatim.partner.features.finance.domain.usecase.*
+import com.nusatim.partner.features.profile.domain.usecase.GetProfileUseCase
 import com.nusatim.partner.features.finance.ui.withdrawals.state.WithdrawalsIntent
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -28,6 +29,7 @@ class WithdrawalsViewModelTest {
     private val getWithdrawalBalanceUseCase: GetWithdrawalBalanceUseCase = mockk()
     private val getWithdrawalDetailUseCase: GetWithdrawalDetailUseCase = mockk()
     private val requestWithdrawalUseCase: RequestWithdrawalUseCase = mockk()
+    private val getProfileUseCase: GetProfileUseCase = mockk()
 
     private lateinit var viewModel: WithdrawalsViewModel
     private val testDispatcher = UnconfinedTestDispatcher()
@@ -35,16 +37,18 @@ class WithdrawalsViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        
+
         // Mock init calls
         coEvery { getWithdrawalsUseCase(any(), any()) } returns flowOf(ResultState.Loading)
         coEvery { getWithdrawalBalanceUseCase() } returns flowOf(ResultState.Loading)
-        
+        coEvery { getProfileUseCase() } returns flowOf(ResultState.Loading)
+
         viewModel = WithdrawalsViewModel(
             getWithdrawalsUseCase,
             getWithdrawalBalanceUseCase,
             getWithdrawalDetailUseCase,
-            requestWithdrawalUseCase
+            requestWithdrawalUseCase,
+            getProfileUseCase
         )
     }
 
@@ -87,7 +91,7 @@ class WithdrawalsViewModelTest {
             ResultState.Loading,
             ResultState.Success(mockk())
         )
-        
+
         // Mock refresh calls
         coEvery { getWithdrawalsUseCase(any(), any()) } returns flowOf(ResultState.Success(mockk()))
         coEvery { getWithdrawalBalanceUseCase() } returns flowOf(ResultState.Success(mockk()))

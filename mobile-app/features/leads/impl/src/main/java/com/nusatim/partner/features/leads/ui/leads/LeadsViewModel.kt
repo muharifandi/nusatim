@@ -4,7 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.nusatim.partner.core.architecture.mvi.BaseViewModel
 import com.nusatim.partner.core.model.ResultState
 import com.nusatim.partner.features.leads.domain.usecase.GetLeadsUseCase
-import com.nusatim.partner.features.leads.ui.leads.state.*
+import com.nusatim.partner.features.leads.ui.leads.state.LeadsEffect
+import com.nusatim.partner.features.leads.ui.leads.state.LeadsIntent
+import com.nusatim.partner.features.leads.ui.leads.state.LeadsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -43,8 +45,8 @@ class LeadsViewModel @Inject constructor(
             ).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, leadsResponse = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, leadsResponse = result.data, error = null)
                     }
                     is ResultState.Error -> {
                         setState { copy(isLoading = false, error = result.message) }

@@ -3,8 +3,21 @@ package com.nusatim.partner.features.leads.ui.leads.detail
 import androidx.lifecycle.viewModelScope
 import com.nusatim.partner.core.architecture.mvi.BaseViewModel
 import com.nusatim.partner.core.model.ResultState
-import com.nusatim.partner.features.leads.domain.usecase.*
-import com.nusatim.partner.features.leads.ui.leads.detail.state.*
+import com.nusatim.partner.features.leads.domain.usecase.CompleteReminderUseCase
+import com.nusatim.partner.features.leads.domain.usecase.CreateLeadNoteUseCase
+import com.nusatim.partner.features.leads.domain.usecase.CreateLeadUseCase
+import com.nusatim.partner.features.leads.domain.usecase.DeleteLeadUseCase
+import com.nusatim.partner.features.leads.domain.usecase.GetCustomerByLeadIdUseCase
+import com.nusatim.partner.features.leads.domain.usecase.GetLeadActivitiesUseCase
+import com.nusatim.partner.features.leads.domain.usecase.GetLeadDetailUseCase
+import com.nusatim.partner.features.leads.domain.usecase.GetLeadDocumentsUseCase
+import com.nusatim.partner.features.leads.domain.usecase.GetLeadRemindersUseCase
+import com.nusatim.partner.features.leads.domain.usecase.UpdateLeadStatusUseCase
+import com.nusatim.partner.features.leads.domain.usecase.UpdateLeadUseCase
+import com.nusatim.partner.features.leads.domain.usecase.UploadLeadDocumentUseCase
+import com.nusatim.partner.features.leads.ui.leads.detail.state.LeadDetailEffect
+import com.nusatim.partner.features.leads.ui.leads.detail.state.LeadDetailIntent
+import com.nusatim.partner.features.leads.ui.leads.detail.state.LeadDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -51,11 +64,11 @@ class LeadDetailViewModel @Inject constructor(
             getLeadDetailUseCase(id).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, lead = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, lead = result.data, error = null)
                     }
-                    is ResultState.Error -> setState { 
-                        copy(isLoading = false, error = result.message) 
+                    is ResultState.Error -> setState {
+                        copy(isLoading = false, error = result.message)
                     }
                 }
             }
@@ -123,11 +136,11 @@ class LeadDetailViewModel @Inject constructor(
             getLeadRemindersUseCase(leadId).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, reminders = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, reminders = result.data, error = null)
                     }
-                    is ResultState.Error -> setState { 
-                        copy(isLoading = false, error = result.message) 
+                    is ResultState.Error -> setState {
+                        copy(isLoading = false, error = result.message)
                     }
                 }
             }
@@ -156,11 +169,11 @@ class LeadDetailViewModel @Inject constructor(
             getLeadActivitiesUseCase(leadId).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, activities = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, activities = result.data, error = null)
                     }
-                    is ResultState.Error -> setState { 
-                        copy(isLoading = false, error = result.message) 
+                    is ResultState.Error -> setState {
+                        copy(isLoading = false, error = result.message)
                     }
                 }
             }
@@ -189,11 +202,11 @@ class LeadDetailViewModel @Inject constructor(
             getLeadDocumentsUseCase(leadId).collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
-                        copy(isLoading = false, documents = result.data, error = null) 
+                    is ResultState.Success -> setState {
+                        copy(isLoading = false, documents = result.data, error = null)
                     }
-                    is ResultState.Error -> setState { 
-                        copy(isLoading = false, error = result.message) 
+                    is ResultState.Error -> setState {
+                        copy(isLoading = false, error = result.message)
                     }
                 }
             }
@@ -203,7 +216,7 @@ class LeadDetailViewModel @Inject constructor(
     private fun uploadDocument(leadId: Int, file: java.io.File, name: String?) {
         val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
-        
+
         viewModelScope.launch {
             uploadLeadDocumentUseCase(leadId, body, name).collectLatest { result ->
                 when (result) {

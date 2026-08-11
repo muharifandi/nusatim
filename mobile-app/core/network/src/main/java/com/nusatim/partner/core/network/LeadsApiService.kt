@@ -1,8 +1,23 @@
 package com.nusatim.partner.core.network
 
-import com.nusatim.partner.core.model.dto.*
+import com.nusatim.partner.core.model.dto.BaseResponse
+import com.nusatim.partner.core.model.dto.LeadActivityResponse
+import com.nusatim.partner.core.model.dto.LeadDocumentResponse
+import com.nusatim.partner.core.model.dto.LeadReminderResponse
+import com.nusatim.partner.core.model.dto.LeadResponse
+import com.nusatim.partner.core.model.dto.PagedBaseResponse
+import com.nusatim.partner.core.model.dto.PipelineResponse
 import okhttp3.MultipartBody
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.Multipart
+import retrofit2.http.PATCH
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Part
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface LeadsApiService {
 

@@ -22,10 +22,10 @@
         <!-- Header Icon (Person/Project) -->
         <FrameLayout
             android:id="@+id/card_type_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="@dimen/partner_icon_wallet_m"
+            android:layout_height="@dimen/partner_icon_wallet_m"
+            android:layout_marginStart="@dimen/partner_space_m"
+            android:layout_marginTop="@dimen/partner_space_m"
             android:background="@drawable/partner_button_primary_bg"
             android:backgroundTint="@color/project_orange_light"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,11 +46,11 @@
             style="@style/PartnerTypography.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/partner_radius_m"
+            android:layout_marginEnd="@dimen/partner_space_s"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textSize="16sp"
+            android:textSize="@dimen/partner_text_body1"
             app:layout_constraintEnd_toStartOf="@id/card_status"
             app:layout_constraintStart_toEndOf="@id/card_type_icon"
             app:layout_constraintTop_toTopOf="@id/card_type_icon"
@@ -73,12 +73,12 @@
             android:id="@+id/card_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="@dimen/partner_space_m"
             android:background="@drawable/partner_button_primary_bg"
             android:backgroundTint="@color/project_blue_light"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="12dp"
+            android:paddingHorizontal="@dimen/partner_radius_m"
             android:paddingVertical="6dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_customer_name">
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@color/status_info"
-                android:textSize="12sp"
+                android:textSize="@dimen/partner_text_caption1"
                 tools:text="Approved" />
         </LinearLayout>
 
@@ -117,17 +117,17 @@
         <!-- Amount Section -->
         <FrameLayout
             android:id="@+id/card_wallet_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="@dimen/partner_icon_wallet_m"
+            android:layout_height="@dimen/partner_icon_wallet_m"
+            android:layout_marginTop="@dimen/partner_space_m"
             android:background="@drawable/partner_button_primary_bg"
             android:backgroundTint="@color/project_orange_light"
             app:layout_constraintStart_toStartOf="@id/card_type_icon"
             app:layout_constraintTop_toBottomOf="@id/divider_horizontal">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/partner_icon_body"
+                android:layout_height="@dimen/partner_icon_body"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_wallet_small"
                 app:tint="@color/partner_primary" />
@@ -138,9 +138,9 @@
             style="@style/PartnerTypography.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="@dimen/partner_radius_m"
             android:textColor="@color/partner_primary"
-            android:textSize="20sp"
+            android:textSize="@dimen/partner_text_title2"
             app:layout_constraintBottom_toBottomOf="@id/card_wallet_icon"
             app:layout_constraintStart_toEndOf="@id/card_wallet_icon"
             app:layout_constraintTop_toTopOf="@id/card_wallet_icon"
@@ -148,9 +148,9 @@
 
         <ImageView
             android:id="@+id/iv_bonus"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="@dimen/partner_icon_body"
+            android:layout_height="@dimen/partner_icon_body"
+            android:layout_marginStart="@dimen/partner_space_s"
             android:src="@android:drawable/btn_star_big_on"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tv_amount"
@@ -162,8 +162,8 @@
         <!-- Vertical Divider -->
         <View
             android:id="@+id/divider_vertical"
-            android:layout_width="1dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/partner_divider_height"
+            android:layout_height="@dimen/partner_space_xl"
             android:background="@color/project_divider"
             app:layout_constraintBottom_toBottomOf="@id/card_wallet_icon"
             app:layout_constraintEnd_toStartOf="@id/layout_calendar"
@@ -185,9 +185,9 @@
 
             <FrameLayout
                 android:id="@+id/card_calendar_icon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="@dimen/partner_space_xl"
+                android:layout_height="@dimen/partner_space_xl"
+                android:layout_marginEnd="@dimen/partner_space_s"
                 android:background="@drawable/partner_button_primary_bg"
                 android:backgroundTint="@color/partner_surface_variant">
 
@@ -205,7 +205,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.8"
-                android:textSize="11sp"
+                android:textSize="@dimen/partner_text_caption2"
                 tools:text="2026-08-08\n05:51:40.000000Z" />
         </LinearLayout>
 

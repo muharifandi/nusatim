@@ -2,7 +2,7 @@
 <network-security-config>
     <!-- Konfigurasi untuk produksi: hanya HTTPS -->
     <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">newsapi.org</domain>
+        <domain includeSubdomains="true">nusatim.id</domain>
     </domain-config>
 
     <!-- Konfigurasi untuk pengembangan lokal (Emulator) -->

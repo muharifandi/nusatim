@@ -37,4 +37,7 @@ interface ProfileApiService {
     suspend fun updatePassword(
         @Body request: Map<String, String>
     ): Map<String, String>
+
+    @DELETE("profile")
+    suspend fun deleteAccount(): Map<String, String>
 }

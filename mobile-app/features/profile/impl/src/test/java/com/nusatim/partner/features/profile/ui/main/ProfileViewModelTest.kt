@@ -32,24 +32,26 @@ class ProfileViewModelTest {
     private val updateProfileUseCase: UpdateProfileUseCase = mockk()
     private val updateKycUseCase: UpdateKycUseCase = mockk()
     private val updatePasswordUseCase: UpdatePasswordUseCase = mockk()
+    private val deleteAccountUseCase: DeleteAccountUseCase = mockk()
     private val sessionManager: SessionManager = mockk(relaxed = true)
-    
+
     private lateinit var viewModel: ProfileViewModel
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        
+
         // Mock initial LoadProfile in init
         coEvery { getProfileUseCase() } returns flowOf(ResultState.Loading)
-        
+
         viewModel = ProfileViewModel(
             getProfileUseCase,
             logoutUseCase,
             updateProfileUseCase,
             updateKycUseCase,
             updatePasswordUseCase,
+            deleteAccountUseCase,
             sessionManager
         )
     }

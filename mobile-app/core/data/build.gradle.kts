@@ -1,6 +1,7 @@
 plugins {
     id("myapp.android.library")
     id("myapp.android.hilt")
+    id("myapp.android.room")
 }
 
 android {
@@ -11,7 +12,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
     implementation(project(":core:model"))
-    
+
     implementation(libs.squareup.retrofit)
     implementation(libs.squareup.retrofit.gson)
 

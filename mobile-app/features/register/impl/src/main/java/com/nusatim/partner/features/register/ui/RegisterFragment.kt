@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.nusatim.partner.core.architecture.base.BaseFragment
 import com.nusatim.partner.core.ui.util.SnackbarType
 import com.nusatim.partner.core.ui.util.showSnackbar
+import com.nusatim.partner.features.register.R
 import com.nusatim.partner.features.register.databinding.FragmentRegisterBinding
 import com.nusatim.partner.features.register.ui.state.RegisterEffect
 import com.nusatim.partner.features.register.ui.state.RegisterIntent
@@ -103,7 +104,13 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
                     viewModel.state.collectLatest { state ->
                         // Update Progress Stepper
                         binding.progressStepper.setProgress(state.progress, true)
-                        binding.tvStepTitle.text = state.stepTitle
+                        binding.tvStepTitle.text = when (state.currentStep) {
+                            1 -> getString(R.string.register_step_1_title)
+                            2 -> getString(R.string.register_step_2_title)
+                            3 -> getString(R.string.register_step_3_title)
+                            4 -> getString(R.string.register_step_4_title)
+                            else -> ""
+                        }
 
                         // Handle Step Visibility
                         binding.step1.root.visibility = if (state.currentStep == 1) View.VISIBLE else View.GONE
@@ -113,14 +120,20 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>() {
 
                         // Handle Navigation Buttons
                         binding.btnBack.visibility = if (state.currentStep > 1) View.VISIBLE else View.INVISIBLE
-                        binding.btnNext.text = if (state.currentStep == state.totalSteps) "Daftar" else "Lanjut"
-                        
+                        binding.btnNext.text = if (state.currentStep == state.totalSteps) {
+                            getString(R.string.register_sign_up)
+                        } else {
+                            getString(R.string.register_btn_next)
+                        }
+
                         // Handle Loading State
                         binding.btnNext.isEnabled = !state.isLoading
                         binding.btnBack.isEnabled = !state.isLoading
 
                         state.error?.let {
                             showSnackbar(it, SnackbarType.ERROR)
+                        } ?: state.errorResId?.let { resId ->
+                            showSnackbar(getString(resId), SnackbarType.ERROR)
                         }
                     }
                 }

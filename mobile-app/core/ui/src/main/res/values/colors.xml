@@ -26,6 +26,17 @@
     <color name="partner_outline">#847466</color>
     <color name="partner_grey">#9E9E9E</color>
     <color name="partner_silver">#E0E0E0</color>
+    <color name="partner_surface_light">#FFF8F1</color>
+    <color name="partner_surface_subtle">#FDF2E9</color>
+    <color name="partner_primary_15">#26A6541A</color>
+    <color name="stat_leads_bg">#FFF3E0</color>
+    <color name="stat_opp_bg">#E3F2FD</color>
+    <color name="stat_cust_bg">#E8F5E9</color>
+    <color name="stat_proj_bg">#F3E5F5</color>
+    <color name="white_20">#33FFFFFF</color>
+    <color name="white_40">#66FFFFFF</color>
+    <color name="white_80">#CCFFFFFF</color>
+    <color name="black_10">#1A000000</color>
 
     <!-- Semantic Status Colors (Separate from brand) -->
     <color name="partner_error">#ba1a1a</color>

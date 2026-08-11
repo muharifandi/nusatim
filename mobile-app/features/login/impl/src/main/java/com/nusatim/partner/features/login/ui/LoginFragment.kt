@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.nusatim.partner.core.architecture.base.BaseFragment
 import com.nusatim.partner.core.ui.util.SnackbarType
 import com.nusatim.partner.core.ui.util.showSnackbar
+import com.nusatim.partner.features.login.R
 import com.nusatim.partner.features.login.databinding.FragmentLoginBinding
 import com.nusatim.partner.features.login.ui.state.LoginEffect
 import com.nusatim.partner.features.login.ui.state.LoginIntent
@@ -74,20 +75,29 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collectLatest { state ->
                     Log.d("LoginFragment", "State updated: isLoading=${state.isLoading}, error=${state.error}")
-                    
+
                     val isInputValid = state.email.isNotBlank() && state.password.isNotBlank()
                     binding.btnLogin.isEnabled = !state.isLoading && isInputValid
-                    
+
                     // Efek visual untuk tombol disabled
                     binding.btnLogin.alpha = if (binding.btnLogin.isEnabled) 1.0f else 0.5f
 
-                    binding.btnLogin.text = if (state.isLoading) "Memproses..." else "Masuk"
+                    binding.btnLogin.text = if (state.isLoading) {
+                        getString(R.string.login_btn_loading)
+                    } else {
+                        getString(R.string.login_sign_in)
+                    }
 
                     state.error?.let {
                         showSnackbar(it, SnackbarType.ERROR)
                         viewModel.processIntent(LoginIntent.DismissError)
                     } ?: run {
-                        binding.tilPassword.error = null
+                        state.errorResId?.let { resId ->
+                            showSnackbar(getString(resId), SnackbarType.ERROR)
+                            viewModel.processIntent(LoginIntent.DismissError)
+                        } ?: run {
+                            binding.tilPassword.error = null
+                        }
                     }
                 }
             }

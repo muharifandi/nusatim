@@ -16,4 +16,7 @@
     <string name="project_label_difficulty">Tingkat Kesulitan</string>
     <string name="project_btn_claim_long">Klaim Proyek Ini</string>
     <string name="project_btn_view_customer">Lihat Detail Customer</string>
+    <string name="project_claim_success">Berhasil diklaim, menunggu persetujuan admin</string>
+    <string name="project_claim_cancelled">Klaim dibatalkan</string>
+    <string name="project_error_not_available">Proyek ini sudah tidak tersedia, mungkin baru saja diklaim partner lain.</string>
 </resources>

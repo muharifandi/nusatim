@@ -11,4 +11,5 @@ sealed interface ProfileIntent : UiIntent {
     data class UpdateNpwp(val file: File) : ProfileIntent
     data class UpdatePassword(val current: String, val new: String, val confirm: String) : ProfileIntent
     data object Logout : ProfileIntent
+    data object DeleteAccount : ProfileIntent
 }

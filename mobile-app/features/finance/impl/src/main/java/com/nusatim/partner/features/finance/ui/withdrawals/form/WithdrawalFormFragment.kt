@@ -67,14 +67,14 @@ class WithdrawalFormFragment : BaseFragment<FragmentWithdrawalFormBinding>() {
             val amount = rawAmount.toLongOrNull() ?: 0
             val ktpFile = selectedKtpFile
             val isKtpVerified = !viewModel.state.value.partnerProfile?.ktpUrl.isNullOrEmpty()
-            
+
             if (isKtpVerified || ktpFile != null) {
                 viewModel.processIntent(WithdrawalsIntent.SubmitRequest(amount, ktpFile ?: File(""), binding.etNote.text.toString()))
             }
         }
-        
+
         val partnerName = sessionManager.getPartnerName() ?: "Partner"
-        binding.tvBankInfo.text = "Dana akan ditransfer ke rekening terdaftar atas nama $partnerName."
+        binding.tvBankInfo.text = getString(com.nusatim.partner.features.finance.R.string.withdrawal_info_bank_default, partnerName)
     }
 
     override fun onInitObservers() {
@@ -85,7 +85,7 @@ class WithdrawalFormFragment : BaseFragment<FragmentWithdrawalFormBinding>() {
                         state.balance?.let { balance ->
                             binding.tvAvailableBalance.text = formatRupiah(balance.availableBalance)
                         }
-                        
+
                         // Handle KTP Verified State
                         if (!state.partnerProfile?.ktpUrl.isNullOrEmpty()) {
                             binding.cardKtp.visibility = android.view.View.GONE
@@ -133,7 +133,7 @@ class WithdrawalFormFragment : BaseFragment<FragmentWithdrawalFormBinding>() {
         val amount = rawAmount.toLongOrNull() ?: 0
         val balance = viewModel.state.value.balance
         val isKtpVerified = !viewModel.state.value.partnerProfile?.ktpUrl.isNullOrEmpty()
-        
+
         return if (balance != null) {
             amount >= balance.minimumWithdrawal && amount <= balance.availableBalance && (isKtpVerified || selectedKtpFile != null)
         } else {

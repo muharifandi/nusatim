@@ -1,6 +1,8 @@
 package com.nusatim.partner.core.data.repository
 
 import app.cash.turbine.test
+import com.google.gson.Gson
+import com.nusatim.partner.core.data.source.local.dao.DashboardDao
 import com.nusatim.partner.core.model.ResultState
 import com.nusatim.partner.core.network.AuthApiService
 import com.nusatim.partner.core.model.dto.BaseResponse
@@ -17,12 +19,16 @@ import org.junit.Test
 class AuthRepositoryImplTest {
 
     private lateinit var apiService: AuthApiService
+    private lateinit var dashboardDao: DashboardDao
+    private lateinit var gson: Gson
     private lateinit var repository: AuthRepositoryImpl
 
     @Before
     fun setUp() {
         apiService = mockk()
-        repository = AuthRepositoryImpl(apiService)
+        dashboardDao = mockk(relaxed = true)
+        gson = Gson()
+        repository = AuthRepositoryImpl(apiService, dashboardDao, gson)
     }
 
     @Test

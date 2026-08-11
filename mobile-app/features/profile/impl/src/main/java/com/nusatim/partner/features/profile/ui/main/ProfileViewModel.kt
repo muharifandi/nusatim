@@ -3,8 +3,10 @@ package com.nusatim.partner.features.profile.ui.main
 import androidx.lifecycle.viewModelScope
 import com.nusatim.partner.core.architecture.mvi.BaseViewModel
 import com.nusatim.partner.core.common.security.SessionManager
+import com.nusatim.partner.core.common.util.Constants
 import com.nusatim.partner.core.model.ResultState
 import com.nusatim.partner.core.model.dto.PartnerResponse
+import com.nusatim.partner.features.profile.domain.usecase.DeleteAccountUseCase
 import com.nusatim.partner.features.profile.domain.usecase.GetProfileUseCase
 import com.nusatim.partner.features.profile.domain.usecase.LogoutUseCase
 import com.nusatim.partner.features.profile.domain.usecase.UpdateKycUseCase
@@ -27,6 +29,7 @@ class ProfileViewModel @Inject constructor(
     private val updateProfileUseCase: UpdateProfileUseCase,
     private val updateKycUseCase: UpdateKycUseCase,
     private val updatePasswordUseCase: UpdatePasswordUseCase,
+    private val deleteAccountUseCase: DeleteAccountUseCase,
     private val sessionManager: SessionManager
 ) : BaseViewModel<ProfileState, ProfileIntent, ProfileEffect>(ProfileState()) {
 
@@ -39,10 +42,11 @@ class ProfileViewModel @Inject constructor(
             is ProfileIntent.LoadProfile -> loadProfile()
             is ProfileIntent.Logout -> logout()
             is ProfileIntent.UpdateProfile -> updateProfile(intent.data)
-            is ProfileIntent.UpdatePhoto -> updateKyc(intent.file, "photo")
-            is ProfileIntent.UpdateKtp -> updateKyc(intent.file, "ktp")
-            is ProfileIntent.UpdateNpwp -> updateKyc(intent.file, "npwp")
+            is ProfileIntent.UpdatePhoto -> updateKyc(intent.file, Constants.DocumentType.PHOTO)
+            is ProfileIntent.UpdateKtp -> updateKyc(intent.file, Constants.DocumentType.KTP)
+            is ProfileIntent.UpdateNpwp -> updateKyc(intent.file, Constants.DocumentType.NPWP)
             is ProfileIntent.UpdatePassword -> updatePassword(intent.current, intent.new, intent.confirm)
+            is ProfileIntent.DeleteAccount -> deleteAccount()
         }
     }
 
@@ -51,13 +55,13 @@ class ProfileViewModel @Inject constructor(
             getProfileUseCase().collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
-                    is ResultState.Success -> setState { 
+                    is ResultState.Success -> setState {
                         sessionManager.savePartnerName(result.data.name)
                         sessionManager.savePartnerPhoto(result.data.profilePhotoUrl)
-                        copy(isLoading = false, partner = result.data, error = null) 
+                        copy(isLoading = false, partner = result.data, error = null)
                     }
-                    is ResultState.Error -> setState { 
-                        copy(isLoading = false, error = result.message) 
+                    is ResultState.Error -> setState {
+                        copy(isLoading = false, error = result.message)
                     }
                 }
             }
@@ -87,20 +91,20 @@ class ProfileViewModel @Inject constructor(
     private fun updateKyc(file: java.io.File, type: String) {
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
         val fieldName = when (type) {
-            "photo" -> "profile_photo" // Matching the requirement in 01-auth.md
-            "ktp" -> "ktp"
-            "npwp" -> "npwp"
+            Constants.DocumentType.PHOTO -> "profile_photo" // Matching the requirement in 01-auth.md
+            Constants.DocumentType.KTP -> Constants.DocumentType.KTP
+            Constants.DocumentType.NPWP -> Constants.DocumentType.NPWP
             else -> type
         }
         val body = MultipartBody.Part.createFormData(fieldName, file.name, requestFile)
-        
+
         viewModelScope.launch {
             val flow: Flow<ResultState<PartnerResponse>> = when (type) {
-                "photo" -> updateKycUseCase.updatePhoto(body)
-                "ktp" -> updateKycUseCase.updateKtp(body)
+                Constants.DocumentType.PHOTO -> updateKycUseCase.updatePhoto(body)
+                Constants.DocumentType.KTP -> updateKycUseCase.updateKtp(body)
                 else -> updateKycUseCase.updateNpwp(body)
             }
-            
+
             flow.collectLatest { result ->
                 when (result) {
                     is ResultState.Loading -> setState { copy(isLoading = true) }
@@ -149,6 +153,24 @@ class ProfileViewModel @Inject constructor(
                     is ResultState.Error -> {
                         setState { copy(isLoading = false) }
                         sendEffect { ProfileEffect.LogoutSuccess }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun deleteAccount() {
+        viewModelScope.launch {
+            deleteAccountUseCase().collectLatest { result ->
+                when (result) {
+                    is ResultState.Loading -> setState { copy(isLoading = true) }
+                    is ResultState.Success -> {
+                        setState { copy(isLoading = false) }
+                        sendEffect { ProfileEffect.DeleteAccountSuccess }
+                    }
+                    is ResultState.Error -> {
+                        setState { copy(isLoading = false, error = result.message) }
+                        sendEffect { ProfileEffect.ShowToast(result.message) }
                     }
                 }
             }

@@ -9,6 +9,13 @@
     <string name="register_btn_next">Lanjut</string>
     <string name="register_btn_back">Kembali</string>
     <string name="register_step_1_title">Data Akun</string>
+    <string name="register_step_2_title">Dokumen KYC</string>
+    <string name="register_step_3_title">Rekening Bank</string>
+    <string name="register_step_4_title">Persetujuan</string>
+    <string name="register_error_missing_photo">Foto Profil dan KTP wajib dipilih.</string>
+    <string name="register_error_invalid_email">Format email tidak valid.</string>
+    <string name="register_error_password_too_short">Password minimal 8 karakter.</string>
+    <string name="register_error_password_mismatch">Konfirmasi password tidak cocok.</string>
     <string name="register_hint_name">Nama Lengkap</string>
     <string name="register_hint_email">Email</string>
     <string name="register_hint_password">Password</string>

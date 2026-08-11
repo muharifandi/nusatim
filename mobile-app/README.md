@@ -95,8 +95,17 @@ Proyek ini mengadopsi standar **Modern Android Development (MAD)**:
 ## 🛠 Tech Stack
 - **UI:** XML Layout, DataBinding, Material Components
 - **Network:** Retrofit, OkHttp, Kotlin Serialization
+- **Local DB:** Room (with Encryption support)
+- **Security:** EncryptedSharedPreferences, Root Detection, SSL Pinning ready
 - **DI:** Hilt (Dagger)
 - **Quality:** JUnit 5, MockK, Turbine
+
+## ✅ Google Play Compliance
+Proyek ini dikonfigurasi untuk mematuhi kebijakan Google Play Store terbaru (2024-2025):
+- **Target SDK 36:** Mendukung standar API terbaru.
+- **Account Deletion:** Fitur penghapusan akun tersedia di layar Profil (memenuhi kebijakan penghapusan data).
+- **Security:** Tidak ada cleartext traffic (dipaksa HTTPS), data sensitif disimpan di penyimpanan terenkripsi.
+- **Privacy:** Template kebijakan privasi dan data safety siap diisi di konsol Play Store.
 
 ---
 **Created by:** Muh. Arifandi  

@@ -11,6 +11,7 @@
 
 package com.nusatim.partner.core.data.repository
 
+import com.nusatim.partner.core.model.ErrorType
 import com.nusatim.partner.core.model.ResultState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -21,6 +22,7 @@ import retrofit2.HttpException
 import java.net.UnknownHostException
 import java.net.SocketTimeoutException
 import java.io.IOException
+
 abstract class BaseRepository {
 
     protected fun <T> safeNetworkCall(
@@ -32,17 +34,14 @@ abstract class BaseRepository {
             if (response != null) {
                 emit(ResultState.Success(response))
             } else {
-                emit(ResultState.Error("Terjadi kesalahan: Data tidak ditemukan."))
+                emit(ResultState.Error("Data not found", ErrorType.NOT_FOUND))
             }
         } catch (e: UnknownHostException) {
-            Log.e("BaseRepository", "No Internet Connection", e)
-            emit(ResultState.Error("Tidak ada koneksi internet. Silakan periksa jaringan Anda."))
+            emit(ResultState.Error("No connection", ErrorType.NETWORK))
         } catch (e: SocketTimeoutException) {
-            Log.e("BaseRepository", "Connection Timeout", e)
-            emit(ResultState.Error("Koneksi ke server terputus (timeout). Silakan coba lagi nanti."))
+            emit(ResultState.Error("Timeout", ErrorType.TIMEOUT))
         } catch (e: IOException) {
-            Log.e("BaseRepository", "Network error", e)
-            emit(ResultState.Error("Terjadi kesalahan jaringan. Silakan coba beberapa saat lagi."))
+            emit(ResultState.Error("Network error", ErrorType.IO))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = try {
@@ -51,33 +50,24 @@ abstract class BaseRepository {
                 null
             }
 
-            if (e.code() == 422) {
-                Log.w("BaseRepository", "Validation Error (422): $errorBody")
-            } else {
-                Log.e("BaseRepository", "HTTP error (${e.code()})", e)
-            }
-
             val apiMessage = when {
                 !errorResponse?.message.isNullOrBlank() -> errorResponse?.message
                 errorResponse?.errors != null -> errorResponse.errors!!.values.flatten().joinToString("\n")
                 else -> null
             }
 
-            val errorMessage = when (e.code()) {
-                401 -> apiMessage ?: "Sesi Anda telah berakhir. Silakan login kembali."
-                403 -> apiMessage ?: "Anda tidak memiliki akses untuk melakukan tindakan ini."
-                404 -> apiMessage ?: "Resource tidak ditemukan (404)."
-                422 -> {
-                    val fieldErrors = errorResponse?.errors?.values?.flatten()?.joinToString("\n")
-                    fieldErrors ?: apiMessage ?: "Data yang Anda masukkan tidak valid."
-                }
-                500 -> apiMessage ?: "Server sedang mengalami gangguan. Silakan coba beberapa saat lagi."
-                else -> apiMessage ?: "Terjadi kesalahan sistem (${e.code()})"
+            val type = when (e.code()) {
+                401 -> ErrorType.UNAUTHORIZED
+                403 -> ErrorType.FORBIDDEN
+                404 -> ErrorType.NOT_FOUND
+                422 -> ErrorType.INVALID_INPUT
+                500 -> ErrorType.SERVER
+                else -> ErrorType.UNKNOWN
             }
-            emit(ResultState.Error(errorMessage))
+
+            emit(ResultState.Error(apiMessage ?: "HTTP Error ${e.code()}", type))
         } catch (e: Exception) {
-            Log.e("BaseRepository", "Unexpected error", e)
-            emit(ResultState.Error(e.message ?: "Terjadi kesalahan yang tidak terduga."))
+            emit(ResultState.Error(e.message ?: "Unexpected error", ErrorType.UNKNOWN))
         }
     }
 }

@@ -21,7 +21,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="@drawable/partner_button_primary_bg"
-                android:backgroundTint="#26A6541A"
+                android:backgroundTint="@color/partner_primary_15"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
