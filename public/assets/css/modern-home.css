@@ -568,6 +568,17 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
   background: var(--bg-soft);
 }
 
+/* Stats band only needs a little breathing room, not the full 100px
+   section rhythm - the gradient bar itself is already the visual weight
+   here, so cut the section down to mostly just that bar. */
+.modern-home .m-section-stats {
+  padding: 12px 0;
+  /* Drop the shared .m-section-soft gray backdrop here - the gradient bar
+     already carries all the visual weight, so let the page's own white
+     background show around it instead of a second background layer. */
+  background: transparent;
+}
+
 /* ---------- Services grid ---------- */
 .modern-home .m-services-grid {
   display: grid;
@@ -879,6 +890,7 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
   .modern-home .m-heading { font-size: 28px; }
   .modern-home .m-hero-heading { font-size: 30px; }
   .modern-home .m-section { padding: 64px 0; }
+  .modern-home .m-section-stats { padding: 12px 0; }
   .modern-home .m-services-grid,
   .modern-home .m-testimonial-grid,
   .modern-home .m-card-grid,

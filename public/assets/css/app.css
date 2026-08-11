@@ -15278,6 +15278,11 @@ ul.pagination-layout2 .center-btn a:hover {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 131px;
+  height: 84px;
   cursor: all-scroll;
   -webkit-filter: grayscale(100%);
           filter: grayscale(100%);
@@ -15289,6 +15294,18 @@ ul.pagination-layout2 .center-btn a:hover {
 .brand-box-layout1:hover {
   -webkit-filter: grayscale(0);
           filter: grayscale(0);
+}
+
+/* Client logos vary wildly in native size - clamp every logo to the
+   131x84 box above (regardless of its real dimensions) so the carousel
+   reads as one uniform row instead of a jumble of sizes. */
+.brand-box-layout1 img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .brand-wrap-layout2 {

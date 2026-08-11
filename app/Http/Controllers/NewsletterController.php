@@ -14,11 +14,17 @@ class NewsletterController extends Controller
             'email' => ['required', 'email', 'max:255'],
         ]);
 
+        $source = $request->input('source', 'coming-soon');
+
         NewsletterSubscriber::firstOrCreate(
             ['email' => $validated['email']],
-            ['source' => $request->input('source', 'coming-soon')]
+            ['source' => $source]
         );
 
-        return back()->with('status', 'Terima kasih! Kami akan menghubungi Anda segera setelah website ini rilis.');
+        $message = $source === 'blog'
+            ? 'Terima kasih! Anda telah berlangganan newsletter kami.'
+            : 'Terima kasih! Kami akan menghubungi Anda segera setelah website ini rilis.';
+
+        return back()->with('status', $message);
     }
 }

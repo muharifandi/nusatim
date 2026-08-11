@@ -88,6 +88,24 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
   margin-bottom: 14px;
 }
 
+.bm-eyebrow-pill {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brand);
+  background: rgba(90, 73, 248, 0.09);
+  padding: 8px 18px;
+  border-radius: 999px;
+  margin-bottom: 20px;
+}
+
+.bm-header-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 32px;
+}
+
 .bm-header h1 {
   font-size: 44px;
   font-weight: 800;
@@ -102,6 +120,259 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
   color: var(--muted);
   max-width: 560px;
   margin: 0;
+}
+
+/* ---------- Header illustration ---------- */
+.bm-header-art {
+  position: relative;
+  height: 320px;
+}
+
+.bm-art-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+  opacity: 0.5;
+}
+
+.bm-art-blob-a {
+  width: 220px;
+  height: 220px;
+  top: 6px;
+  right: 40px;
+  background: radial-gradient(circle at 30% 30%, rgba(90, 73, 248, 0.12), rgba(90, 73, 248, 0) 70%);
+}
+
+.bm-art-blob-b {
+  width: 160px;
+  height: 160px;
+  bottom: 0;
+  left: 10px;
+  background: radial-gradient(circle at 30% 30%, rgba(90, 73, 248, 0.08), rgba(90, 73, 248, 0) 70%);
+}
+
+/* Document/preview card - the illustration's focal point */
+.bm-art-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(4deg);
+  width: 230px;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 28px 56px -18px rgba(20, 20, 43, 0.22);
+}
+
+.bm-art-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.bm-art-card-header-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand);
+  flex: none;
+}
+
+.bm-art-card-header-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bm-art-card-header-lines span {
+  display: block;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--border);
+}
+
+.bm-art-card-header-lines span:first-child {
+  width: 46px;
+}
+
+.bm-art-card-header-lines span:last-child {
+  width: 26px;
+}
+
+.bm-art-card-header-menu {
+  display: flex;
+  gap: 3px;
+  margin-left: auto;
+}
+
+.bm-art-card-header-menu span {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.bm-art-card-body {
+  padding: 18px 16px 20px;
+}
+
+.bm-art-card-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.bm-art-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--brand), #7b64f2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex: none;
+}
+
+.bm-art-card-row-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bm-art-card-row-lines span {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+}
+
+.bm-art-card-row-lines span:first-child {
+  width: 85%;
+}
+
+.bm-art-card-row-lines span:last-child {
+  width: 55%;
+}
+
+.bm-art-card-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bm-art-card-lines span {
+  display: block;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--border);
+}
+
+.bm-art-card-lines span:nth-child(4) {
+  width: 80%;
+}
+
+.bm-art-card-lines span:nth-child(5) {
+  width: 55%;
+}
+
+/* Speech bubble */
+.bm-art-bubble {
+  position: absolute;
+  top: 26px;
+  left: -6px;
+  width: 108px;
+  height: 66px;
+  padding: 14px;
+  background: #ffffff;
+  border-radius: 16px 16px 16px 4px;
+  box-shadow: 0 16px 32px -12px rgba(20, 20, 43, 0.16);
+  transform: rotate(-5deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.bm-art-bubble span {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+}
+
+.bm-art-bubble span:first-child {
+  width: 90%;
+}
+
+.bm-art-bubble span:last-child {
+  width: 60%;
+}
+
+/* Lightbulb with rays */
+.bm-art-bulb {
+  position: absolute;
+  bottom: 14px;
+  right: 4px;
+  width: 60px;
+  height: 60px;
+}
+
+.bm-art-bulb i {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  color: var(--brand);
+  opacity: 0.85;
+}
+
+.bm-art-ray {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 3px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--brand);
+  opacity: 0.45;
+  transform-origin: 50% 36px;
+}
+
+.bm-art-ray-1 {
+  transform: translateX(-50%) rotate(-40deg);
+}
+
+.bm-art-ray-2 {
+  transform: translateX(-50%) rotate(-20deg);
+}
+
+.bm-art-ray-3 {
+  transform: translateX(-50%) rotate(0deg);
+}
+
+.bm-art-ray-4 {
+  transform: translateX(-50%) rotate(20deg);
+}
+
+.bm-art-ray-5 {
+  transform: translateX(-50%) rotate(40deg);
+}
+
+@media only screen and (max-width: 850px) {
+  .bm-header-grid {
+    grid-template-columns: 1fr;
+  }
+  .bm-header-art {
+    display: none;
+  }
 }
 
 @media only screen and (max-width: 575px) {
@@ -133,14 +404,15 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
 /* ---------- Featured post ---------- */
 .bm-featured {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 40px;
-  align-items: center;
+  grid-template-columns: 1.05fr 1fr;
+  align-items: stretch;
   text-decoration: none;
   color: inherit;
   margin-bottom: 64px;
-  padding-bottom: 56px;
-  border-bottom: 1px solid var(--border);
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px -24px rgba(20, 20, 43, 0.16), 0 4px 16px rgba(20, 20, 43, 0.05);
 }
 
 .bm-featured:hover {
@@ -149,9 +421,8 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
 }
 
 .bm-featured-image {
-  border-radius: 16px;
-  overflow: hidden;
-  aspect-ratio: 16 / 11;
+  position: relative;
+  min-height: 380px;
 }
 
 .bm-featured-image img {
@@ -166,6 +437,29 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
 }
 
 .bm-featured-tag {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: var(--brand);
+  padding: 7px 16px;
+  border-radius: 999px;
+}
+
+.bm-featured-body {
+  padding: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bm-featured-category {
   display: inline-block;
   font-size: 12px;
   font-weight: 700;
@@ -173,23 +467,6 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
   text-transform: uppercase;
   color: var(--brand);
   margin-bottom: 14px;
-}
-
-.bm-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 14px;
-}
-
-.bm-meta .bm-dot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--muted);
-  flex: none;
 }
 
 .bm-featured-body h2 {
@@ -205,7 +482,14 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
   font-size: 16px;
   line-height: 1.7;
   color: var(--muted);
-  margin: 0 0 18px;
+  margin: 0 0 22px;
+}
+
+.bm-featured-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
 }
 
 .bm-readmore {
@@ -224,23 +508,55 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
 @media only screen and (max-width: 850px) {
   .bm-featured {
     grid-template-columns: 1fr;
-    gap: 24px;
+  }
+  .bm-featured-image {
+    /* A fixed min-height stayed just as tall on narrow phones as on a
+       tablet. aspect-ratio scales the image with the card's own width
+       instead, so it shrinks along with the screen. */
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+  .bm-featured-body {
+    padding: 28px 24px;
+  }
+  .bm-featured-category {
+    margin-bottom: 10px;
   }
   .bm-featured-body h2 {
-    font-size: 24px;
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+  .bm-featured-body p {
+    margin-bottom: 16px;
+    /* Cap the excerpt at 2 lines on mobile - the card was running long
+       mostly because of a full, unclamped description. */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .bm-featured-meta {
+    margin-bottom: 16px;
   }
 }
 
 @media only screen and (max-width: 575px) {
   .bm-featured {
     margin-bottom: 32px;
-    padding-bottom: 24px;
+    border-radius: 18px;
+  }
+  .bm-featured-body {
+    padding: 20px 18px;
   }
 }
 
 /* ---------- Filter bar ---------- */
 .bm-filter-bar {
   margin-bottom: 48px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 12px 16px;
+  box-shadow: 0 20px 45px -26px rgba(20, 20, 43, 0.18), 0 2px 10px rgba(20, 20, 43, 0.04);
 }
 
 .bm-filter-row {
@@ -248,56 +564,185 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border);
 }
 
 .bm-filter-row input,
 .bm-filter-row select {
-  height: 42px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0 14px;
-  font-size: 14px;
+  height: 44px;
+  border: none;
+  border-radius: 999px;
+  padding: 0 18px;
+  /* 16px, not 14px - anything smaller makes iOS Safari auto-zoom the whole
+     page when the user taps into a text/date input. Invisible in desktop
+     dev-tools emulation, very visible on a real phone. */
+  font-size: 16px;
   font-family: inherit;
   color: var(--ink);
-  background-color: #ffffff;
-  transition: border-color 0.2s ease;
+  background-color: var(--bg-soft);
+  /* iOS Safari applies its own inset "control" chrome to text/date inputs
+     unless appearance is reset, which can override our flat pill look. */
+  -webkit-appearance: none;
+  appearance: none;
+  transition: background-color 0.2s ease;
 }
 
 .bm-filter-row input:focus,
 .bm-filter-row select:focus {
   outline: none;
-  border-color: var(--brand);
+  background-color: #efeefb;
+}
+
+.bm-filter-row select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236e7191' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  cursor: pointer;
 }
 
 .bm-search {
+  position: relative;
   flex: 1 1 220px;
   min-width: 180px;
 }
 
 .bm-search input {
   width: 100%;
+  padding-right: 42px;
+}
+
+.bm-search i {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 14px;
+  pointer-events: none;
 }
 
 .bm-filter-select {
-  width: 160px;
+  width: 184px;
 }
 
-.bm-filter-date {
-  width: 150px;
+/* ---------- Date range filter (trigger + popover) ---------- */
+.bm-date-filter {
+  position: relative;
+}
+
+.bm-date-trigger {
+  height: 44px;
+  min-width: 210px;
+  border: none;
+  border-radius: 999px;
+  padding: 0 16px;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--muted);
+  background-color: var(--bg-soft);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.bm-date-trigger span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bm-date-trigger i {
+  font-size: 10px;
+  color: var(--muted);
+  flex: none;
+  transition: transform 0.2s ease;
+}
+
+.bm-date-filter.has-value .bm-date-trigger {
+  background-color: #efeefb;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.bm-date-filter.open .bm-date-trigger {
+  background-color: #efeefb;
+}
+
+.bm-date-filter.open .bm-date-trigger i {
+  transform: rotate(180deg);
+}
+
+.bm-date-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: max-content;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 20px 45px -20px rgba(20, 20, 43, 0.25), 0 4px 16px rgba(20, 20, 43, 0.08);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+  z-index: 30;
+}
+
+.bm-date-filter.open .bm-date-popover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.bm-date-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.bm-date-field input {
+  height: 40px;
+  min-width: 130px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0 12px;
+  /* 16px to avoid the iOS Safari auto-zoom-on-focus bug, same as
+     .bm-filter-row input above. */
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--ink);
+  background-color: #ffffff;
+}
+
+.bm-date-field input:focus {
+  outline: none;
+  border-color: var(--brand);
 }
 
 .bm-filter-submit {
-  height: 42px;
-  padding: 0 20px;
-  border-radius: 8px;
+  height: 44px;
+  padding: 0 22px;
+  border-radius: 999px;
   border: none;
   background-color: var(--ink);
   color: #ffffff;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  white-space: nowrap;
   transition: background-color 0.2s ease;
 }
 
@@ -307,24 +752,59 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
 
 .bm-filter-reset {
   font-size: 14px;
-  font-weight: 600;
-  color: var(--muted);
-  text-decoration: underline;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  padding: 0 4px;
 }
 
 .bm-filter-reset:hover {
   color: var(--brand);
 }
 
+.bm-view-toggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background-color: var(--bg-soft);
+  border-radius: 999px;
+  margin-left: auto;
+}
+
+.bm-view-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.bm-view-btn:hover {
+  color: var(--ink);
+}
+
+.bm-view-btn.active {
+  background-color: var(--brand);
+  color: #ffffff;
+  box-shadow: 0 6px 16px -4px rgba(90, 73, 248, 0.5);
+}
+
 @media only screen and (max-width: 575px) {
   .bm-filter-bar {
     margin-bottom: 24px;
+    border-radius: 18px;
   }
   .bm-filter-row {
     flex-direction: column;
     align-items: stretch;
     gap: 8px;
-    padding-bottom: 4px;
   }
   .bm-filter-row input,
   .bm-filter-row select,
@@ -340,17 +820,41 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
     width: 100%;
     min-width: 0;
   }
-  .bm-filter-select,
-  .bm-filter-date {
+  .bm-filter-select {
     width: 100%;
+  }
+  .bm-date-filter {
+    width: 100%;
+  }
+  .bm-date-trigger {
+    width: 100%;
+    min-width: 0;
+  }
+  .bm-date-popover {
+    left: 0;
+    right: 0;
+    /* Base rule uses width:max-content so the two date fields sit side by
+       side on desktop. On mobile that explicit width wins over the
+       left:0/right:0 stretch, so even while CLOSED (opacity:0, still in
+       normal layout since it's only visibility:hidden, not display:none)
+       the popover keeps its full max-content width (~400px) and pushes
+       the whole page's scrollable area past the viewport - the page
+       "shifts left" with dead space on the right, exactly like an
+       accidental horizontal-scroll bug. width:auto lets left/right:0
+       actually stretch it to the filter row's real width instead. */
+    width: auto;
+  }
+  .bm-filter-reset {
+    text-align: center;
+  }
+  .bm-view-toggle {
+    align-self: center;
+    margin-left: 0;
   }
 }
 
 /* ---------- Post grid ---------- */
 .bm-list-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-bottom: 24px;
 }
 
@@ -359,45 +863,12 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
   color: var(--muted);
 }
 
-.bm-view-toggle {
-  display: inline-flex;
-  gap: 4px;
-  padding: 4px;
-  background-color: var(--bg-soft);
-  border-radius: 10px;
-}
-
-.bm-view-btn {
-  width: 34px;
-  height: 34px;
-  border: none;
-  border-radius: 7px;
-  background: transparent;
-  color: var(--muted);
-  font-size: 14px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
 @media only screen and (max-width: 650px) {
   .bm-view-btn {
     width: 40px;
     height: 40px;
     font-size: 15px;
   }
-}
-
-.bm-view-btn:hover {
-  color: var(--ink);
-}
-
-.bm-view-btn.active {
-  background-color: #ffffff;
-  color: var(--brand);
-  box-shadow: 0 2px 6px rgba(20, 20, 43, 0.1);
 }
 
 .bm-grid {
@@ -602,6 +1073,225 @@ header .navbar-layout1 .item-btn.btn-ghost.btn-light:hover {
 @media only screen and (max-width: 575px) {
   .bm-pagination {
     margin-top: 32px;
+  }
+}
+
+/* ---------- Newsletter ---------- */
+.bm-newsletter {
+  padding-bottom: 100px;
+}
+
+@media only screen and (max-width: 575px) {
+  .bm-newsletter {
+    padding-bottom: 56px;
+  }
+}
+
+.bm-newsletter-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  background: linear-gradient(135deg, #f4f2fd, #eceafc);
+  border-radius: 24px;
+  padding: 40px 48px;
+}
+
+.bm-newsletter-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  flex: 1 1 420px;
+}
+
+.bm-newsletter-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--brand), #7b64f2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex: none;
+  box-shadow: 0 12px 24px -8px rgba(90, 73, 248, 0.45);
+}
+
+.bm-newsletter-info h2 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.bm-newsletter-info p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 420px;
+  margin: 0;
+}
+
+.bm-newsletter-action {
+  flex: 1 1 380px;
+  max-width: 460px;
+}
+
+.bm-newsletter-status {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a7f4b;
+  background-color: #e6f7ee;
+  border-radius: 10px;
+  padding: 8px 14px;
+}
+
+.bm-newsletter-form {
+  display: flex;
+  gap: 10px;
+}
+
+.bm-newsletter-form input[type="email"] {
+  flex: 1;
+  height: 52px;
+  min-width: 0;
+  border: none;
+  border-radius: 999px;
+  padding: 0 20px;
+  /* 16px to avoid the iOS Safari auto-zoom-on-focus bug, same as
+     .bm-filter-row input above. */
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--ink);
+  background-color: #ffffff;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: 0 2px 8px rgba(20, 20, 43, 0.04);
+}
+
+.bm-newsletter-form input[type="email"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--brand);
+}
+
+.bm-newsletter-form input[type="email"].is-invalid {
+  box-shadow: 0 0 0 2px #e5484d;
+}
+
+.bm-newsletter-form button {
+  height: 52px;
+  padding: 0 28px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--brand);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.bm-newsletter-form button:hover {
+  background-color: var(--brand-dark);
+}
+
+.bm-newsletter-error {
+  display: block;
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: #e5484d;
+}
+
+.bm-newsletter-hint {
+  margin: 10px 2px 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+@media only screen and (max-width: 850px) {
+  .bm-newsletter-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 32px;
+  }
+  /* .bm-newsletter-info/-action carry flex-basis width hints (420px/380px)
+     for the row layout - once the card stacks to flex-direction:column
+     those basis values get reinterpreted as *height*, inflating both
+     blocks and blowing the gap between them wide open. Reset to natural
+     block sizing here, same fix as .bm-search above. */
+  .bm-newsletter-info,
+  .bm-newsletter-action {
+    flex: none;
+  }
+  .bm-newsletter-action {
+    max-width: none;
+  }
+  /* Keep the icon level with the heading (not stacked above it), but let
+     the heading own a full row of its own instead of sharing width with
+     the icon AND the paragraph - that's what forced it to wrap mid-phrase
+     ("Dapatkan Insight" / "Terbaru") before. A grid places icon+heading
+     side by side on row 1, then lets the paragraph span the full card
+     width on row 2 - .bm-newsletter-text turns to display:contents so its
+     h2/p children can be placed directly as grid items without an extra
+     nested box. This has to live in the SAME query as the column stack
+     above (850px), not a narrower one - the card is already one column
+     from 850px down, so the row-wrap bug was still live between 575-850px
+     until this was merged in here. */
+  .bm-newsletter-info {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    column-gap: 16px;
+    row-gap: 10px;
+    align-items: center;
+  }
+  .bm-newsletter-text {
+    display: contents;
+  }
+  .bm-newsletter-info h2 {
+    grid-column: 2;
+    margin: 0;
+  }
+  .bm-newsletter-info p {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .bm-newsletter-card {
+    padding: 24px 20px;
+    border-radius: 18px;
+    gap: 24px;
+  }
+  .bm-newsletter-info {
+    grid-template-columns: 52px 1fr;
+    column-gap: 14px;
+  }
+  .bm-newsletter-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 20px;
+    border-radius: 14px;
+  }
+  .bm-newsletter-info h2 {
+    font-size: 19px;
+  }
+  .bm-newsletter-form {
+    flex-direction: column;
+  }
+  /* input[type=email] carries flex:1 1 0% for the row layout, growing to
+     fill the width next to the button. Once the form stacks to
+     flex-direction:column, that 0% flex-basis is reinterpreted as a
+     *height* basis, collapsing the field to its ~21px text-content height
+     and silently overriding the explicit height:52px above it - same
+     flex-basis/column bug as .bm-search and .bm-newsletter-info elsewhere
+     in this file. Reset to natural sizing so height:52px actually wins. */
+  .bm-newsletter-form input[type="email"] {
+    flex: none;
   }
 }
 
