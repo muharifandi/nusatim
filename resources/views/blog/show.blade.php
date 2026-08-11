@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @push('styles')
-	<link rel="stylesheet" href="{{ asset('assets/css/blog-modern.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/blog-modern.css') }}?v={{ filemtime(public_path('assets/css/blog-modern.css')) }}">
 @endpush
 
 @section('content')
@@ -16,6 +16,17 @@
 		"datePublished": "{{ optional($post->published_at)->toAtomString() }}",
 		"author": { "@@type": "Person", "name": "{{ $post->author_name }}" },
 		"publisher": { "@@type": "Organization", "name": "{{ $siteSettings->company_name }}" }
+	}
+	</script>
+	<script type="application/ld+json">
+	{
+		"@@context": "https://schema.org",
+		"@@type": "BreadcrumbList",
+		"itemListElement": [
+			{"@@type": "ListItem", "position": 1, "name": "Home", "item": "{{ route('home') }}"},
+			{"@@type": "ListItem", "position": 2, "name": "Blog", "item": "{{ route('blog.index') }}"},
+			{"@@type": "ListItem", "position": 3, "name": "{{ $post->title }}", "item": "{{ route('blog.show', $post->slug) }}"}
+		]
 	}
 	</script>
 	@endpush

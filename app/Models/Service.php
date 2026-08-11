@@ -3,11 +3,23 @@
 namespace App\Models;
 
 use App\Models\Concerns\DeletesOldFiles;
+use App\Services\IndexNowService;
 use Illuminate\Database\Eloquent\Model;
 
 class Service extends Model
 {
     use DeletesOldFiles;
+
+    protected static function booted(): void
+    {
+        // Same "ping on every live save" pattern as Post::booted() - a
+        // content edit is as much a re-crawl signal as the first publish.
+        static::saved(function (Service $service) {
+            if ($service->is_active && ! app()->runningUnitTests()) {
+                app(IndexNowService::class)->submit(route('services.show', $service->slug));
+            }
+        });
+    }
 
     protected $fillable = [
         'title',

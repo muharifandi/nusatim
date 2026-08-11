@@ -46,6 +46,10 @@ Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+// Dynamic (not a static public/robots.txt file) so the Sitemap: line always
+// resolves through route()/APP_URL instead of a hardcoded domain that could
+// go stale between environments.
+Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
 // IndexNow ownership-verification file, must live at exactly /{key}.txt.
 // {key} is constrained to the one configured value so this doesn't swallow

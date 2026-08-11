@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@push('scripts')
+	<script src="{{ asset('dependencies/counter-up/jquery.counterup.min.js') }}"></script>
+	<script src="{{ asset('dependencies/waypoints/jquery.waypoints.min.js') }}"></script>
+	<script src="{{ asset('dependencies/Parallaxie-master/parallaxie.js') }}"></script>
+@endpush
+
 @section('content')
 	@include('partials.services-hero')
 

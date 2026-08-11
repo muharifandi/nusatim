@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@push('scripts')
+	<script src="{{ asset('dependencies/validator/validator.min.js') }}"></script>
+@endpush
+
 @push('styles')
 	<style>
 		.map-embed-frame {

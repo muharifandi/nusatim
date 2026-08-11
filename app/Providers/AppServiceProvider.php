@@ -6,11 +6,16 @@ use App\Models\LegalPage;
 use App\Models\Menu;
 use App\Models\Promotion;
 use App\Models\SiteSetting;
+use App\Services\ImageCompressionService;
+use Filament\Forms\Components\BaseFileUpload;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
+use League\Flysystem\UnableToCheckFileExistence;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -47,6 +52,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->applyDynamicMailConfig();
+        $this->compressUploadedImages();
 
         View::composer('*', function ($view) {
             // Guard against running before migrations exist (e.g. fresh install).
@@ -86,6 +92,52 @@ class AppServiceProvider extends ServiceProvider
             $view->with('footerMenu', $this->footerMenu);
             $view->with('activePromotion', $this->activePromotion);
             $view->with('footerLegalPages', $this->footerLegalPages);
+        });
+    }
+
+    /**
+     * Every image field across every Filament panel (admin + partner) goes
+     * through this - logos, post/service/project images, avatars, KYC
+     * photos, etc. Uploads routinely arrive at 1.5MB+ straight off a phone
+     * camera; re-encoding them here means every future page load ships the
+     * smaller version, without needing to touch 30+ individual FileUpload
+     * field definitions one at a time.
+     *
+     * Falls back to Filament's own default save behavior (unchanged) for
+     * anything ImageCompressionService declines to touch - non-image
+     * uploads like the marketing-material/lead-document PDF fields, GIFs,
+     * SVGs, or any image it fails to decode. Compression is never allowed
+     * to be the reason an upload is lost.
+     */
+    private function compressUploadedImages(): void
+    {
+        FileUpload::configureUsing(function (FileUpload $fileUpload) {
+            $fileUpload->saveUploadedFileUsing(static function (BaseFileUpload $component, TemporaryUploadedFile $file): ?string {
+                try {
+                    if (! $file->exists()) {
+                        return null;
+                    }
+                } catch (UnableToCheckFileExistence $exception) {
+                    return null;
+                }
+
+                $compressed = app(ImageCompressionService::class)->compress($file->get());
+
+                if ($compressed !== null) {
+                    $path = trim($component->getDirectory().'/'.$component->getUploadedFileNameForStorage($file), '/');
+                    $component->getDisk()->put($path, $compressed, $component->getVisibility());
+
+                    return $path;
+                }
+
+                $storeMethod = $component->getVisibility() === 'public' ? 'storePubliclyAs' : 'storeAs';
+
+                return $file->{$storeMethod}(
+                    $component->getDirectory(),
+                    $component->getUploadedFileNameForStorage($file),
+                    $component->getDiskName(),
+                );
+            });
         });
     }
 

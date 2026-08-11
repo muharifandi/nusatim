@@ -1,5 +1,36 @@
 @extends('layouts.app')
 
+@push('structured-data')
+<script type="application/ld+json">
+{
+	"@@context": "https://schema.org",
+	"@@type": "Service",
+	"name": "{{ $service->title }}",
+	"description": "{{ $service->short_description }}",
+	"url": "{{ route('services.show', $service->slug) }}",
+	@if($service->image || $service->og_image)
+	"image": "{{ asset($service->og_image ?? $service->image) }}",
+	@endif
+	"provider": {
+		"@@type": "Organization",
+		"name": "{{ $siteSettings->company_name }}",
+		"url": "{{ url('/') }}"
+	}
+}
+</script>
+<script type="application/ld+json">
+{
+	"@@context": "https://schema.org",
+	"@@type": "BreadcrumbList",
+	"itemListElement": [
+		{"@@type": "ListItem", "position": 1, "name": "Home", "item": "{{ route('home') }}"},
+		{"@@type": "ListItem", "position": 2, "name": "Layanan", "item": "{{ route('services.index') }}"},
+		{"@@type": "ListItem", "position": 3, "name": "{{ $service->title }}", "item": "{{ route('services.show', $service->slug) }}"}
+	]
+}
+</script>
+@endpush
+
 @section('content')
 	<link rel="stylesheet" href="{{ asset('assets/css/services-detail.css') }}?v={{ filemtime(public_path('assets/css/services-detail.css')) }}">
 

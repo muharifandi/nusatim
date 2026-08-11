@@ -35,6 +35,16 @@ class PostController extends Controller
             'metaDescription' => $page?->meta_description,
             'metaKeywords' => $page?->meta_keywords,
             'ogImage' => $page?->og_image,
+            // The layout's default canonical (url()->current()) drops the
+            // query string entirely, so every paginated page (?page=2, 3...)
+            // was canonicalizing to page 1 - telling Google those pages'
+            // posts aren't worth indexing separately. Keep just the page
+            // number (drop filter/sort params so filtered/sorted variants
+            // still consolidate onto the plain listing instead of each
+            // becoming its own indexable near-duplicate).
+            'canonicalUrl' => route('blog.index', array_filter([
+                'page' => $request->integer('page') > 1 ? $request->integer('page') : null,
+            ])),
             'posts' => $postsQuery->paginate(9)->withQueryString(),
             'featuredPost' => $showFeaturedBanner ? $featuredPost : null,
             'categories' => Post::published()->whereNotNull('category')->distinct()->orderBy('category')->pluck('category'),

@@ -1,5 +1,45 @@
 @extends('layouts.app')
 
+@push('styles')
+	<link rel="stylesheet" href="{{ asset('dependencies/owl.carousel/css/owl.carousel.min.css') }}" type="text/css">
+	<link rel="stylesheet" href="{{ asset('dependencies/owl.carousel/css/owl.theme.default.min.css') }}" type="text/css">
+@endpush
+@push('scripts')
+	<script src="{{ asset('dependencies/owl.carousel/js/owl.carousel.min.js') }}"></script>
+@endpush
+
+@push('structured-data')
+<script type="application/ld+json">
+{
+	"@@context": "https://schema.org",
+	"@@type": "CreativeWork",
+	"name": "{{ $project->title }}",
+	"description": "{{ $project->description }}",
+	"url": "{{ route('portfolio.show', $project->slug) }}",
+	"image": "{{ asset($project->og_image ?? $project->image) }}",
+	@if($project->category)
+	"genre": "{{ $project->category }}",
+	@endif
+	"creator": {
+		"@@type": "Organization",
+		"name": "{{ $siteSettings->company_name }}",
+		"url": "{{ url('/') }}"
+	}
+}
+</script>
+<script type="application/ld+json">
+{
+	"@@context": "https://schema.org",
+	"@@type": "BreadcrumbList",
+	"itemListElement": [
+		{"@@type": "ListItem", "position": 1, "name": "Home", "item": "{{ route('home') }}"},
+		{"@@type": "ListItem", "position": 2, "name": "Portfolio", "item": "{{ route('portfolio') }}"},
+		{"@@type": "ListItem", "position": 3, "name": "{{ $project->title }}", "item": "{{ route('portfolio.show', $project->slug) }}"}
+	]
+}
+</script>
+@endpush
+
 @section('content')
 	@include('partials.page-banner', ['title' => $project->title, 'breadcrumbParent' => 'Portfolio'])
 

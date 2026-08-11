@@ -6,6 +6,13 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Resource hints - fire the font DNS/TLS handshake before the render-blocking
+	     stylesheets below get parsed, instead of only starting it once the browser
+	     reaches the font <link> further down. -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 	<title>{{ $metaTitle ?? $siteSettings->default_meta_title ?? $siteSettings->company_name }}</title>
 
 	<!-- SEO Meta Tags -->
@@ -36,20 +43,20 @@
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/x-icon" href="{{ $siteSettings->favicon ? asset($siteSettings->favicon) : asset('media/favicon.png') }}">
 
-	<!-- Dependency Styles -->
+	<!-- Dependency Styles - only the plugins every page actually uses
+	     (bootstrap grid/components, icon fonts, mobile menu). Anything
+	     page-specific (owl.carousel, magnific-popup, counterup, parallaxie,
+	     validator) is pushed from the individual view/partial that needs
+	     it via @push('styles'); several other bundled plugins (select2,
+	     wow.js, page-piling, nivo-slider, slick, isotope, knob, tilt,
+	     theia-sticky-sidebar, gmap3, countdown, jquery.parallax-scroll)
+	     were confirmed unused anywhere in resources/views and dropped
+	     entirely rather than gated - see app.js for the corresponding
+	     init calls, all guarded so removing the plugin scripts is safe. -->
 	<link rel="stylesheet" href="{{ asset('dependencies/bootstrap/css/bootstrap.min.css') }}" type="text/css">
 	<link rel="stylesheet" href="{{ asset('dependencies/fontawesome/css/all.min.css') }}" type="text/css">
-	<link rel="stylesheet" href="{{ asset('dependencies/select2/css/select2.min.css') }}" type="text/css">
 	<link rel="stylesheet" href="{{ asset('dependencies/flaticon/flaticon.css') }}" type="text/css">
-	<link rel="stylesheet" href="{{ asset('dependencies/wow/css/animate.css') }}" type="text/css">
-	<link rel="stylesheet" href="{{ asset('dependencies/page-piling/css/jquery.pagepiling.min.css') }}" type="text/css">
-	<link rel="stylesheet" href="{{ asset('dependencies/nivo-slider/css/nivo-slider.css') }}" type="text/css">
 	<link rel="stylesheet" href="{{ asset('dependencies/meanmenu/css/meanmenu.min.css') }}" type="text/css">
-	<link rel="stylesheet" href="{{ asset('dependencies/magnific-popup/css/magnific-popup.css') }}" type="text/css">
-	<link rel="stylesheet" href="{{ asset('dependencies/owl.carousel/css/owl.carousel.min.css') }}" type="text/css">
-	<link rel="stylesheet" href="{{ asset('dependencies/owl.carousel/css/owl.theme.default.min.css') }}" type="text/css">
-	<link rel="stylesheet" href="{{ asset('dependencies/slick/css/slick.css') }}" type="text/css">
-	<link rel="stylesheet" href="{{ asset('dependencies/slick/css/slick-theme.css') }}" type="text/css">
 
 	<!-- Site Stylesheet -->
 	<link rel="stylesheet" href="{{ asset('assets/css/app.css') }}" type="text/css">
@@ -108,34 +115,19 @@
 	@endif
 	@include('partials.cookie-consent')
 
-	<!-- Dependency Scripts -->
+	<!-- Dependency Scripts - core only (jQuery/bootstrap/meanmenu are used
+	     site-wide). Page-specific plugins (owl.carousel, magnific-popup,
+	     counterup+waypoints, parallaxie, validator) are pushed here via
+	     @push('scripts') by the view/partial that needs them - BEFORE
+	     assets/js/app.js below, since app.js runs immediately on load
+	     (not deferred to document-ready) and feature-detects each plugin
+	     with an `if ($.fn.pluginName)`-style guard at that exact point. -->
 	<script src="{{ asset('dependencies/popper.js/popper.min.js') }}"></script>
 	<script src="{{ asset('dependencies/jquery/jquery.min.js') }}"></script>
 	<script src="{{ asset('dependencies/bootstrap/js/bootstrap.min.js') }}"></script>
-	<script src="{{ asset('dependencies/jquery.appear/jquery.appear.js') }}"></script>
-	<script src="{{ asset('dependencies/jquery.parallax-scroll/jquery.parallax-scroll.js') }}"></script>
-	<script src="{{ asset('dependencies/gmap3/js/gmap3.min.js') }}"></script>
-	<script src="{{ asset('dependencies/owl.carousel/js/owl.carousel.min.js') }}"></script>
-	<script src="{{ asset('dependencies/slick/js/slick.min.js') }}"></script>
-	<script src="{{ asset('dependencies/counter-up/jquery.counterup.min.js') }}"></script>
-	<script src="{{ asset('dependencies/waypoints/jquery.waypoints.min.js') }}"></script>
-	<script src="{{ asset('dependencies/select2/js/select2.min.js') }}"></script>
-	<script src="{{ asset('dependencies/isotope-layout/isotope.pkgd.min.js') }}"></script>
-	<script src="{{ asset('dependencies/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
 	<script src="{{ asset('dependencies/meanmenu/js/jquery.meanmenu.min.js') }}"></script>
-	<script src="{{ asset('dependencies/Parallaxie-master/parallaxie.js') }}"></script>
-	<script src="{{ asset('dependencies/nivo-slider/js/jquery.nivo.slider.js') }}"></script>
-	@stack('nivo-slider-init')
-	<script src="{{ asset('dependencies/wow/js/wow.min.js') }}"></script>
-	<script src="{{ asset('dependencies/knob/jquery.knob.js') }}"></script>
-	<script src="{{ asset('dependencies/countdown/jquery.countdown.min.js') }}"></script>
-	<script src="{{ asset('dependencies/page-piling/js/jquery.pagepiling.min.js') }}"></script>
-	<script src="{{ asset('dependencies/tilt/tilt.jquery.min.js') }}"></script>
-	<script src="{{ asset('dependencies/theia-sticky-sidebar/theia-sticky-sidebar.min.js') }}"></script>
-	<script src="{{ asset('dependencies/theia-sticky-sidebar/resize-sensor.min.js') }}"></script>
-	<script src="{{ asset('dependencies/magnific-popup/js/jquery.magnific-popup.min.js') }}"></script>
-	<script src="{{ asset('dependencies/validator/validator.min.js') }}"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key') }}"></script>
+
+	@stack('scripts')
 
 	<!-- Site Scripts -->
 	<script>
@@ -148,8 +140,6 @@
 	@if($siteSettings->enable_image_skeleton ?? true)
 		<script src="{{ asset('assets/js/img-skeleton.js') }}"></script>
 	@endif
-
-	@stack('scripts')
 </body>
 
 </html>

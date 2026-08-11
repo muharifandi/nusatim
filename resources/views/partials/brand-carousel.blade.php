@@ -1,4 +1,11 @@
 @if($clients->isNotEmpty())
+@push('styles')
+	<link rel="stylesheet" href="{{ asset('dependencies/owl.carousel/css/owl.carousel.min.css') }}" type="text/css">
+	<link rel="stylesheet" href="{{ asset('dependencies/owl.carousel/css/owl.theme.default.min.css') }}" type="text/css">
+@endpush
+@push('scripts')
+	<script src="{{ asset('dependencies/owl.carousel/js/owl.carousel.min.js') }}"></script>
+@endpush
 <section id="brand-wrap-layout1" class="brand-wrap-layout1 {{ $bgClass ?? 'bg-color-accent2' }}">
 	<div class="container">
 		<div class="rc-carousel nav-control-simple nav-center" data-loop="true" data-items="8" data-margin="30" data-autoplay="{{ ($autoplay ?? false) ? 'true' : 'false' }}" data-autoplay-timeout="5000" data-smart-speed="700" data-dots="false" data-nav="true" data-nav-speed="false" data-r-x-small="{{ $rXSmall ?? 2 }}"

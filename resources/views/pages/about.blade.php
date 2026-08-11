@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
+@push('styles')
+	<link rel="stylesheet" href="{{ asset('dependencies/magnific-popup/css/magnific-popup.css') }}" type="text/css">
+@endpush
+@push('scripts')
+	<script src="{{ asset('dependencies/magnific-popup/js/jquery.magnific-popup.min.js') }}"></script>
+@endpush
+
 @section('content')
 	@include('partials.page-banner', ['title' => $page?->field('banner_title', 'Tentang Kami')])
 

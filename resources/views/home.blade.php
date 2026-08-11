@@ -42,7 +42,7 @@
 							<div class="m-trust">
 								<div class="m-trust-avatars">
 									@foreach($testimonials->take(4) as $testimonial)
-										<img src="{{ $testimonial->photo ? asset($testimonial->photo) : asset('media/testimonial/testimonial1.jpg') }}" alt="{{ $testimonial->name }}">
+										<img src="{{ $testimonial->photo ? asset($testimonial->photo) : asset('media/testimonial/testimonial1.jpg') }}" alt="{{ $testimonial->name }}" width="38" height="38">
 									@endforeach
 								</div>
 								<div class="m-trust-text"><strong>{{ $page?->field('trust_highlight', '50+') }}</strong> {{ $page?->field('trust_text', 'bisnis sudah mempercayai kami') }}</div>
@@ -115,7 +115,7 @@
 				<div class="m-logos-label">{{ $page?->field('logos_label', 'Dipercaya oleh perusahaan-perusahaan berikut') }}</div>
 				<div class="m-logos-row">
 					@foreach($clients as $client)
-						<a href="{{ $client->website_url ?: '#' }}"><img src="{{ asset($client->logo) }}" alt="{{ $client->name }}"></a>
+						<a href="{{ $client->website_url ?: '#' }}"><img src="{{ asset($client->logo) }}" alt="{{ $client->name }}" loading="lazy" decoding="async"></a>
 					@endforeach
 				</div>
 			</div>
@@ -174,7 +174,7 @@
 		</section>
 
 		{{-- ===== Stats ===== --}}
-		<section class="m-section m-section-soft">
+		<section class="m-section m-section-soft m-section-stats">
 			<div class="m-container">
 				<div class="m-stats">
 					<div class="m-stat">
@@ -217,7 +217,7 @@
 						</div>
 					</div>
 					<div class="m-about-visual">
-						<img src="{{ $page?->field('about_image') ? asset($page->field('about_image')) : asset('media/team/team1.jpg') }}" alt="{{ $siteSettings->company_name }}" class="m-about-photo">
+						<img src="{{ $page?->field('about_image') ? asset($page->field('about_image')) : asset('media/team/team1.jpg') }}" alt="{{ $siteSettings->company_name }}" class="m-about-photo" loading="lazy" decoding="async">
 					</div>
 				</div>
 			</div>
@@ -239,7 +239,7 @@
 							</div>
 							<p>&ldquo;{{ $testimonial->quote }}&rdquo;</p>
 							<div class="m-testimonial-author">
-								<img src="{{ $testimonial->photo ? asset($testimonial->photo) : asset('media/testimonial/testimonial1.jpg') }}" alt="{{ $testimonial->name }}">
+								<img src="{{ $testimonial->photo ? asset($testimonial->photo) : asset('media/testimonial/testimonial1.jpg') }}" alt="{{ $testimonial->name }}" width="44" height="44" loading="lazy" decoding="async">
 								<div>
 									<div class="m-name">{{ $testimonial->name }}</div>
 									<div class="m-role">{{ $testimonial->position }}</div>
@@ -265,7 +265,7 @@
 					@foreach($projects as $project)
 						<a href="{{ route('portfolio.show', $project->slug) }}" class="m-media-card">
 							<div class="m-media-figure">
-								<img src="{{ asset($project->image) }}" alt="{{ $project->title }}">
+								<img src="{{ asset($project->image) }}" alt="{{ $project->title }}" loading="lazy" decoding="async">
 							</div>
 							<div class="m-media-body">
 								@if($project->category)<span class="m-media-tag">{{ $project->category }}</span>@endif
@@ -294,7 +294,7 @@
 					@foreach($posts as $post)
 						<a href="{{ route('blog.show', $post->slug) }}" class="m-media-card">
 							<div class="m-media-figure">
-								<img src="{{ $post->featured_image ? asset($post->featured_image) : asset('media/blog/blog4.jpg') }}" alt="{{ $post->title }}">
+								<img src="{{ $post->featured_image ? asset($post->featured_image) : asset('media/blog/blog4.jpg') }}" alt="{{ $post->title }}" loading="lazy" decoding="async">
 							</div>
 							<div class="m-media-body">
 								<span class="m-media-tag">{{ optional($post->published_at)->format('d M Y') }}</span>

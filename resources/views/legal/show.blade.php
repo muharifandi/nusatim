@@ -4,6 +4,20 @@
 	<link rel="stylesheet" href="{{ asset('assets/css/legal-page.css') }}">
 @endpush
 
+@push('structured-data')
+<script type="application/ld+json">
+{
+	"@@context": "https://schema.org",
+	"@@type": "BreadcrumbList",
+	"itemListElement": [
+		{"@@type": "ListItem", "position": 1, "name": "Home", "item": "{{ route('home') }}"},
+		{"@@type": "ListItem", "position": 2, "name": "Dokumen Legal", "item": "{{ route('legal.index') }}"},
+		{"@@type": "ListItem", "position": 3, "name": "{{ $legalPage->title }}", "item": "{{ route('legal.show', $legalPage->slug) }}"}
+	]
+}
+</script>
+@endpush
+
 @section('content')
 
 	<section class="legal-header">

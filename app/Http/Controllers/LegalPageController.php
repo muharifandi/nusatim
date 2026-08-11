@@ -13,9 +13,18 @@ class LegalPageController extends Controller
 {
     public function index()
     {
+        $legalPages = LegalPage::active()->get();
+
         return view('legal.index', [
             'metaTitle' => 'Dokumen Legal',
-            'legalPages' => LegalPage::active()->get(),
+            // Every other page type passes a real metaDescription; this one
+            // was silently falling through to the sitewide default (which
+            // has nothing to do with legal documents) - list what's
+            // actually on the page instead.
+            'metaDescription' => $legalPages->isNotEmpty()
+                ? 'Kebijakan dan dokumen resmi: '.$legalPages->pluck('title')->join(', ').'.'
+                : 'Kebijakan dan dokumen resmi perusahaan.',
+            'legalPages' => $legalPages,
         ]);
     }
 
@@ -28,7 +37,13 @@ class LegalPageController extends Controller
         return view('legal.show', [
             'legalPage' => $legalPage,
             'metaTitle' => $legalPage->meta_title ?? $legalPage->title,
-            'metaDescription' => $legalPage->meta_description,
+            // meta_description is admin-editable and often left blank for
+            // these (policy/document pages get filled in less often than
+            // blog posts) - fall back to a plain-text excerpt of the actual
+            // content instead of silently losing the search snippet to the
+            // generic sitewide default.
+            'metaDescription' => $legalPage->meta_description
+                ?: Str::limit(trim(strip_tags((string) $legalPage->content)), 160),
             'metaKeywords' => $legalPage->meta_keywords,
             'otherLegalPages' => LegalPage::active()->where('id', '!=', $legalPage->id)->get(),
         ]);

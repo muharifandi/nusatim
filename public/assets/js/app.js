@@ -173,11 +173,18 @@
   /*-------------------------------------
   Masonry
   -------------------------------------*/
-  $('.masonry-items').masonry({
-    itemSelector: '.masonry-item',
-    columnWidth: '.masonry-item',
-    horizontalOrder: true
-  });
+  // .masonry-items isn't used anywhere currently, but this call used to run
+  // unconditionally on every page - safe only because isotope.pkgd.min.js
+  // (which provides $.fn.masonry) used to load site-wide too. Now that
+  // isotope is no longer loaded globally, guard on both the element AND
+  // the plugin so this doesn't throw if either is ever reintroduced alone.
+  if ($('.masonry-items').length && $.fn.masonry) {
+    $('.masonry-items').masonry({
+      itemSelector: '.masonry-item',
+      columnWidth: '.masonry-item',
+      horizontalOrder: true
+    });
+  }
 
   /*-------------------------------------
   MeanMenu activation code
