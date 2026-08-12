@@ -37,6 +37,7 @@ class LegalPageResource extends Resource
                         Forms\Components\TextInput::make('slug')
                             ->required()
                             ->maxLength(255)
+                            ->unique(ignoreRecord: true)
                             ->helperText('Dipakai di URL, contoh: kebijakan-privasi → /legal/kebijakan-privasi'),
                         Forms\Components\Select::make('type')
                             ->label('Tipe')
@@ -58,13 +59,14 @@ class LegalPageResource extends Resource
                         Forms\Components\TextInput::make('order')
                             ->label('Urutan')
                             ->numeric()
-                            ->default(0)
+                            ->default(fn () => (LegalPage::max('order') ?? -1) + 1)
                             ->helperText('Menentukan urutan tampil di daftar halaman legal & footer - angka kecil tampil lebih dulu.'),
                         Forms\Components\RichEditor::make('content')
                             ->label('Isi Dokumen')
                             ->fileAttachmentsDisk('media')
                             ->fileAttachmentsDirectory('media/uploads')
                             ->fileAttachmentsVisibility('public')
+                            ->requiredIf('is_active', true)
                             ->columnSpanFull(),
                     ])->columns(2),
 

@@ -32,6 +32,23 @@ class PartnerProjectResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
+    /**
+     * `->visible()` alone only hides the button in the UI - Filament's
+     * mountTableAction()/callMountedTableAction() never re-checks it before
+     * running the action closure, so a Livewire request crafted directly
+     * against this table (available to anyone who can reach the page, i.e.
+     * anyone with partner_project.view) can still invoke the action.
+     */
+    private static function assertCanAssign(): void
+    {
+        abort_unless((bool) auth()->user()?->can('partner_project.assign'), 403);
+    }
+
+    private static function assertCanUpdate(): void
+    {
+        abort_unless((bool) auth()->user()?->can('partner_project.update'), 403);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -97,14 +114,18 @@ class PartnerProjectResource extends Resource
                 Tables\Actions\Action::make('assignPartner')
                     ->label('Assign Partner')
                     ->icon('heroicon-o-user-plus')
-                    ->visible(fn (PartnerProject $record) => in_array($record->status, ['available', 'draft']))
+                    ->visible(fn (PartnerProject $record) => in_array($record->status, ['available', 'draft'])
+                        && auth()->user()?->can('partner_project.assign'))
                     ->form([
                         Forms\Components\Select::make('partner_id')
                             ->label('Partner')
                             ->options(fn () => Partner::where('status', 'approved')->pluck('name', 'id'))
                             ->required(),
                     ])
-                    ->action(fn (PartnerProject $record, array $data) => $record->assignDirectly(Partner::findOrFail($data['partner_id']))),
+                    ->action(function (PartnerProject $record, array $data) {
+                        static::assertCanAssign();
+                        $record->assignDirectly(Partner::findOrFail($data['partner_id']));
+                    }),
                 Tables\Actions\Action::make('approveClaim')
                     ->label('Approve Claim')
                     ->icon('heroicon-o-check')
@@ -124,9 +145,13 @@ class PartnerProjectResource extends Resource
                 Tables\Actions\Action::make('close')
                     ->label('Close')
                     ->icon('heroicon-o-lock-closed')
-                    ->visible(fn (PartnerProject $record) => in_array($record->status, ['assigned', 'in_progress']))
+                    ->visible(fn (PartnerProject $record) => in_array($record->status, ['assigned', 'in_progress'])
+                        && auth()->user()?->can('partner_project.update'))
                     ->requiresConfirmation()
-                    ->action(fn (PartnerProject $record) => $record->close()),
+                    ->action(function (PartnerProject $record) {
+                        static::assertCanUpdate();
+                        $record->close();
+                    }),
                 Tables\Actions\DeleteAction::make(),
             ]);
     }

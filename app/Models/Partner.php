@@ -120,13 +120,20 @@ class Partner extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Approved-but-not-yet-paid commissions - the pool a withdrawal request
-     * draws from. Re-validated server-side in Withdrawal::submit(), not
-     * just used to render the balance shown in the form.
+     * Approved-but-not-yet-paid commissions, minus whatever is already
+     * reserved by pending/approved withdrawal requests still in flight -
+     * without this, the same commission pool could back multiple
+     * simultaneous withdrawal requests since a commission only leaves
+     * "approved" status once its withdrawal is marked Paid. Re-validated
+     * server-side in Withdrawal::submit(), not just used to render the
+     * balance shown in the form.
      */
     public function availableBalance(): float
     {
-        return (float) $this->commissions()->where('status', 'approved')->sum('amount');
+        $approvedCommissions = (float) $this->commissions()->where('status', 'approved')->sum('amount');
+        $reservedByWithdrawals = (float) $this->withdrawals()->whereIn('status', ['pending', 'approved'])->sum('amount');
+
+        return max(0.0, $approvedCommissions - $reservedByWithdrawals);
     }
 
     public function salesTargets(): HasMany
@@ -139,6 +146,23 @@ class Partner extends Authenticatable implements FilamentUser
         return $this->salesTargets()
             ->whereDate('period', now()->startOfMonth()->toDateString())
             ->first();
+    }
+
+    /**
+     * Sum of this partner's closed deals within a target's period (month)
+     * only - callers used to compare target_amount against the partner's
+     * lifetime total_project_value instead, so "achieved" only ever grew
+     * and a partner who'd already blown past an old target would show
+     * >100% forever, even in a month with zero new deals.
+     */
+    public function achievedAmountForPeriod(\DateTimeInterface $period): float
+    {
+        return (float) $this->customers()
+            ->whereBetween('created_at', [
+                \Illuminate\Support\Carbon::parse($period)->startOfMonth(),
+                \Illuminate\Support\Carbon::parse($period)->endOfMonth(),
+            ])
+            ->sum('project_value');
     }
 
     public function supportTickets(): HasMany

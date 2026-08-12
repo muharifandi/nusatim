@@ -37,6 +37,33 @@ class WithdrawalResource extends Resource
         return false;
     }
 
+    /**
+     * `->visible()` alone only hides the button in the UI - Filament's
+     * mountTableAction()/callMountedTableAction() never re-checks it (or
+     * ->authorize()) before running the action closure, so a Livewire
+     * request crafted directly against this table (available to anyone who
+     * can reach the page, i.e. anyone with withdrawal.view) can still
+     * invoke the action. Every closure that disburses money must assert
+     * this itself.
+     */
+    private static function assertCanApproveOrPay(): void
+    {
+        abort_unless(
+            (bool) auth()->user()?->can('withdrawal.approve')
+                && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::WITHDRAWAL_APPROVAL, auth()->user()),
+            403
+        );
+    }
+
+    private static function assertCanReject(): void
+    {
+        abort_unless(
+            (bool) auth()->user()?->can('withdrawal.reject')
+                && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::WITHDRAWAL_APPROVAL, auth()->user()),
+            403
+        );
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -96,7 +123,10 @@ class WithdrawalResource extends Resource
                     ->visible(fn (Withdrawal $record) => $record->status === 'pending'
                         && auth()->user()?->can('withdrawal.approve')
                         && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::WITHDRAWAL_APPROVAL, auth()->user()))
-                    ->action(fn (Withdrawal $record) => $record->approve()),
+                    ->action(function (Withdrawal $record) {
+                        static::assertCanApproveOrPay();
+                        $record->approve();
+                    }),
                 Tables\Actions\Action::make('reject')
                     ->label('Reject')
                     ->icon('heroicon-o-x-mark')
@@ -107,12 +137,17 @@ class WithdrawalResource extends Resource
                     ->form([
                         Forms\Components\Textarea::make('reason')->label('Alasan Reject')->required(),
                     ])
-                    ->action(fn (Withdrawal $record, array $data) => $record->reject($data['reason'])),
+                    ->action(function (Withdrawal $record, array $data) {
+                        static::assertCanReject();
+                        $record->reject($data['reason']);
+                    }),
                 Tables\Actions\Action::make('markPaid')
                     ->label('Mark Paid')
                     ->icon('heroicon-o-banknotes')
                     ->color('success')
-                    ->visible(fn (Withdrawal $record) => $record->status === 'approved')
+                    ->visible(fn (Withdrawal $record) => $record->status === 'approved'
+                        && auth()->user()?->can('withdrawal.approve')
+                        && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::WITHDRAWAL_APPROVAL, auth()->user()))
                     ->form([
                         Forms\Components\FileUpload::make('proof_of_transfer_path')
                             ->label('Bukti Transfer')
@@ -121,6 +156,7 @@ class WithdrawalResource extends Resource
                             ->required(),
                     ])
                     ->action(function (Withdrawal $record, array $data) {
+                        static::assertCanApproveOrPay();
                         $record->markPaid($data['proof_of_transfer_path']);
 
                         Notification::make()

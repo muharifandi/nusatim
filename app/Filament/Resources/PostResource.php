@@ -34,7 +34,8 @@ class PostResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('slug')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('excerpt')
                     ->maxLength(500)
                     ->default(null),
@@ -42,6 +43,7 @@ class PostResource extends Resource
                     ->fileAttachmentsDisk('media')
                     ->fileAttachmentsDirectory('media/uploads')
                     ->fileAttachmentsVisibility('public')
+                    ->requiredIf('is_published', true)
                     ->columnSpanFull(),
                 Forms\Components\FileUpload::make('featured_image')
                     ->disk('media')

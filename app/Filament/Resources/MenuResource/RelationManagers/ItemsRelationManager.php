@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\MenuResource\RelationManagers;
 
+use App\Models\MenuItem;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -18,7 +19,19 @@ class ItemsRelationManager extends RelationManager
             ->schema([
                 Forms\Components\Select::make('parent_id')
                     ->label('Parent Item')
-                    ->options(fn () => $this->getOwnerRecord()->allItems()->pluck('label', 'id'))
+                    // Excludes the item being edited and its own descendants -
+                    // picking either as its own parent would form a cycle that
+                    // infinite-loops the recursive nav render (see MenuItem's
+                    // saving() guard, which also rejects this server-side).
+                    ->options(function (?MenuItem $record) {
+                        $options = $this->getOwnerRecord()->allItems()->pluck('label', 'id');
+
+                        if ($record) {
+                            $options = $options->except([$record->id, ...$record->descendantIds()]);
+                        }
+
+                        return $options;
+                    })
                     ->searchable()
                     ->helperText('Kosongkan untuk item level atas (top-level menu).'),
                 Forms\Components\TextInput::make('label')

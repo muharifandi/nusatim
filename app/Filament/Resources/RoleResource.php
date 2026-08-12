@@ -10,6 +10,9 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Models\Permission;
 
 class RoleResource extends Resource
 {
@@ -121,13 +124,37 @@ class RoleResource extends Resource
                         return $data;
                     })
                     ->using(function (Role $record, array $data): Role {
+                        // The "Super Admin" role's name and full permission
+                        // set are load-bearing (Role::firstOrCreate lookups
+                        // in the RBAC seed migration, UserFactory's default
+                        // test user, WorkflowAssignment fallbacks) - both are
+                        // locked here rather than merely hidden in the UI,
+                        // so it can't be renamed away (which would silently
+                        // strand every one of those lookups) or quietly
+                        // stripped of permissions by whoever has role.update.
+                        if ($record->name === 'Super Admin') {
+                            $record->syncPermissions(Permission::pluck('name')->all());
+
+                            return $record;
+                        }
+
+                        self::assertPermissionsAreGrantableByActingUser(
+                            self::permissionNamesFromVerbs($data['permission_verbs'] ?? [])
+                        );
+
                         $record->update(['name' => $data['name']]);
                         $record->syncPermissions(self::permissionNamesFromVerbs($data['permission_verbs'] ?? []));
 
                         return $record;
                     }),
                 Tables\Actions\DeleteAction::make()
-                    ->visible(fn (Role $record) => $record->name !== 'Super Admin'),
+                    ->visible(fn (Role $record) => $record->name !== 'Super Admin')
+                    // ->visible() only hides the button - Filament never
+                    // re-checks it before running the action, so the real
+                    // guard against deleting Super Admin has to live here.
+                    ->before(function (Role $record) {
+                        abort_if($record->name === 'Super Admin', 403, 'Role Super Admin tidak dapat dihapus.');
+                    }),
             ]);
     }
 
@@ -146,6 +173,28 @@ class RoleResource extends Resource
         }
 
         return $names;
+    }
+
+    /**
+     * Without this, anyone holding role.update/role.create could grant a
+     * role (their own current one, or a brand new one to self-assign via
+     * User Resource) any permission at all - including ones they don't
+     * personally have - a straight path to privilege escalation. Caps
+     * what can be granted at the acting user's own current permission set;
+     * Super Admin (which already has every permission) is unaffected.
+     *
+     * @param  array<int, string>  $requestedPermissionNames
+     */
+    public static function assertPermissionsAreGrantableByActingUser(array $requestedPermissionNames): void
+    {
+        $grantable = Auth::guard('web')->user()?->getAllPermissions()->pluck('name')->all() ?? [];
+        $notGrantable = array_diff($requestedPermissionNames, $grantable);
+
+        if ($notGrantable !== []) {
+            throw ValidationException::withMessages([
+                'permission_verbs' => 'Anda tidak dapat memberikan izin yang tidak anda miliki sendiri: '.implode(', ', $notGrantable),
+            ]);
+        }
     }
 
     public static function getPages(): array

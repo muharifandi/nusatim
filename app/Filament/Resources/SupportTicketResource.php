@@ -10,6 +10,7 @@ use App\Models\WorkflowAssignment;
 use Filament\Forms;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -122,6 +123,29 @@ class SupportTicketResource extends Resource
                         && auth()->user()?->can('support_ticket.approve')
                         && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::SUPPORT_TICKET, auth()->user()))
                     ->action(fn (SupportTicket $record) => $record->close()),
+                Tables\Actions\Action::make('reopen')
+                    ->label('Reopen')
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    // reopen() already existed on the model but had no
+                    // table action wired to it - a resolved/closed ticket
+                    // could not actually be reopened from the admin panel
+                    // at all short of a raw DB edit.
+                    ->visible(fn (SupportTicket $record) => in_array($record->status, ['resolved', 'closed'])
+                        && auth()->user()?->can('support_ticket.approve')
+                        && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::SUPPORT_TICKET, auth()->user()))
+                    ->action(function (SupportTicket $record) {
+                        $record->reopen();
+
+                        if ($record->partner) {
+                            Notification::make()
+                                ->title("Tiket \"{$record->subject}\" dibuka kembali")
+                                ->body('Tim kami akan meninjau kembali tiket Anda.')
+                                ->warning()
+                                ->sendToDatabase($record->partner);
+                        }
+                    }),
             ]);
     }
 

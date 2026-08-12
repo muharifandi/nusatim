@@ -34,7 +34,8 @@ class ServiceResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('slug')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('icon')
                     ->maxLength(255)
                     ->default(null),
@@ -61,6 +62,7 @@ class ServiceResource extends Resource
                     ->fileAttachmentsDisk('media')
                     ->fileAttachmentsDirectory('media/uploads')
                     ->fileAttachmentsVisibility('public')
+                    ->requiredIf('is_active', true)
                     ->columnSpanFull(),
                 Forms\Components\Repeater::make('features')
                     ->label('Badge Fitur (halaman detail service)')
@@ -93,9 +95,10 @@ class ServiceResource extends Resource
                 Forms\Components\TextInput::make('order')
                     ->required()
                     ->numeric()
-                    ->default(0),
+                    ->default(fn () => (Service::max('order') ?? -1) + 1),
                 Forms\Components\Toggle::make('is_active')
-                    ->required(),
+                    ->required()
+                    ->default(true),
                 Forms\Components\TextInput::make('meta_title')
                     ->maxLength(255)
                     ->default(null),

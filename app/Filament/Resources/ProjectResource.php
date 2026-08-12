@@ -34,7 +34,8 @@ class ProjectResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('slug')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('category')
                     ->maxLength(255)
                     ->default(null),
@@ -48,9 +49,10 @@ class ProjectResource extends Resource
                 Forms\Components\TextInput::make('order')
                     ->required()
                     ->numeric()
-                    ->default(0),
+                    ->default(fn () => (Project::max('order') ?? -1) + 1),
                 Forms\Components\Toggle::make('is_active')
-                    ->required(),
+                    ->required()
+                    ->default(true),
                 Forms\Components\TextInput::make('meta_title')
                     ->maxLength(255)
                     ->default(null),

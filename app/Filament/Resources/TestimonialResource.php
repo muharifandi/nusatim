@@ -45,13 +45,16 @@ class TestimonialResource extends Resource
                 Forms\Components\TextInput::make('rating')
                     ->required()
                     ->numeric()
+                    ->minValue(1)
+                    ->maxValue(5)
                     ->default(5),
                 Forms\Components\TextInput::make('order')
                     ->required()
                     ->numeric()
-                    ->default(0),
+                    ->default(fn () => (Testimonial::max('order') ?? -1) + 1),
                 Forms\Components\Toggle::make('is_active')
-                    ->required(),
+                    ->required()
+                    ->default(true),
             ]);
     }
 

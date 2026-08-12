@@ -139,10 +139,34 @@ class PartnerProject extends Model
     }
 
     /**
-     * Admin assigning a partner directly, skipping the claim flow entirely.
+     * Admin assigning a partner directly, skipping the claim flow - but not
+     * the "Project Claim Rule" concurrent-claim limit that flow enforces.
+     * Without this check, direct-assign was a wide-open backdoor around
+     * that limit: any admin action could push a partner arbitrarily far
+     * past max_concurrent_claimed_projects regardless of what claim()
+     * allows them to reach on their own.
+     *
+     * @throws ValidationException if the partner is already at the
+     *      concurrent-claim limit from Partner Settings.
      */
     public function assignDirectly(Partner $partner): void
     {
+        $maxConcurrent = PartnerSetting::current()->max_concurrent_claimed_projects;
+
+        if ($maxConcurrent) {
+            $activeCount = static::query()
+                ->where('partner_id', $partner->id)
+                ->where('id', '!=', $this->id)
+                ->whereIn('status', ['pending_approval', 'assigned', 'in_progress'])
+                ->count();
+
+            if ($activeCount >= $maxConcurrent) {
+                throw ValidationException::withMessages([
+                    'partner_id' => "Partner ini sudah mencapai batas maksimal {$maxConcurrent} project yang diklaim bersamaan.",
+                ]);
+            }
+        }
+
         $this->update([
             'partner_id' => $partner->id,
             'status' => 'assigned',

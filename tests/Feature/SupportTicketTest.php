@@ -108,6 +108,45 @@ class SupportTicketTest extends TestCase
         $this->assertSame('closed', $ticket->fresh()->status);
     }
 
+    public function test_admin_can_reopen_a_closed_ticket_and_the_partner_is_notified(): void
+    {
+        $partner = Partner::factory()->create(['status' => 'approved']);
+        $ticket = SupportTicket::create([
+            'partner_id' => $partner->id,
+            'subject' => 'Perlu bantuan',
+            'description' => 'x',
+            'status' => 'closed',
+        ]);
+
+        $admin = User::factory()->create();
+
+        Filament::setCurrentPanel(Filament::getPanel('admin'));
+
+        Livewire::actingAs($admin)
+            ->test(\App\Filament\Resources\SupportTicketResource\Pages\ManageSupportTickets::class)
+            ->assertTableActionHidden('resolve', $ticket)
+            ->callTableAction('reopen', $ticket);
+
+        $this->assertSame('open', $ticket->fresh()->status);
+        $this->assertSame(1, $partner->notifications()->count());
+    }
+
+    public function test_reopen_action_is_only_visible_for_resolved_or_closed_tickets(): void
+    {
+        $partner = Partner::factory()->create(['status' => 'approved']);
+        $openTicket = SupportTicket::create(['partner_id' => $partner->id, 'subject' => 'Baru', 'description' => 'x', 'status' => 'open']);
+        $closedTicket = SupportTicket::create(['partner_id' => $partner->id, 'subject' => 'Selesai', 'description' => 'x', 'status' => 'closed']);
+
+        $admin = User::factory()->create();
+
+        Filament::setCurrentPanel(Filament::getPanel('admin'));
+
+        Livewire::actingAs($admin)
+            ->test(\App\Filament\Resources\SupportTicketResource\Pages\ManageSupportTickets::class)
+            ->assertTableActionHidden('reopen', $openTicket)
+            ->assertTableActionVisible('reopen', $closedTicket);
+    }
+
     public function test_resolve_action_is_gated_by_permission_and_workflow_assignment(): void
     {
         $approverRole = Role::create(['name' => 'Support Approver', 'guard_name' => 'web']);

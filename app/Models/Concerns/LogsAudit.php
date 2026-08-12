@@ -36,6 +36,14 @@ trait LogsAudit
                 return;
             }
 
+            // getChanges()/getOriginal() read raw attributes, bypassing the
+            // $hidden filtering that normally keeps a password hash out of
+            // array/JSON output - without this, a User's password change
+            // would otherwise land the old and new bcrypt hash directly in
+            // the audit trail.
+            $hidden = $model->getHidden();
+            $redact = fn ($key, $value) => in_array($key, $hidden, true) ? '[hidden]' : $value;
+
             AuditLog::create([
                 'auditable_type' => $model->getMorphClass(),
                 'auditable_id' => $model->getKey(),
@@ -43,9 +51,11 @@ trait LogsAudit
                 'action' => 'updated',
                 'changes' => [
                     'before' => collect($changes)->keys()->mapWithKeys(
-                        fn ($key) => [$key => $model->getOriginal($key)]
+                        fn ($key) => [$key => $redact($key, $model->getOriginal($key))]
                     )->all(),
-                    'after' => $changes,
+                    'after' => collect($changes)->mapWithKeys(
+                        fn ($value, $key) => [$key => $redact($key, $value)]
+                    )->all(),
                 ],
             ]);
         });

@@ -120,13 +120,17 @@ class DashboardController extends Controller
             'pending_commission' => (float) $partner->commissions()->where('status', 'pending')->sum('amount'),
             'available_balance' => $partner->availableBalance(),
             'total_withdrawn' => (float) $partner->withdrawals()->where('status', 'paid')->sum('amount'),
-            'sales_target' => $target ? [
-                'target_amount' => (float) $target->target_amount,
-                'achieved_amount' => $totalProjectValue,
-                'achieved_percentage' => $target->target_amount > 0
-                    ? round(($totalProjectValue / (float) $target->target_amount) * 100, 1)
-                    : 0,
-            ] : null,
+            'sales_target' => $target ? (function () use ($partner, $target) {
+                $achieved = $partner->achievedAmountForPeriod($target->period);
+
+                return [
+                    'target_amount' => (float) $target->target_amount,
+                    'achieved_amount' => $achieved,
+                    'achieved_percentage' => $target->target_amount > 0
+                        ? round(($achieved / (float) $target->target_amount) * 100, 1)
+                        : 0,
+                ];
+            })() : null,
         ];
     }
 

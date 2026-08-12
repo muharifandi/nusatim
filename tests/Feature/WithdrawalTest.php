@@ -45,6 +45,31 @@ class WithdrawalTest extends TestCase
         Withdrawal::submit($partner, ['amount' => 1000000, 'ktp_path' => 'withdrawals/ktp.jpg']);
     }
 
+    public function test_a_second_withdrawal_cannot_draw_on_balance_already_reserved_by_a_pending_one(): void
+    {
+        $partner = Partner::factory()->create(['status' => 'approved']);
+        $this->approvedCommission($partner, 500000);
+
+        Withdrawal::submit($partner, ['amount' => 400000, 'ktp_path' => 'withdrawals/ktp.jpg']);
+
+        $this->assertSame(100000.0, $partner->availableBalance());
+
+        $this->expectException(ValidationException::class);
+
+        Withdrawal::submit($partner, ['amount' => 400000, 'ktp_path' => 'withdrawals/ktp.jpg']);
+    }
+
+    public function test_rejecting_a_withdrawal_frees_up_its_reserved_balance(): void
+    {
+        $partner = Partner::factory()->create(['status' => 'approved']);
+        $this->approvedCommission($partner, 500000);
+
+        $withdrawal = Withdrawal::submit($partner, ['amount' => 400000, 'ktp_path' => 'withdrawals/ktp.jpg']);
+        $withdrawal->reject('Dokumen tidak lengkap');
+
+        $this->assertSame(500000.0, $partner->availableBalance());
+    }
+
     public function test_submitting_below_the_minimum_withdrawal_is_rejected(): void
     {
         $partner = Partner::factory()->create(['status' => 'approved']);
@@ -133,6 +158,65 @@ class WithdrawalTest extends TestCase
         $this->actingAs($owner, 'partner')
             ->get(route('withdrawal.documents.show', [$withdrawal, 'ktp']))
             ->assertOk();
+    }
+
+    /**
+     * Filament's mountTableAction()/callMountedTableAction() never re-checks
+     * ->visible() (or ->authorize()) before running an action's closure -
+     * it only checks ->isDisabled(). So a staff user who can merely view
+     * this page (withdrawal.view) but lacks withdrawal.approve could,
+     * before this fix, still trigger approve/reject/markPaid via a direct
+     * Livewire call even though the button was hidden from them. This
+     * proves the resource's own explicit permission checks (not just
+     * ->visible()) are what actually block it now.
+     */
+    public function test_a_staff_user_without_approve_permission_cannot_invoke_approve_via_a_direct_action_call(): void
+    {
+        $staff = User::factory()->create();
+        $staff->syncRoles([]);
+        $staff->syncPermissions(['withdrawal.view']);
+
+        $partner = Partner::factory()->create(['status' => 'approved']);
+        $this->approvedCommission($partner, 500000);
+        $withdrawal = Withdrawal::submit($partner, ['amount' => 100000, 'ktp_path' => 'withdrawals/ktp.jpg']);
+
+        // callTableAction() would itself assert the action is visible before
+        // calling it - that only proves the button is hidden, not that the
+        // server blocks the call. mountTableAction()/callMountedTableAction()
+        // is what a raw Livewire request actually hits, with no such guard,
+        // so calling them directly is what actually exercises the bypass.
+        // Filament's test-only assertion helpers (callTableAction()) would
+        // themselves refuse to call a hidden action - that only proves the
+        // button is hidden, not that the server blocks the call if invoked
+        // directly. Calling the same public Livewire methods a raw request
+        // would hit (mountTableAction/callMountedTableAction) is what
+        // actually exercises the bypass; the action must have no effect.
+        \Livewire\Livewire::actingAs($staff)
+            ->test(\App\Filament\Resources\WithdrawalResource\Pages\ManageWithdrawals::class)
+            ->call('mountTableAction', 'approve', $withdrawal->getKey())
+            ->call('callMountedTableAction');
+
+        $this->assertSame('pending', $withdrawal->fresh()->status);
+    }
+
+    public function test_a_staff_user_without_approve_permission_cannot_invoke_mark_paid_via_a_direct_action_call(): void
+    {
+        $staff = User::factory()->create();
+        $staff->syncRoles([]);
+        $staff->syncPermissions(['withdrawal.view']);
+
+        $partner = Partner::factory()->create(['status' => 'approved']);
+        $this->approvedCommission($partner, 500000);
+        $withdrawal = Withdrawal::submit($partner, ['amount' => 100000, 'ktp_path' => 'withdrawals/ktp.jpg']);
+        $withdrawal->approve();
+
+        \Livewire\Livewire::actingAs($staff)
+            ->test(\App\Filament\Resources\WithdrawalResource\Pages\ManageWithdrawals::class)
+            ->call('mountTableAction', 'markPaid', $withdrawal->getKey())
+            ->set('mountedTableActionsData.0.proof_of_transfer_path', 'withdrawals/proof.jpg')
+            ->call('callMountedTableAction');
+
+        $this->assertSame('approved', $withdrawal->fresh()->status);
     }
 
     public function test_withdrawal_pages_render_for_partner_and_admin(): void

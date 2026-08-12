@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\AuditLog;
+use App\Models\CommissionScheme;
 use App\Models\Lead;
 use App\Models\Partner;
 use App\Models\SupportTicket;
@@ -94,6 +95,45 @@ class AuditLogTest extends TestCase
 
         $this->assertSame(Partner::class, $log->user_type);
         $this->assertSame($partner->id, $log->user_id);
+    }
+
+    public function test_changes_to_a_commission_scheme_are_logged(): void
+    {
+        $scheme = CommissionScheme::create(['name' => 'Skema A', 'type' => 'percentage', 'percentage' => 5, 'is_active' => true]);
+
+        $scheme->update(['percentage' => 10]);
+
+        $log = AuditLog::where('auditable_type', CommissionScheme::class)
+            ->where('auditable_id', $scheme->id)
+            ->where('action', 'updated')
+            ->latest('id')
+            ->first();
+
+        $this->assertNotNull($log);
+        $this->assertEquals(5, $log->changes['before']['percentage']);
+        $this->assertEquals(10, $log->changes['after']['percentage']);
+    }
+
+    /**
+     * getChanges()/getOriginal() read raw attributes, bypassing $hidden -
+     * without redaction, changing a staff user's password would put the
+     * old and new bcrypt hash directly in the audit trail.
+     */
+    public function test_changing_a_users_password_redacts_the_hash_in_the_audit_log(): void
+    {
+        $user = User::factory()->create();
+
+        $user->update(['password' => 'a-brand-new-password']);
+
+        $log = AuditLog::where('auditable_type', User::class)
+            ->where('auditable_id', $user->id)
+            ->where('action', 'updated')
+            ->latest('id')
+            ->first();
+
+        $this->assertNotNull($log);
+        $this->assertSame('[hidden]', $log->changes['before']['password']);
+        $this->assertSame('[hidden]', $log->changes['after']['password']);
     }
 
     public function test_admin_audit_log_page_renders(): void

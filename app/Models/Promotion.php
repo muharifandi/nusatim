@@ -24,6 +24,23 @@ class Promotion extends Model
         'ends_at' => 'datetime',
     ];
 
+    protected static function booted(): void
+    {
+        // current() only ever reads the latest active row, so marking a
+        // second promotion active silently did nothing visible - and made
+        // it easy to lose track of which one was actually still live.
+        // Only one promotion can be active at a time.
+        static::saving(function (Promotion $promotion) {
+            if (! $promotion->is_active) {
+                return;
+            }
+
+            static::where('is_active', true)
+                ->when($promotion->exists, fn ($query) => $query->whereKeyNot($promotion->getKey()))
+                ->update(['is_active' => false]);
+        });
+    }
+
     /**
      * The promotion currently eligible to show on the public site, if any.
      */

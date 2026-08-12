@@ -194,4 +194,44 @@ class LeadManagementTest extends TestCase
         $this->assertTrue($lead->is_validated);
         $this->assertSame($partnerB->id, $lead->partner_id);
     }
+
+    /**
+     * Filament's mountTableAction()/callMountedTableAction() never re-checks
+     * ->visible() before running an action's closure - it only checks
+     * ->isDisabled(). A staff user who can merely view this page
+     * (lead.view) but lacks lead.update/lead.assign could, before this
+     * fix, still trigger validate/transferOwnership via a direct Livewire
+     * call even though the buttons were hidden from them.
+     */
+    public function test_a_staff_user_without_the_relevant_permission_cannot_invoke_validate_or_transfer_via_a_direct_action_call(): void
+    {
+        Filament::setCurrentPanel(Filament::getPanel('admin'));
+
+        $staff = User::factory()->create();
+        $staff->syncRoles([]);
+        $staff->syncPermissions(['lead.view']);
+
+        $partnerA = Partner::factory()->create(['status' => 'approved']);
+        $partnerB = Partner::factory()->create(['status' => 'approved']);
+        $lead = Lead::create([
+            'partner_id' => $partnerA->id,
+            'name' => 'Lead Tidak Boleh Diubah',
+            'phone' => '0877777777',
+        ]);
+
+        Livewire::actingAs($staff)
+            ->test(ManageLeads::class)
+            ->call('mountTableAction', 'validate', $lead->getKey())
+            ->call('callMountedTableAction');
+
+        $this->assertFalse($lead->fresh()->is_validated);
+
+        Livewire::actingAs($staff)
+            ->test(ManageLeads::class)
+            ->call('mountTableAction', 'transferOwnership', $lead->getKey())
+            ->set('mountedTableActionsData.0.partner_id', $partnerB->id)
+            ->call('callMountedTableAction');
+
+        $this->assertSame($partnerA->id, $lead->fresh()->partner_id);
+    }
 }

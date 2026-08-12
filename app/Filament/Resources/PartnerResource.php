@@ -45,6 +45,18 @@ class PartnerResource extends Resource
         return false;
     }
 
+    /**
+     * `->visible()` alone only hides the button in the UI - Filament's
+     * mountTableAction()/callMountedTableAction() never re-checks it before
+     * running the action closure, so a Livewire request crafted directly
+     * against this table (available to anyone who can reach the page, i.e.
+     * anyone with partner.view) can still invoke the action.
+     */
+    private static function assertCanUpdate(): void
+    {
+        abort_unless((bool) auth()->user()?->can('partner.update'), 403);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -156,7 +168,7 @@ class PartnerResource extends Resource
                     ->label('Suspend')
                     ->icon('heroicon-o-no-symbol')
                     ->color('gray')
-                    ->visible(fn (Partner $record) => $record->status === 'approved')
+                    ->visible(fn (Partner $record) => $record->status === 'approved' && auth()->user()?->can('partner.update'))
                     ->form([
                         // Reuses the same free-text `rejection_reason` column
                         // as the reject action - it's a generic "reason the
@@ -168,23 +180,30 @@ class PartnerResource extends Resource
                             ->label('Alasan Suspend')
                             ->helperText('Opsional - ditampilkan ke partner di halaman status akun.'),
                     ])
-                    ->action(fn (Partner $record, array $data) => $record->update([
-                        'status' => 'suspended',
-                        'rejection_reason' => $data['rejection_reason'] ?? null,
-                    ])),
+                    ->action(function (Partner $record, array $data) {
+                        static::assertCanUpdate();
+                        $record->update([
+                            'status' => 'suspended',
+                            'rejection_reason' => $data['rejection_reason'] ?? null,
+                        ]);
+                    }),
                 Tables\Actions\Action::make('reactivate')
                     ->label('Aktifkan Kembali')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
                     ->requiresConfirmation()
-                    ->visible(fn (Partner $record) => $record->status === 'suspended')
-                    ->action(fn (Partner $record) => $record->update([
-                        'status' => 'approved',
-                        'rejection_reason' => null,
-                    ])),
+                    ->visible(fn (Partner $record) => $record->status === 'suspended' && auth()->user()?->can('partner.update'))
+                    ->action(function (Partner $record) {
+                        static::assertCanUpdate();
+                        $record->update([
+                            'status' => 'approved',
+                            'rejection_reason' => null,
+                        ]);
+                    }),
                 Tables\Actions\Action::make('updateLevel')
                     ->label('Ubah Level')
                     ->icon('heroicon-o-star')
+                    ->visible(fn () => auth()->user()?->can('partner.update'))
                     ->fillForm(fn (Partner $record) => ['level' => $record->level])
                     ->form([
                         Forms\Components\Select::make('level')
@@ -193,14 +212,18 @@ class PartnerResource extends Resource
                             ->placeholder('Tidak ada level')
                             ->helperText('Atribut informational saja (badge, loyalty program, prioritas project, dashboard/reporting) - tidak mempengaruhi perhitungan Commission Scheme.'),
                     ])
-                    ->action(fn (Partner $record, array $data) => $record->update(['level' => $data['level']])),
+                    ->action(function (Partner $record, array $data) {
+                        static::assertCanUpdate();
+                        $record->update(['level' => $data['level']]);
+                    }),
                 Tables\Actions\Action::make('resetPassword')
                     ->label('Reset Password')
                     ->icon('heroicon-o-key')
                     ->requiresConfirmation()
                     ->modalDescription('Partner akan menerima email berisi link untuk membuat password baru.')
-                    ->visible(fn (Partner $record) => $record->status !== 'pending_review')
+                    ->visible(fn (Partner $record) => $record->status !== 'pending_review' && auth()->user()?->can('partner.update'))
                     ->action(function (Partner $record) {
+                        static::assertCanUpdate();
                         // Reuses the exact same reset-link mechanism already
                         // wired up for the partner-facing "Lupa Password"
                         // flow (Fase 1, Filament's passwordReset() +

@@ -7,6 +7,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class Withdrawal extends Model
@@ -61,14 +62,7 @@ class Withdrawal extends Model
     public static function submit(Partner $partner, array $data): self
     {
         $amount = (float) $data['amount'];
-        $available = $partner->availableBalance();
         $minimum = (float) (PartnerSetting::current()->minimum_withdrawal ?? 0);
-
-        if ($amount > $available) {
-            throw ValidationException::withMessages([
-                'amount' => "Saldo tidak cukup. Saldo tersedia: Rp".number_format($available, 0, ',', '.'),
-            ]);
-        }
 
         if ($minimum > 0 && $amount < $minimum) {
             throw ValidationException::withMessages([
@@ -76,16 +70,31 @@ class Withdrawal extends Model
             ]);
         }
 
-        return static::create([
-            'partner_id' => $partner->id,
-            'amount' => $amount,
-            'bank_name' => $partner->bank_name,
-            'bank_account_number' => $partner->bank_account_number,
-            'bank_account_holder' => $partner->bank_account_holder,
-            'ktp_path' => $data['ktp_path'],
-            'note' => $data['note'] ?? null,
-            'status' => 'pending',
-        ]);
+        // Locks the partner row for the duration of the transaction so two
+        // concurrent submit() calls can't both read the same availableBalance()
+        // and each pass validation against a balance that only actually
+        // covers one of them.
+        return DB::transaction(function () use ($partner, $amount, $data) {
+            $lockedPartner = Partner::query()->whereKey($partner->id)->lockForUpdate()->firstOrFail();
+            $available = $lockedPartner->availableBalance();
+
+            if ($amount > $available) {
+                throw ValidationException::withMessages([
+                    'amount' => "Saldo tidak cukup. Saldo tersedia: Rp".number_format($available, 0, ',', '.'),
+                ]);
+            }
+
+            return static::create([
+                'partner_id' => $partner->id,
+                'amount' => $amount,
+                'bank_name' => $partner->bank_name,
+                'bank_account_number' => $partner->bank_account_number,
+                'bank_account_holder' => $partner->bank_account_holder,
+                'ktp_path' => $data['ktp_path'],
+                'note' => $data['note'] ?? null,
+                'status' => 'pending',
+            ]);
+        });
     }
 
     public function approve(): void

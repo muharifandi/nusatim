@@ -24,13 +24,15 @@ class PartnerFinanceStats extends StatsOverviewWidget
 
         $target = $partner->currentSalesTarget();
         $targetDescription = 'Belum ada target diset untuk bulan ini';
+        $percentage = 0;
 
         if ($target) {
+            $achieved = $partner->achievedAmountForPeriod($target->period);
             $percentage = $target->target_amount > 0
-                ? round(($totalProjectValue / (float) $target->target_amount) * 100, 1)
+                ? round(($achieved / (float) $target->target_amount) * 100, 1)
                 : 0;
 
-            $targetDescription = 'Rp'.number_format($totalProjectValue, 0, ',', '.')
+            $targetDescription = 'Rp'.number_format($achieved, 0, ',', '.')
                 .' dari target Rp'.number_format((float) $target->target_amount, 0, ',', '.')
                 ." ({$percentage}%)";
         }

@@ -31,7 +31,8 @@ class PageResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('slug')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->unique(ignoreRecord: true),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),

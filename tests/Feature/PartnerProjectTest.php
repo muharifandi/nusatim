@@ -112,6 +112,41 @@ class PartnerProjectTest extends TestCase
         $this->assertSame($partner->id, $project->partner_id);
     }
 
+    /**
+     * Filament's mountTableAction()/callMountedTableAction() never re-checks
+     * ->visible() before running an action's closure - it only checks
+     * ->isDisabled(). A staff user who can merely view this page
+     * (partner_project.view) but lacks partner_project.assign/update could,
+     * before this fix, still assign a partner directly or close a project
+     * via a direct Livewire call even though the buttons were hidden.
+     */
+    public function test_a_staff_user_without_the_relevant_permission_cannot_invoke_assign_or_close_via_a_direct_call(): void
+    {
+        Filament::setCurrentPanel(Filament::getPanel('admin'));
+
+        $staff = User::factory()->create();
+        $staff->syncRoles([]);
+        $staff->syncPermissions(['partner_project.view']);
+
+        $partner = Partner::factory()->create(['status' => 'approved']);
+        $available = PartnerProject::create(['name' => 'Tidak Boleh Diassign', 'status' => 'available']);
+        $assigned = PartnerProject::create(['name' => 'Tidak Boleh Ditutup', 'status' => 'assigned', 'partner_id' => $partner->id]);
+
+        Livewire::actingAs($staff)
+            ->test(ManagePartnerProjects::class)
+            ->call('mountTableAction', 'assignPartner', $available->getKey())
+            ->set('mountedTableActionsData.0.partner_id', $partner->id)
+            ->call('callMountedTableAction');
+        $this->assertSame('available', $available->fresh()->status);
+        $this->assertNull($available->fresh()->partner_id);
+
+        Livewire::actingAs($staff)
+            ->test(ManagePartnerProjects::class)
+            ->call('mountTableAction', 'close', $assigned->getKey())
+            ->call('callMountedTableAction');
+        $this->assertSame('assigned', $assigned->fresh()->status);
+    }
+
     public function test_partner_project_board_page_renders(): void
     {
         $partner = Partner::factory()->create(['status' => 'approved']);

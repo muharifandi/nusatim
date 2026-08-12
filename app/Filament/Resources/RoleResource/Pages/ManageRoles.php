@@ -16,8 +16,11 @@ class ManageRoles extends ManageRecords
         return [
             Actions\CreateAction::make()
                 ->using(function (array $data): Role {
+                    $permissionNames = RoleResource::permissionNamesFromVerbs($data['permission_verbs'] ?? []);
+                    RoleResource::assertPermissionsAreGrantableByActingUser($permissionNames);
+
                     $role = Role::create(['name' => $data['name'], 'guard_name' => 'web']);
-                    $role->syncPermissions(RoleResource::permissionNamesFromVerbs($data['permission_verbs'] ?? []));
+                    $role->syncPermissions($permissionNames);
 
                     return $role;
                 }),

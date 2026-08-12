@@ -38,6 +38,38 @@ class CommissionResource extends Resource
         return false;
     }
 
+    /**
+     * `->visible()` alone only hides the button in the UI - Filament's
+     * mountTableAction()/callMountedTableAction() never re-checks it (or
+     * ->authorize()) before running the action closure, so a Livewire
+     * request crafted directly against this table (available to anyone who
+     * can reach the page, i.e. anyone with commission.view) can still
+     * invoke the action. Every closure that changes money-affecting state
+     * must assert this itself.
+     */
+    private static function assertCanApproveOrPay(): void
+    {
+        abort_unless(
+            (bool) auth()->user()?->can('commission.approve')
+                && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::COMMISSION_APPROVAL, auth()->user()),
+            403
+        );
+    }
+
+    private static function assertCanReject(): void
+    {
+        abort_unless(
+            (bool) auth()->user()?->can('commission.reject')
+                && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::COMMISSION_APPROVAL, auth()->user()),
+            403
+        );
+    }
+
+    private static function assertCanCreate(): void
+    {
+        abort_unless((bool) auth()->user()?->can('commission.create'), 403);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -64,6 +96,7 @@ class CommissionResource extends Resource
                 Tables\Actions\Action::make('generate')
                     ->label('Generate Komisi')
                     ->icon('heroicon-o-calculator')
+                    ->visible(fn () => auth()->user()?->can('commission.create'))
                     ->form([
                         Forms\Components\Select::make('customer_id')
                             ->label('Customer')
@@ -71,10 +104,15 @@ class CommissionResource extends Resource
                             ->searchable()
                             ->required(),
                     ])
-                    ->action(fn (array $data) => Commission::generateForCustomer(Customer::findOrFail($data['customer_id']))),
+                    ->action(function (array $data) {
+                        static::assertCanCreate();
+
+                        return Commission::generateForCustomer(Customer::findOrFail($data['customer_id']));
+                    }),
                 Tables\Actions\Action::make('addBonus')
                     ->label('Bonus Komisi')
                     ->icon('heroicon-o-gift')
+                    ->visible(fn () => auth()->user()?->can('commission.create'))
                     ->form([
                         Forms\Components\Select::make('partner_id')
                             ->label('Partner')
@@ -91,15 +129,19 @@ class CommissionResource extends Resource
                             ->required(),
                         Forms\Components\Textarea::make('note')->label('Catatan'),
                     ])
-                    ->action(fn (array $data) => Commission::create([
-                        'partner_id' => $data['partner_id'],
-                        'customer_id' => $data['customer_id'] ?? null,
-                        'amount' => $data['amount'],
-                        'type' => 'bonus',
-                        'status' => 'pending',
-                        'is_bonus' => true,
-                        'note' => $data['note'] ?? null,
-                    ])),
+                    ->action(function (array $data) {
+                        static::assertCanCreate();
+
+                        return Commission::create([
+                            'partner_id' => $data['partner_id'],
+                            'customer_id' => $data['customer_id'] ?? null,
+                            'amount' => $data['amount'],
+                            'type' => 'bonus',
+                            'status' => 'pending',
+                            'is_bonus' => true,
+                            'note' => $data['note'] ?? null,
+                        ]);
+                    }),
             ])
             ->actions([
                 Tables\Actions\Action::make('waitingClientPayment')
@@ -114,7 +156,10 @@ class CommissionResource extends Resource
                     ->visible(fn (Commission $record) => in_array($record->status, ['pending', 'waiting_client_payment'])
                         && auth()->user()?->can('commission.approve')
                         && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::COMMISSION_APPROVAL, auth()->user()))
-                    ->action(fn (Commission $record) => $record->approve()),
+                    ->action(function (Commission $record) {
+                        static::assertCanApproveOrPay();
+                        $record->approve();
+                    }),
                 Tables\Actions\Action::make('reject')
                     ->label('Reject')
                     ->icon('heroicon-o-x-mark')
@@ -125,13 +170,21 @@ class CommissionResource extends Resource
                     ->form([
                         Forms\Components\Textarea::make('reason')->label('Alasan Reject')->required(),
                     ])
-                    ->action(fn (Commission $record, array $data) => $record->reject($data['reason'])),
+                    ->action(function (Commission $record, array $data) {
+                        static::assertCanReject();
+                        $record->reject($data['reason']);
+                    }),
                 Tables\Actions\Action::make('markPaid')
                     ->label('Mark Paid')
                     ->icon('heroicon-o-banknotes')
                     ->color('success')
-                    ->visible(fn (Commission $record) => $record->status === 'approved')
-                    ->action(fn (Commission $record) => $record->markPaid()),
+                    ->visible(fn (Commission $record) => $record->status === 'approved'
+                        && auth()->user()?->can('commission.approve')
+                        && WorkflowAssignment::userIsAuthorizedFor(WorkflowAssignment::COMMISSION_APPROVAL, auth()->user()))
+                    ->action(function (Commission $record) {
+                        static::assertCanApproveOrPay();
+                        $record->markPaid();
+                    }),
             ]);
     }
 

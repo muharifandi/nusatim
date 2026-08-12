@@ -70,6 +70,39 @@ class PartnerSettingsExtendedTest extends TestCase
         $this->assertTrue($projectB->claim($partner));
     }
 
+    /**
+     * assignDirectly() (the admin "assign a partner without going through
+     * the claim/approve flow" action) used to skip this limit entirely -
+     * a backdoor around the same concurrent-claim rule claim() enforces.
+     */
+    public function test_direct_assign_is_rejected_once_the_concurrent_limit_is_reached(): void
+    {
+        PartnerSetting::current()->update(['max_concurrent_claimed_projects' => 1]);
+
+        $partner = Partner::factory()->create(['status' => 'approved']);
+        $projectA = PartnerProject::create(['name' => 'Project A', 'status' => 'available']);
+        $projectB = PartnerProject::create(['name' => 'Project B', 'status' => 'available']);
+
+        $projectA->assignDirectly($partner);
+        $this->assertSame('assigned', $projectA->fresh()->status);
+
+        $this->expectException(ValidationException::class);
+        $projectB->assignDirectly($partner);
+    }
+
+    public function test_direct_assign_limit_is_not_enforced_when_the_setting_is_empty(): void
+    {
+        $partner = Partner::factory()->create(['status' => 'approved']);
+        $projectA = PartnerProject::create(['name' => 'Project A', 'status' => 'available']);
+        $projectB = PartnerProject::create(['name' => 'Project B', 'status' => 'available']);
+
+        $projectA->assignDirectly($partner);
+        $projectB->assignDirectly($partner);
+
+        $this->assertSame('assigned', $projectA->fresh()->status);
+        $this->assertSame('assigned', $projectB->fresh()->status);
+    }
+
     public function test_expire_stale_claims_command_rejects_overdue_pending_claims_only(): void
     {
         PartnerSetting::current()->update(['claim_processing_hours' => 24]);

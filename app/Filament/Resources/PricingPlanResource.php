@@ -68,9 +68,10 @@ class PricingPlanResource extends Resource
                 Forms\Components\TextInput::make('order')
                     ->required()
                     ->numeric()
-                    ->default(0),
+                    ->default(fn () => (PricingPlan::max('order') ?? -1) + 1),
                 Forms\Components\Toggle::make('is_active')
-                    ->required(),
+                    ->required()
+                    ->default(true),
             ]);
     }
 

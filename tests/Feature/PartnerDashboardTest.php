@@ -106,6 +106,37 @@ class PartnerDashboardTest extends TestCase
         $this->assertSame('50%', $withTarget['Target Penjualan Bulan Ini']);
     }
 
+    /**
+     * "Achieved" used to be the partner's lifetime total_project_value
+     * compared against the current month's target - a deal closed months
+     * ago (or in a future month) would inflate this month's percentage
+     * forever, even with zero new deals in the target's actual period.
+     */
+    public function test_sales_target_percentage_only_counts_deals_closed_within_the_targets_period(): void
+    {
+        $partner = Partner::factory()->create(['status' => 'approved']);
+
+        $oldCustomer = Customer::create(['partner_id' => $partner->id, 'name' => 'Deal Lama', 'project_value' => 10000000]);
+        $oldCustomer->timestamps = false;
+        $oldCustomer->created_at = now()->subMonths(3);
+        $oldCustomer->save();
+
+        Customer::create(['partner_id' => $partner->id, 'name' => 'Deal Bulan Ini', 'project_value' => 1000000]);
+
+        PartnerSalesTarget::create([
+            'partner_id' => $partner->id,
+            'period' => now()->startOfMonth(),
+            'target_amount' => 5000000,
+        ]);
+
+        $this->actingAs($partner, 'partner');
+        $stats = $this->invokeGetStats(new \App\Filament\Partner\Widgets\PartnerFinanceStats);
+
+        // Only "Deal Bulan Ini" (1jt) counts toward this month's target -
+        // 20%, not the ~220% a lifetime sum (11jt / 5jt) would produce.
+        $this->assertSame('20%', $stats['Target Penjualan Bulan Ini']);
+    }
+
     public function test_dashboard_and_sales_target_pages_render(): void
     {
         $partner = Partner::factory()->create(['status' => 'approved']);

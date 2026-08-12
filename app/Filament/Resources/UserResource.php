@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -52,7 +53,19 @@ class UserResource extends Resource
                     ->relationship('roles', 'name')
                     ->multiple()
                     ->preload()
-                    ->searchable(),
+                    ->searchable()
+                    // Letting a staff user change their own roles is a
+                    // straight path to privilege escalation (self-assign
+                    // Super Admin, or any role they were able to create/
+                    // edit via Role Resource) - disabled() excludes this
+                    // field from the saved state entirely when the record
+                    // being edited is the acting user themselves, rather
+                    // than just hiding it, so a raw request can't smuggle
+                    // a role change through either.
+                    ->disabled(fn (?User $record) => $record?->id === Auth::guard('web')->id())
+                    ->helperText(fn (?User $record) => $record?->id === Auth::guard('web')->id()
+                        ? 'Anda tidak dapat mengubah role akun anda sendiri.'
+                        : null),
             ]);
     }
 

@@ -49,7 +49,7 @@ class MarketingMaterialResource extends Resource
                     ->label('Isi')
                     ->visible(fn (Forms\Get $get) => filled($get('category')) && ! in_array($get('category'), MarketingMaterial::FILE_CATEGORIES))
                     ->required(fn (Forms\Get $get) => filled($get('category')) && ! in_array($get('category'), MarketingMaterial::FILE_CATEGORIES)),
-                Forms\Components\TextInput::make('order')->numeric()->default(0)->required(),
+                Forms\Components\TextInput::make('order')->numeric()->default(fn () => (MarketingMaterial::max('order') ?? -1) + 1)->required(),
                 Forms\Components\Toggle::make('is_active')->default(true)->required(),
             ]);
     }

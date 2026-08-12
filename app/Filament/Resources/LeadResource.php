@@ -47,6 +47,24 @@ class LeadResource extends Resource
         return false;
     }
 
+    /**
+     * `->visible()` alone only hides the button in the UI - Filament's
+     * mountTableAction()/callMountedTableAction() never re-checks it before
+     * running the action closure, so a Livewire request crafted directly
+     * against this table (available to anyone who can reach the page, i.e.
+     * anyone with lead.view) can still invoke the action. Both closures
+     * below assert this themselves.
+     */
+    private static function assertCanUpdate(): void
+    {
+        abort_unless((bool) auth()->user()?->can('lead.update'), 403);
+    }
+
+    private static function assertCanAssign(): void
+    {
+        abort_unless((bool) auth()->user()?->can('lead.assign'), 403);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -94,18 +112,25 @@ class LeadResource extends Resource
                 Tables\Actions\Action::make('validate')
                     ->label('Tandai Valid')
                     ->icon('heroicon-o-check-badge')
-                    ->visible(fn (Lead $record) => ! $record->is_validated)
-                    ->action(fn (Lead $record) => $record->update(['is_validated' => true])),
+                    ->visible(fn (Lead $record) => ! $record->is_validated && auth()->user()?->can('lead.update'))
+                    ->action(function (Lead $record) {
+                        static::assertCanUpdate();
+                        $record->update(['is_validated' => true]);
+                    }),
                 Tables\Actions\Action::make('transferOwnership')
                     ->label('Transfer Ownership')
                     ->icon('heroicon-o-arrow-right-circle')
+                    ->visible(fn () => auth()->user()?->can('lead.assign'))
                     ->form([
                         Forms\Components\Select::make('partner_id')
                             ->label('Partner Tujuan')
                             ->options(fn (Lead $record) => Partner::where('id', '!=', $record->partner_id)->pluck('name', 'id'))
                             ->required(),
                     ])
-                    ->action(fn (Lead $record, array $data) => $record->update(['partner_id' => $data['partner_id']])),
+                    ->action(function (Lead $record, array $data) {
+                        static::assertCanAssign();
+                        $record->update(['partner_id' => $data['partner_id']]);
+                    }),
             ]);
     }
 

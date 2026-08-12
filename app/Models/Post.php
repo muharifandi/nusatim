@@ -13,6 +13,20 @@ class Post extends Model
 
     protected static function booted(): void
     {
+        // PostController::index() only ever reads the first is_featured
+        // row, so marking a second post as featured silently did nothing
+        // visible - confusing for whoever set it expecting it to show.
+        // Only one post can hold the spot at a time.
+        static::saving(function (Post $post) {
+            if (! $post->is_featured) {
+                return;
+            }
+
+            static::where('is_featured', true)
+                ->when($post->exists, fn ($query) => $query->whereKeyNot($post->getKey()))
+                ->update(['is_featured' => false]);
+        });
+
         // Fires on every save (create or edit) while the post is actually
         // live - not just the first publish, since a later content edit is
         // also a legitimate "please re-crawl this" signal. isLive() already
