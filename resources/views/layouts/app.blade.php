@@ -27,14 +27,19 @@
 	<meta property="og:title" content="{{ $metaTitle ?? $siteSettings->default_meta_title ?? $siteSettings->company_name }}">
 	<meta property="og:description" content="{{ $metaDescription ?? $siteSettings->default_meta_description }}">
 	<meta property="og:url" content="{{ $canonicalUrl ?? url()->current() }}">
-	<meta property="og:image" content="{{ $ogImage ?? $siteSettings->default_og_image }}">
+	{{-- og:image/twitter:image MUST be an absolute URL per spec - every controller
+	     passes a raw storage path (e.g. "media/banner/banner1.jpg"), so this needs
+	     asset() here same as the favicon below. Without it, crawlers (Google Images,
+	     Facebook/WhatsApp link previews, Twitter cards) can't resolve the relative
+	     path and silently show a blank preview. --}}
+	<meta property="og:image" content="{{ asset($ogImage ?? $siteSettings->default_og_image) }}">
 	<meta property="og:locale" content="en_US">
 
 	<!-- Twitter Card -->
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="{{ $metaTitle ?? $siteSettings->default_meta_title ?? $siteSettings->company_name }}">
 	<meta name="twitter:description" content="{{ $metaDescription ?? $siteSettings->default_meta_description }}">
-	<meta name="twitter:image" content="{{ $ogImage ?? $siteSettings->default_og_image }}">
+	<meta name="twitter:image" content="{{ asset($ogImage ?? $siteSettings->default_og_image) }}">
 
 	@stack('structured-data')
 

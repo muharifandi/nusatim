@@ -5,6 +5,17 @@
 
     RewriteEngine On
 
+    # Force HTTPS. Without this, plain http:// requests were served the full
+    # site directly (200, no redirect) - session cookies issued over that
+    # unencrypted connection lose their "Secure" flag (sniffable on a public
+    # network), and it splits ranking/indexing signal between the http and
+    # https versions of every page instead of consolidating on the https
+    # canonical URLs the app already emits. X-Forwarded-Proto check covers
+    # the case where SSL is terminated upstream of this server.
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -28,6 +39,25 @@
     # 403 Forbidden with no matching route ever being consulted).
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+
+# Security headers. HSTS/X-XSS-Protection/X-Content-Type-Options are already
+# added by the hosting layer (confirmed via curl -I) - only the two below
+# were actually missing. Skipping Content-Security-Policy here: the site
+# loads Google Fonts, Google Analytics, and Google Maps embeds from several
+# external hosts, and a wrong CSP silently breaks those instead of failing
+# loudly - not something to hand-roll without testing each of them.
+<IfModule mod_headers.c>
+    # Blocks clickjacking - stops this site from being embedded in an
+    # <iframe> on another domain. SAMEORIGIN (not DENY) since nothing here
+    # needs to embed itself, but this also isn't an API that should never
+    # be framed by anything.
+    Header always set X-Frame-Options "SAMEORIGIN"
+    # Strips the full URL (including query strings) from the Referer header
+    # sent to OTHER sites when a visitor clicks an outbound link - avoids
+    # leaking things like a password-reset token embedded in the current
+    # page's URL to whatever site they click through to next.
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
 
 # Compress text-based responses (CSS/JS/HTML/SVG/fonts) - safe to enable
